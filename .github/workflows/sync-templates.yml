@@ -9,9 +9,9 @@ jobs:
   sync-templates:
     runs-on: ubuntu-latest
     env:
-      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_URL: "https://ydfvwqjrjzyyfwgfjsnr.supabase.co"
       SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-      PREVIEW_DOMAIN: ${{ secrets.PREVIEW_DOMAIN }}
+      PREVIEW_DOMAIN: "preview.kanverse.live"
 
     steps:
       - name: Checkout repository
