@@ -1,0 +1,23 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Vercel
+.vercel/
+
+# Node (if any template ever uses it)
+node_modules/
+
+# Environment
+.env
+.env.local
+.env.*.local
