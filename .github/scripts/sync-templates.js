@@ -66,13 +66,22 @@ function prettyName(folderName) {
 }
 
 /**
- * Pretty-print a category name.
+ * Pretty-print a category name for display.
  * "LOVE" → "Love"
  * "wedding" → "Wedding"
  */
 function prettyCategory(folderName) {
   const lower = folderName.toLowerCase();
   return lower.charAt(0).toUpperCase() + lower.slice(1);
+}
+
+/**
+ * Category value for database storage (UPPERCASE).
+ * Matches the existing Admin panel's category format.
+ * "love" → "LOVE", "wedding" → "WEDDING"
+ */
+function dbCategory(folderName) {
+  return folderName.toUpperCase();
 }
 
 /**
@@ -166,7 +175,7 @@ function scanTemplates() {
         templateFolder,
         slug: makeSlug(categoryFolder, templateFolder),
         name: prettyName(templateFolder),
-        category: categoryFolder.toLowerCase(),
+        category: dbCategory(categoryFolder),
         displayCategory: prettyCategory(categoryFolder),
         previewUrl: makePreviewUrl(categoryFolder, templateFolder),
         hasContent: hasIndex,
@@ -182,15 +191,13 @@ function scanTemplates() {
  * Uses the slug as the unique identifier (ON CONFLICT).
  */
 async function upsertTemplate(template) {
-  const url = `${SUPABASE_URL}/rest/v1/templates`;
+  const url = `${SUPABASE_URL}/rest/v1/template_urls`;
 
   const payload = {
     slug: template.slug,
     name: template.name,
     category: template.category,
-    description: `${template.displayCategory} — ${template.name}`,
     demo_url: template.previewUrl,
-    active: template.hasContent,
     updated_at: new Date().toISOString(),
   };
 
@@ -215,8 +222,8 @@ async function upsertTemplate(template) {
  * Only removes templates whose slug follows the pattern used by this sync.
  */
 async function removeStaleTemplates(activeTemplateSlugs) {
-  // Fetch all templates from Supabase
-  const url = `${SUPABASE_URL}/rest/v1/templates?select=id,slug,demo_url`;
+  // Fetch all templates from Supabase template_urls table
+  const url = `${SUPABASE_URL}/rest/v1/template_urls?select=id,slug,demo_url`;
   const headers = {
     'apikey': SUPABASE_KEY,
     'Authorization': `Bearer ${SUPABASE_KEY}`,
@@ -226,7 +233,7 @@ async function removeStaleTemplates(activeTemplateSlugs) {
   const res = await request('GET', url, headers, null);
 
   if (res.status < 200 || res.status >= 300) {
-    console.warn('⚠️  Could not fetch existing templates to check for stale entries');
+    console.warn('⚠️  Could not fetch existing template URLs to check for stale entries');
     return;
   }
 
@@ -241,8 +248,8 @@ async function removeStaleTemplates(activeTemplateSlugs) {
   );
 
   for (const t of stale) {
-    console.log(`🗑️  Removing stale template: ${t.slug}`);
-    const delUrl = `${SUPABASE_URL}/rest/v1/templates?id=eq.${t.id}`;
+    console.log(`🗑️  Removing stale template URL: ${t.slug}`);
+    const delUrl = `${SUPABASE_URL}/rest/v1/template_urls?id=eq.${t.id}`;
     await request('DELETE', delUrl, headers, null);
   }
 }
