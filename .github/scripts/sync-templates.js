@@ -20,9 +20,9 @@ const http = require('http');
 
 // ─── Configuration ───────────────────────────────────────────────────────────
 
-const SUPABASE_URL = process.env.SUPABASE_URL;
-const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const PREVIEW_DOMAIN = process.env.PREVIEW_DOMAIN || 'preview.kanverse.live';
+const SUPABASE_URL = (process.env.SUPABASE_URL || '').trim();
+const SUPABASE_KEY = (process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
+const PREVIEW_DOMAIN = (process.env.PREVIEW_DOMAIN || 'preview.kanverse.live').trim();
 
 // Root of the repository (two levels up from .github/scripts/)
 const REPO_ROOT = path.resolve(__dirname, '..', '..');
