@@ -191,7 +191,7 @@ function scanTemplates() {
  * Uses the slug as the unique identifier (ON CONFLICT).
  */
 async function upsertTemplate(template) {
-  const url = `${SUPABASE_URL}/rest/v1/template_urls`;
+  const url = `${SUPABASE_URL}/rest/v1/template_urls?on_conflict=slug`;
 
   const payload = {
     slug: template.slug,
