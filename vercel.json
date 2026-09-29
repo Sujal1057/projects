@@ -4,12 +4,6 @@
   "framework": null,
   "cleanUrls": false,
   "trailingSlash": true,
-  "rewrites": [
-    {
-      "source": "/LOVE/tempate-02/:path*",
-      "destination": "/LOVE/tempate-02/dist/:path*"
-    }
-  ],
   "headers": [
     {
       "source": "/(.*)",
