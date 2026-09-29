@@ -110,7 +110,7 @@ The user's only regular task should be creating the correct category/template fo
 Since the Vercel repository is served statically (`buildCommand: ""`), if a template uses a framework like React or Vite that requires compilation:
 1. The project MUST be built locally (e.g., `npm run build`) to generate a `dist/` folder before pushing to GitHub.
 2. In `vite.config.ts`, `base: './'` must be set so built assets use relative paths.
-3. The `previewUrl` in the generated `template.json` MUST point to the `/dist/` folder (e.g., `/LOVE/tempate-02/dist/`) so that Vercel serves the compiled HTML/JS, preventing a blank screen on live preview.
+3. The AI Agent / System MUST automatically add `/dist/` to the `previewUrl` when generating the `template.json` (e.g., `"previewUrl": "/LOVE/tempate-02/dist/"`). Do NOT add hardcoded redirects in `vercel.json` for individual templates. By adding it to the JSON, the admin panel automatically points to the `dist` folder.
 
 ## 11. Important Principle
 
