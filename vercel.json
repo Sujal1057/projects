@@ -6,16 +6,8 @@
   "trailingSlash": true,
   "rewrites": [
     {
-      "source": "/LOVE/tempate-02",
-      "destination": "/LOVE/tempate-02/dist/index.html"
-    },
-    {
-      "source": "/LOVE/tempate-02/",
-      "destination": "/LOVE/tempate-02/dist/index.html"
-    },
-    {
-      "source": "/LOVE/tempate-02/(assets/.*)",
-      "destination": "/LOVE/tempate-02/dist/$1"
+      "source": "/LOVE/tempate-02/:path*",
+      "destination": "/LOVE/tempate-02/dist/:path*"
     }
   ],
   "headers": [
