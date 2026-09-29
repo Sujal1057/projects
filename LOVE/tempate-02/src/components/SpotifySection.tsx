@@ -49,14 +49,14 @@ export const SpotifySection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.15 }}
-                className="relative rounded-2xl glass-card p-4 overflow-hidden border border-white/80 group"
+                className="relative rounded-2xl glass-card p-4 overflow-hidden border border-white/80 group h-[128px] sm:h-[144px] flex items-center"
               >
                 {isEmbedActive ? (
-                  <div className="w-full h-[152px] rounded-xl overflow-hidden shadow-inner bg-black">
+                  <div className="w-full rounded-xl overflow-hidden shadow-inner bg-transparent flex items-center justify-center h-full">
                     <iframe
                       src={`https://open.spotify.com/embed/track/${track.embedId}?utm_source=generator&theme=0`}
                       width="100%"
-                      height="152"
+                      height="80"
                       frameBorder="0"
                       allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                       loading="lazy"
@@ -64,7 +64,7 @@ export const SpotifySection: React.FC = () => {
                     />
                   </div>
                 ) : (
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-4 w-full h-full">
                     {/* Album Cover */}
                     <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden flex-shrink-0 shadow-md border border-white/60">
                       <img

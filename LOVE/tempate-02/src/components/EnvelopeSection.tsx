@@ -60,13 +60,13 @@ export const EnvelopeSection: React.FC<EnvelopeSectionProps> = ({ onOpenEnvelope
       opacity: 0,
       duration: 0.2
     })
-    // 2. Fade out whole envelope after seal breaks
+    // 2. Fade out whole envelope backwards
     .to(containerRef.current, {
       opacity: 0,
-      scale: 0.9,
-      duration: 0.5,
-      ease: "power2.in"
-    });
+      scale: 0.8,
+      duration: 0.8,
+      ease: "power2.inOut"
+    }, "-=0.1");
   };
 
   return (
