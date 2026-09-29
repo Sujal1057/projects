@@ -182,6 +182,66 @@
       });
     </script>
 
+    <style>
+      #orientation-overlay {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        background: #000; color: #fff;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        z-index: 9999999; text-align: center; font-family: sans-serif;
+      }
+      #orientation-overlay.hidden { display: none; }
+      #start-fullscreen-btn {
+        padding: 12px 24px; font-size: 1.1rem; background: #fff; color: #000;
+        border: none; border-radius: 30px; cursor: pointer; margin-top: 20px;
+      }
+    </style>
+    <div id="orientation-overlay">
+      <div id="orientation-content">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:15px"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+        <p id="orientation-text">Please rotate your phone to landscape mode.</p>
+      </div>
+      <button id="start-fullscreen-btn" style="display:none;">Tap to Start Experience</button>
+    </div>
+    <script>
+      (function() {
+        var overlay = document.getElementById('orientation-overlay');
+        var btn = document.getElementById('start-fullscreen-btn');
+        var content = document.getElementById('orientation-content');
+        
+        var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight > window.innerWidth);
+        
+        if (!isMobile) {
+          overlay.classList.add('hidden');
+          return;
+        }
+
+        function checkOrientation() {
+          var isPortrait = window.innerHeight > window.innerWidth;
+          if (isPortrait) {
+            content.style.display = 'block';
+            btn.style.display = 'none';
+          } else {
+            content.style.display = 'none';
+            btn.style.display = 'block';
+          }
+        }
+        
+        window.addEventListener('resize', checkOrientation);
+        checkOrientation();
+
+        btn.addEventListener('click', function() {
+          var docElm = document.documentElement;
+          if (docElm.requestFullscreen) docElm.requestFullscreen();
+          else if (docElm.webkitRequestFullscreen) docElm.webkitRequestFullscreen();
+          overlay.classList.add('hidden');
+          
+          var audio = document.querySelector('audio');
+          if (audio) {
+            audio.play().catch(function(e) { console.log(e); });
+          }
+        });
+      })();
+    </script>
     <script src="assets/app.js"></script>
   </body>
 </html>

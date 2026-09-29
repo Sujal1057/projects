@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Olivia!</title>
+  <meta name="description" content="A hand-drawn, sketchbook-style birthday card filled with doodles, memories, and warm wishes.">
+  
+  <!-- Fonts: Caveat (Handwritten), Special Elite (Typewriter), Inter (Body copy) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Special+Elite&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="sketchbook-theme">
+
+  <!-- SKETCH LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="pencil-doodle">
+        <svg viewBox="0 0 100 100" width="80" height="80" fill="none" stroke="currentColor" stroke-width="2">
+          <!-- Pencil drawing a line -->
+          <path d="M10,80 Q30,50 60,60 T90,30" class="pencil-path"></path>
+          <path d="M55,45 L70,30 L75,35 L60,50 Z" fill="currentColor" class="pencil-body"></path>
+        </svg>
+      </div>
+      <p class="sketch-label">Opening sketchbook...</p>
+      <div class="sketch-progress-bar">
+        <div class="sketch-progress-fill" id="loaderBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROGRESS LINE (Torn paper border effect) -->
+  <div class="scroll-progress-container">
+    <div class="scroll-progress" id="scrollProgress"></div>
+  </div>
+
+  <!-- FLOATING CONTROLS -->
+  <div class="controls">
+    <button class="control-btn" id="themeToggle" aria-label="Toggle dark notebook" title="Toggle notebook shade">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m11.314 11.314l.707-.707" stroke-linecap="round"/>
+        <circle cx="12" cy="12" r="4"/>
+      </svg>
+    </button>
+    <button class="control-btn" id="musicToggle" aria-label="Toggle birthday track" title="Toggle background music">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+      </svg>
+    </button>
+    <button class="control-btn" id="shareToggle" aria-label="Share card" title="Share card">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+    </button>
+  </div>
+
+  <audio id="bgMusic" loop preload="none"></audio>
+
+  <!-- =============================================
+       SECTION 1 — THE COVER (HERO)
+       ============================================= -->
+  <section class="notebook-cover" id="heroSection">
+    <!-- Doodle grid background overlay -->
+    <div class="notebook-bg-pattern"></div>
+    
+    <div class="doodle-overlay" aria-hidden="true">
+      <!-- Handdrawn party hat -->
+      <svg class="doodle doodle-hat" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polygon points="50,15 20,80 80,80"/>
+        <circle cx="50" cy="10" r="4" fill="currentColor"/>
+        <path d="M30,80 Q50,70 70,80 M40,60 Q50,55 60,60 M45,40 Q50,38 55,40" stroke-linecap="round"/>
+      </svg>
+
+      <!-- Handdrawn stars -->
+      <svg class="doodle doodle-star-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L15 9L22 9L17 14L19 21L12 17L5 21L7 14L2 9L9 9Z" stroke-linejoin="round"/>
+      </svg>
+      <svg class="doodle doodle-star-2" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L15 9L22 9L17 14L19 21L12 17L5 21L7 14L2 9L9 9Z" stroke-linejoin="round"/>
+      </svg>
+      
+      <!-- Handdrawn crown -->
+      <svg class="doodle doodle-crown" viewBox="0 0 100 60" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M10,50 L20,20 L40,35 L50,15 L60,35 L80,20 L90,50 Z" stroke-linejoin="round"/>
+        <circle cx="20" cy="17" r="3" fill="currentColor"/>
+        <circle cx="50" cy="12" r="3" fill="currentColor"/>
+        <circle cx="80" cy="17" r="3" fill="currentColor"/>
+      </svg>
+    </div>
+
+    <div class="sketchbook-container hero-content">
+      <div class="hero-date-tag">
+        <span class="typewriter-text" id="currentDate"></span>
+      </div>
+
+      <div class="hero-title-block">
+        <span class="handwritten-eyebrow">Hey beautiful soul, it's your day!</span>
+        <h1 class="hero-title-main">HAPPY<br>BIRTHDAY</h1>
+        
+        <div class="name-display">
+          <span class="handwritten-name">Olivia</span>
+          <!-- Sketched underlines -->
+          <svg class="sketch-underline" viewBox="0 0 200 20" preserveAspectRatio="none">
+            <path d="M5,10 Q90,18 195,8 M10,14 Q95,5 185,13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="hero-footer-hint">
+        <p class="hint-text typewriter-text">Page 01 // Click below to flip open</p>
+        <a href="#photoSection" class="flip-btn" id="ctaBtn">
+          <span>Open Card</span>
+          <svg class="sketch-arrow" viewBox="0 0 50 30" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10,5 L25,20 L40,5 M25,20 L25,2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 2 — PORTRAIT (TAPED PHOTO)
+       ============================================= -->
+  <section class="scrapbook-photo-section" id="photoSection">
+    <div class="sketchbook-container">
+      <div class="section-banner reveal">
+        <span class="handwritten-tag">Happy Moments</span>
+      </div>
+
+      <div class="scrapbook-photo-layout">
+        <!-- Photo with washi tape borders -->
+        <div class="polaroid-wrapper reveal reveal-delay-1">
+          <!-- Handdrawn tape decorations -->
+          <div class="tape-strip tape-top-left"></div>
+          <div class="tape-strip tape-bottom-right"></div>
+
+          <div class="polaroid-frame">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=1067&fit=crop&crop=faces" alt="Birthday person" class="grayscale-photo">
+            <p class="polaroid-caption handwritten-text">Olivia (The Birthday Star! 🎂)</p>
+          </div>
+        </div>
+
+        <div class="photo-side-doodle-text reveal reveal-delay-2">
+          <!-- Sketch bubble -->
+          <div class="sketch-speech-bubble">
+            <p class="handwritten-bubble-text">This year, let your sparkle shine brighter than ever before!</p>
+          </div>
+          
+          <svg class="sketch-star-spiral" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M10,10 Q50,30 30,70 T80,80" stroke-dasharray="5 3"/>
+            <polygon points="80,72 85,85 72,80" fill="currentColor"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 3 — BIRTHDAY QUOTE
+       ============================================= -->
+  <section class="doodle-quote-section" id="quoteSection">
+    <div class="sketchbook-container text-center">
+      <div class="quote-frame-doodle reveal">
+        <!-- Sketched quote marks -->
+        <span class="handwritten-quote-mark">&ldquo;</span>
+        <blockquote class="birthday-quote-text handwritten-text">
+          Every year is another beautiful chapter of your story. Write it with bold colors, wild dreams, and laughter.
+        </blockquote>
+        <span class="handwritten-quote-mark">&rdquo;</span>
+        <p class="quote-author typewriter-text">— Hand-written with love.</p>
+        
+        <!-- Doodle flowers -->
+        <svg class="doodle-flower" viewBox="0 0 50 50" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="25" cy="25" r="5" fill="currentColor"/>
+          <path d="M25,10 C20,15 30,15 25,20 C20,25 20,15 15,25 C10,25 20,20 25,25 C30,25 25,35 25,30 C30,20 40,25 35,25 C30,25 30,30 25,25"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 4 — CHRONICLES (TIMELINE)
+       ============================================= -->
+  <section class="notebook-timeline-section" id="timelineSection">
+    <div class="sketchbook-container">
+      <div class="section-banner reveal">
+        <span class="handwritten-tag">The Story So Far</span>
+      </div>
+      <h2 class="timeline-main-title handwritten-text reveal">Chapters of a Beautiful Journey</h2>
+
+      <!-- Winding timeline container (different from Swiss grid) -->
+      <div class="sketch-timeline-trail">
+        <!-- Vertical sketchy timeline track -->
+        <div class="timeline-sketch-track"></div>
+
+        <!-- Node 1: Childhood -->
+        <div class="timeline-step-node left-step reveal">
+          <div class="step-card">
+            <div class="step-tape"></div>
+            <div class="step-media">
+              <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=600&h=450&fit=crop" alt="Childhood" class="grayscale-photo">
+            </div>
+            <div class="step-info">
+              <span class="step-number typewriter-text">CHAP 01</span>
+              <h3 class="step-title handwritten-text">Early Wonders</h3>
+              <p class="step-desc">Pure curiosity, innocent laughter, and endless days of running in the sunshine.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 2: Moments -->
+        <div class="timeline-step-node right-step reveal">
+          <div class="step-card">
+            <div class="step-tape"></div>
+            <div class="step-media">
+              <img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=450&fit=crop" alt="Moments" class="grayscale-photo">
+            </div>
+            <div class="step-info">
+              <span class="step-number typewriter-text">CHAP 02</span>
+              <h3 class="step-title handwritten-text">Sweet Laughter</h3>
+              <p class="step-desc">Shared moments, late-night talks, and growing together with friends who became family.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 3: Adventures -->
+        <div class="timeline-step-node left-step reveal">
+          <div class="step-card">
+            <div class="step-tape"></div>
+            <div class="step-media">
+              <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=600&h=450&fit=crop" alt="Adventures" class="grayscale-photo">
+            </div>
+            <div class="step-info">
+              <span class="step-number typewriter-text">CHAP 03</span>
+              <h3 class="step-title handwritten-text">Wild Horizons</h3>
+              <p class="step-desc">Stepping off the beaten path, conquering new heights, and chasing sunsets fearlessly.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Node 4: Today -->
+        <div class="timeline-step-node right-step reveal">
+          <div class="step-card">
+            <div class="step-tape"></div>
+            <div class="step-media">
+              <img src="https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600&h=450&fit=crop" alt="Today" class="grayscale-photo">
+            </div>
+            <div class="step-info">
+              <span class="step-number typewriter-text">CHAP 04</span>
+              <h3 class="step-title handwritten-text">The Present Masterpiece</h3>
+              <p class="step-desc">Living right now. Beautifully complex, strong, and ready for whatever comes next.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 5 — WISHES (STICKY NOTES)
+       ============================================= -->
+  <section class="sticky-wishes-section" id="wishesSection">
+    <div class="sketchbook-container">
+      <div class="section-banner reveal">
+        <span class="handwritten-tag">Wishes for You</span>
+      </div>
+
+      <div class="wishes-board">
+        <!-- Post-it 1 -->
+        <div class="wish-post-it reveal reveal-delay-1">
+          <div class="post-it-pin"></div>
+          <div class="post-it-content">
+            <span class="wish-index typewriter-text">#01</span>
+            <p class="wish-text handwritten-text">May your beautiful smile never fade, even on the darkest days.</p>
+            <div class="wish-doodle-sun">
+              <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="20" cy="20" r="8"/>
+                <path d="M20,5 L20,8 M20,32 L20,35 M5,20 L8,20 M32,20 L35,20 M9.5,9.5 L11.5,11.5 M28.5,28.5 L30.5,30.5 M9.5,30.5 L11.5,28.5 M28.5,11.5 L30.5,9.5"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post-it 2 -->
+        <div class="wish-post-it reveal reveal-delay-2">
+          <div class="post-it-pin"></div>
+          <div class="post-it-content">
+            <span class="wish-index typewriter-text">#02</span>
+            <p class="wish-text handwritten-text">May every little dream you hold close to your heart find its way to come true.</p>
+            <div class="wish-doodle-star">
+              <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M20,5 L23,15 L33,15 L25,22 L28,32 L20,25 L12,32 L15,22 L7,15 L17,15 Z" stroke-linejoin="round"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Post-it 3 -->
+        <div class="wish-post-it reveal reveal-delay-3">
+          <div class="post-it-pin"></div>
+          <div class="post-it-content">
+            <span class="wish-index typewriter-text">#03</span>
+            <p class="wish-text handwritten-text">Stay healthy. Stay happy. Stay fearless. The world needs your light.</p>
+            <div class="wish-doodle-heart">
+              <svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12,21 C12,21 12,14 17,14 C20,14 20,17 20,17 C20,17 20,14 23,14 C28,14 28,21 28,21 C28,25 24,29 20,31 C16,29 12,25 12,21 Z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 6 — POLAROID COLLAGE
+       ============================================= -->
+  <section class="scrapbook-gallery-section" id="gallerySection">
+    <div class="sketchbook-container">
+      <div class="section-banner reveal">
+        <span class="handwritten-tag">Picture Gallery</span>
+      </div>
+    </div>
+
+    <!-- Scrapbook Taped Polaroid Pile -->
+    <div class="polaroid-collage-container">
+      <!-- Image 1 -->
+      <div class="collage-item pos-1 reveal">
+        <div class="collage-tape"></div>
+        <div class="polaroid-frame-mini">
+          <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800&h=600&fit=crop" alt="Memory" class="grayscale-photo">
+          <p class="mini-caption handwritten-text">Best vibes! ✨</p>
+        </div>
+      </div>
+
+      <!-- Image 2 -->
+      <div class="collage-item pos-2 reveal">
+        <div class="collage-tape"></div>
+        <div class="polaroid-frame-mini">
+          <img src="https://images.unsplash.com/photo-1464347744102-11db6282f854?w=600&h=400&fit=crop" alt="Memory" class="grayscale-photo">
+          <p class="mini-caption handwritten-text">Birthday cake time! 🎂</p>
+        </div>
+      </div>
+
+      <!-- Image 3 -->
+      <div class="collage-item pos-3 reveal">
+        <div class="collage-tape"></div>
+        <div class="polaroid-frame-mini">
+          <img src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=600&h=400&fit=crop" alt="Memory" class="grayscale-photo">
+          <p class="mini-caption handwritten-text">Smiles & Sunshine ☀️</p>
+        </div>
+      </div>
+
+      <!-- Image 4 -->
+      <div class="collage-item pos-4 reveal">
+        <div class="collage-tape"></div>
+        <div class="polaroid-frame-mini">
+          <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&h=400&fit=crop" alt="Memory" class="grayscale-photo">
+          <p class="mini-caption handwritten-text">Dinner memories 🥂</p>
+        </div>
+      </div>
+
+      <!-- Image 5 -->
+      <div class="collage-item pos-5 reveal">
+        <div class="collage-tape"></div>
+        <div class="polaroid-frame-mini">
+          <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=800&fit=crop" alt="Memory" class="grayscale-photo">
+          <p class="mini-caption handwritten-text">Serene sunset views 🌅</p>
+        </div>
+      </div>
+
+      <!-- Image 6 -->
+      <div class="collage-item pos-6 reveal">
+        <div class="collage-tape"></div>
+        <div class="polaroid-frame-mini">
+          <img src="https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=600&h=400&fit=crop" alt="Memory" class="grayscale-photo">
+          <p class="mini-caption handwritten-text">Blooming flowers 🌸</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 7 — FAVORITE QUOTE
+       ============================================= -->
+  <section class="handwritten-billboard-section" id="bigQuoteSection">
+    <div class="sketchbook-container text-center">
+      <div class="banner-hanging reveal">
+        <span class="typewriter-text">[NOTE-07]</span>
+        <h2 class="billboard-quote-title handwritten-text">
+          The best is yet to come.
+        </h2>
+        
+        <!-- Scribbled loop doodle -->
+        <svg class="doodle-loop-large" viewBox="0 0 100 50" fill="none" stroke="currentColor" stroke-width="1">
+          <path d="M10,25 C30,5 20,45 50,25 C80,5 70,45 90,25 M15,40 Q40,15 50,45" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- =============================================
+       SECTION 8 — FOOTER / SIGNATURE
+       ============================================= -->
+  <footer class="notebook-footer" id="footerSection">
+    <div class="sketchbook-container text-center">
+      <div class="doodle-divider">
+        <svg viewBox="0 0 200 10" preserveAspectRatio="none" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5,5 Q50,0 100,5 T195,5 M10,8 Q50,3 100,8 T190,8" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="footer-meta-block">
+        <p class="made-love handwritten-text">Made with <span class="heart-doodle">&#9829;</span> for you</p>
+        <h2 class="footer-signature-name handwritten-text">Happy Birthday, Olivia</h2>
+      </div>
+
+      <div class="footer-button-block reveal">
+        <button class="sketch-share-btn" id="footerShareBtn">
+          <span>SHARE CARD</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+      </div>
+
+      <p class="copyright-mono typewriter-text">&copy; 2026 / Hand-drawn sketch page</p>
+    </div>
+  </footer>
+
+  <!-- SHARE MODAL -->
+  <div class="share-modal" id="shareModal">
+    <div class="share-modal-bg"></div>
+    <div class="share-modal-content">
+      <h3 class="share-modal-title typewriter-text">SHARE BIRTHDAY CARD</h3>
+      <p class="share-modal-text">Copy the link below to send this hand-drawn card to Olivia.</p>
+      <div class="share-url">
+        <input type="text" id="shareUrl" readonly>
+        <button id="shareCopy" class="typewriter-text">COPY</button>
+      </div>
+      <button class="share-close typewriter-text">[ CLOSE ]</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <style>
+    #orientation-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #000; color: #fff;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 9999999; text-align: center; font-family: sans-serif;
+    }
+    #orientation-overlay.hidden { display: none; }
+    #start-fullscreen-btn {
+      padding: 12px 24px; font-size: 1.1rem; background: #fff; color: #000;
+      border: none; border-radius: 30px; cursor: pointer; margin-top: 20px;
+    }
+  </style>
+  <div id="orientation-overlay">
+    <div id="orientation-content">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-bottom:15px"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+      <p id="orientation-text">Please rotate your phone to landscape mode.</p>
+    </div>
+    <button id="start-fullscreen-btn" style="display:none;">Tap to Start Experience</button>
+  </div>
+  <script>
+    (function() {
+      var overlay = document.getElementById('orientation-overlay');
+      var btn = document.getElementById('start-fullscreen-btn');
+      var content = document.getElementById('orientation-content');
+      
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight > window.innerWidth);
+      
+      if (!isMobile) {
+        overlay.classList.add('hidden');
+        return;
+      }
+
+      function checkOrientation() {
+        var isPortrait = window.innerHeight > window.innerWidth;
+        if (isPortrait) {
+          content.style.display = 'block';
+          btn.style.display = 'none';
+        } else {
+          content.style.display = 'none';
+          btn.style.display = 'block';
+        }
+      }
+      
+      window.addEventListener('resize', checkOrientation);
+      checkOrientation();
+
+      btn.addEventListener('click', function() {
+        var docElm = document.documentElement;
+        if (docElm.requestFullscreen) docElm.requestFullscreen();
+        else if (docElm.webkitRequestFullscreen) docElm.webkitRequestFullscreen();
+        overlay.classList.add('hidden');
+        
+        var audio = document.querySelector('audio');
+        if (audio) {
+          audio.play().catch(function(e) { console.log(e); });
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,985 @@
+/* ============================================
+   TEMPLATE 07 — SKETCHBOOK & DOODLE BIRTHDAY
+   Theme: Raw Hand-drawn, Sketchy, Scrapbook B&W
+   ============================================ */
+
+:root {
+  /* Cream paper palette */
+  --bg: #FDFBF7;
+  --bg-secondary: #F6F3EC;
+  --primary: #1A1A1A;
+  --secondary: #555555;
+  --tertiary: #888888;
+  --border: #1A1A1A;
+  --border-light: #DDD7CD;
+  --grid-line: rgba(26, 26, 26, 0.04);
+  --tape-color: rgba(220, 215, 200, 0.6);
+  --pin-color: #A32A2A;
+
+  /* Fonts */
+  --font-hand: 'Caveat', cursive, sans-serif;
+  --font-typewriter: 'Special Elite', Courier, monospace;
+  --font-body: 'Inter', sans-serif;
+
+  /* Font Sizes */
+  --fs-hero: clamp(3rem, 9vw, 7.5rem);
+  --fs-h1: clamp(2rem, 5vw, 3.5rem);
+  --fs-h2: clamp(1.6rem, 4vw, 2.6rem);
+  --fs-body: clamp(0.95rem, 1.1vw, 1.15rem);
+  --fs-small: clamp(0.8rem, 0.9vw, 0.95rem);
+  --fs-micro: 0.75rem;
+
+  /* Spacings */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4rem;
+  --space-3xl: 5.5rem;
+  --space-4xl: 7rem;
+  --space-5xl: 9rem;
+
+  --grid-margin: clamp(1rem, 5vw, 3.5rem);
+
+  /* Timings */
+  --dur-fast: 0.2s;
+  --dur-med: 0.4s;
+  --dur-slow: 0.7s;
+  --ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+
+  --z-loader: 9999;
+  --z-progress: 1000;
+  --z-controls: 900;
+  --z-modal: 800;
+}
+
+/* ── Dark Inverted Notebook ── */
+[data-theme="dark"] {
+  --bg: #121210;
+  --bg-secondary: #1E1E1C;
+  --primary: #F0EDE6;
+  --secondary: #BEBAAF;
+  --tertiary: #7E7A70;
+  --border: #F0EDE6;
+  --border-light: #2C2C28;
+  --grid-line: rgba(240, 237, 230, 0.05);
+  --tape-color: rgba(60, 60, 56, 0.6);
+  --pin-color: #D44B4B;
+}
+
+/* ── Core Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background-color var(--dur-med) var(--ease-out),
+              color var(--dur-med) var(--ease-out);
+}
+
+/* Sketchbook graph-paper style background */
+.sketchbook-theme {
+  background-image: 
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.grayscale-photo {
+  filter: grayscale(1) contrast(1.05);
+  transition: filter var(--dur-med) var(--ease-out);
+}
+.grayscale-photo:hover {
+  filter: grayscale(0) contrast(1);
+}
+
+/* Text styles */
+.handwritten-text {
+  font-family: var(--font-hand);
+}
+.typewriter-text {
+  font-family: var(--font-typewriter);
+}
+
+.sketchbook-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--grid-margin);
+}
+
+.text-center { text-align: center; }
+
+/* ── Notebook Section Tags ── */
+.section-banner {
+  margin-bottom: var(--space-lg);
+  display: inline-block;
+}
+.handwritten-tag {
+  font-family: var(--font-hand);
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 1px dashed var(--border);
+  padding: 4px 15px;
+  border-radius: 12px;
+  display: inline-block;
+  transform: rotate(-1.5deg);
+  background: var(--bg);
+}
+
+section {
+  padding: var(--space-4xl) 0;
+  border-bottom: 2px dashed var(--border-light);
+  position: relative;
+}
+section:last-of-type {
+  border-bottom: none;
+}
+
+/* ── Sketch Loader ── */
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-loader);
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.8s var(--ease-out), visibility 0.8s;
+}
+.loader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.loader-inner {
+  text-align: center;
+}
+.pencil-doodle {
+  margin-bottom: var(--space-md);
+  color: var(--primary);
+  display: inline-block;
+}
+.pencil-path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: drawLine 2.5s infinite ease-in-out;
+}
+.pencil-body {
+  animation: movePencil 2.5s infinite ease-in-out;
+}
+@keyframes drawLine {
+  0% { stroke-dashoffset: 200; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -200; }
+}
+@keyframes movePencil {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(25px, -20px); }
+  100% { transform: translate(0, 0); }
+}
+.sketch-label {
+  font-family: var(--font-typewriter);
+  font-size: var(--fs-small);
+  color: var(--secondary);
+  margin-bottom: var(--space-sm);
+}
+.sketch-progress-bar {
+  width: 150px;
+  height: 4px;
+  background: var(--border-light);
+  margin: 0 auto;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.sketch-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: var(--primary);
+  transition: width 0.15s linear;
+}
+
+/* ── Scroll Progress (Torn Page Accent) ── */
+.scroll-progress-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 6px;
+  z-index: var(--z-progress);
+  background: transparent;
+}
+.scroll-progress {
+  width: 0%; height: 100%;
+  background: var(--primary);
+  transition: width 0.1s linear;
+}
+
+/* ── Controls ── */
+.controls {
+  position: fixed;
+  top: var(--space-lg);
+  right: var(--space-lg);
+  z-index: var(--z-controls);
+  display: flex;
+  gap: var(--space-xs);
+}
+.control-btn {
+  width: 38px; height: 38px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: transform var(--dur-fast), background var(--dur-fast);
+  box-shadow: 2px 2px 0px var(--border);
+}
+.control-btn:hover {
+  background: var(--bg-secondary);
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px var(--border);
+}
+.control-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px var(--border);
+}
+
+/* ── Reveal Trigger ── */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--dur-slow) var(--ease-out),
+              transform var(--dur-slow) var(--ease-out);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+
+/* ============================================
+   SECTION 1 — THE COVER (HERO)
+   ============================================ */
+.notebook-cover {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: var(--space-xl);
+}
+
+/* Spiral Ring Notebook margin line */
+.notebook-bg-pattern::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 45px;
+  width: 2px; height: 100%;
+  background: rgba(163, 42, 42, 0.2); /* red margin line */
+  pointer-events: none;
+}
+
+/* Handdrawn Doodle Elements */
+.doodle-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.doodle {
+  position: absolute;
+  color: var(--primary);
+  opacity: 0.18;
+}
+.doodle-hat {
+  top: 18%; left: 10%;
+  width: 90px; height: 90px;
+  transform: rotate(-15deg);
+}
+.doodle-star-1 {
+  top: 15%; right: 12%;
+  width: 40px; height: 40px;
+  transform: rotate(20deg);
+}
+.doodle-star-2 {
+  bottom: 25%; left: 8%;
+  width: 30px; height: 30px;
+  transform: rotate(-10deg);
+}
+.doodle-crown {
+  top: 48%; right: 8%;
+  width: 80px; height: 50px;
+  transform: rotate(15deg);
+}
+
+.hero-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 70vh;
+  position: relative;
+  z-index: 2;
+  padding-left: 60px; /* offset for spiral red margin */
+}
+
+.hero-date-tag {
+  align-self: flex-start;
+  border: 1px solid var(--border);
+  padding: 4px 12px;
+  background: var(--bg);
+  box-shadow: 2px 2px 0px var(--border);
+  transform: rotate(-1deg);
+}
+.hero-date-tag span {
+  font-size: var(--fs-micro);
+}
+
+.hero-title-block {
+  margin: var(--space-xl) 0;
+}
+.handwritten-eyebrow {
+  font-family: var(--font-hand);
+  font-size: 1.8rem;
+  color: var(--secondary);
+  display: block;
+  margin-bottom: var(--space-xs);
+}
+.hero-title-main {
+  font-size: var(--fs-hero);
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+.name-display {
+  display: inline-block;
+  position: relative;
+  margin-top: 10px;
+}
+.handwritten-name {
+  font-family: var(--font-hand);
+  font-size: clamp(3.5rem, 10vw, 8.5rem);
+  font-weight: 700;
+  color: var(--pin-color);
+  line-height: 1;
+}
+.sketch-underline {
+  position: absolute;
+  bottom: -15px; left: 0;
+  width: 100%; height: 20px;
+  color: var(--primary);
+}
+
+.hero-footer-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px dashed var(--border-light);
+  padding-top: var(--space-md);
+}
+.hint-text {
+  font-size: var(--fs-micro);
+  color: var(--secondary);
+}
+
+.flip-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-typewriter);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 10px 18px;
+  background: var(--bg);
+  color: var(--primary);
+  box-shadow: 2px 2px 0px var(--border);
+  transition: all var(--dur-fast) var(--ease-out);
+}
+.flip-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 4px 0px var(--border);
+}
+.sketch-arrow {
+  width: 18px; height: 18px;
+  animation: bounceArrow 1.5s infinite alternate;
+}
+@keyframes bounceArrow {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+
+/* ============================================
+   SECTION 2 — PORTRAIT (TAPED PHOTO)
+   ============================================ */
+.scrapbook-photo-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2xl);
+  margin-top: var(--space-xl);
+}
+
+.polaroid-wrapper {
+  position: relative;
+  transform: rotate(-2.5deg);
+  margin: 0 auto;
+}
+.polaroid-frame {
+  background: #FFF;
+  border: 1px solid var(--border-light);
+  padding: 16px 16px 45px 16px;
+  box-shadow: 0px 8px 24px rgba(0, 0, 0, 0.05);
+  max-width: 380px;
+}
+.polaroid-frame img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.polaroid-caption {
+  font-size: 1.8rem;
+  text-align: center;
+  color: var(--primary);
+  margin-top: 15px;
+}
+
+/* Washi Tape Strips */
+.tape-strip {
+  position: absolute;
+  background: var(--tape-color);
+  backdrop-filter: blur(1px);
+  border: 1px dashed rgba(26,26,26,0.1);
+  box-shadow: 0px 2px 5px rgba(0,0,0,0.03);
+}
+.tape-top-left {
+  width: 120px; height: 35px;
+  top: -15px; left: -25px;
+  transform: rotate(-35deg);
+}
+.tape-bottom-right {
+  width: 100px; height: 35px;
+  bottom: -15px; right: -20px;
+  transform: rotate(-15deg);
+}
+
+.photo-side-doodle-text {
+  max-width: 400px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.sketch-speech-bubble {
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  padding: 24px;
+  background: var(--bg);
+  position: relative;
+  box-shadow: 3px 3px 0 var(--border);
+}
+.sketch-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -15px; left: 40px;
+  border-width: 15px 15px 0 0;
+  border-style: solid;
+  border-color: var(--border) transparent;
+  display: block;
+  width: 0;
+}
+.handwritten-bubble-text {
+  font-size: 1.8rem;
+  line-height: 1.3;
+}
+.sketch-star-spiral {
+  align-self: flex-end;
+  width: 80px; height: 80px;
+  margin-top: var(--space-md);
+  color: var(--tertiary);
+  transform: rotate(15deg);
+}
+
+
+/* ============================================
+   SECTION 3 — BIRTHDAY QUOTE
+   ============================================ */
+.doodle-quote-section {
+  background: var(--bg-secondary);
+}
+.quote-frame-doodle {
+  max-width: 750px;
+  margin: 0 auto;
+  border: 2px dashed var(--border);
+  padding: var(--space-2xl) var(--space-lg);
+  border-radius: 20px;
+  position: relative;
+}
+.handwritten-quote-mark {
+  font-family: var(--font-hand);
+  font-size: 5rem;
+  line-height: 1;
+  color: var(--pin-color);
+  opacity: 0.8;
+  display: inline-block;
+  vertical-align: middle;
+}
+.birthday-quote-text {
+  font-size: 2.2rem;
+  line-height: 1.3;
+  color: var(--primary);
+  display: inline;
+  vertical-align: middle;
+  padding: 0 10px;
+}
+.quote-author {
+  font-size: var(--fs-micro);
+  color: var(--secondary);
+  margin-top: var(--space-md);
+}
+.doodle-flower {
+  position: absolute;
+  bottom: -15px; right: 25px;
+  width: 40px; height: 40px;
+  color: var(--primary);
+}
+
+
+/* ============================================
+   SECTION 4 — CHRONICLES (TIMELINE)
+   ============================================ */
+.timeline-main-title {
+  font-size: var(--fs-h1);
+  margin-bottom: var(--space-2xl);
+}
+
+.sketch-timeline-trail {
+  position: relative;
+  padding: var(--space-xl) 0;
+}
+/* Vertical Winding line */
+.timeline-sketch-track {
+  position: absolute;
+  left: 50%; top: 0;
+  width: 2px; height: 100%;
+  background-image: linear-gradient(to bottom, var(--border) 60%, transparent 40%);
+  background-size: 1px 12px;
+  transform: translateX(-50%);
+}
+
+.timeline-step-node {
+  display: flex;
+  width: 100%;
+  margin-bottom: var(--space-3xl);
+  position: relative;
+}
+.timeline-step-node::before {
+  content: '★';
+  font-size: 1.2rem;
+  color: var(--pin-color);
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  width: 32px; height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 50%; top: 20px;
+  transform: translateX(-50%);
+  z-index: 5;
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+.left-step { justify-content: flex-start; }
+.right-step { justify-content: flex-end; }
+
+.step-card {
+  width: 45%;
+  background: var(--bg);
+  border: 2px solid var(--border);
+  padding: 16px;
+  position: relative;
+  box-shadow: 4px 4px 0 var(--border);
+  border-radius: 8px;
+}
+.left-step .step-card { transform: rotate(-1deg); }
+.right-step .step-card { transform: rotate(1deg); }
+
+.step-tape {
+  position: absolute;
+  top: -12px; left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 80px; height: 25px;
+  background: var(--tape-color);
+}
+
+.step-media {
+  aspect-ratio: 16/10;
+  overflow: hidden;
+  border: 1px solid var(--border-light);
+  margin-bottom: var(--space-sm);
+}
+.step-media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.step-number {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--tertiary);
+  letter-spacing: 0.1em;
+  display: block;
+  margin-bottom: 2px;
+}
+.step-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: var(--space-xs);
+  color: var(--pin-color);
+}
+.step-desc {
+  font-size: var(--fs-small);
+  color: var(--secondary);
+  line-height: 1.45;
+}
+
+
+/* ============================================
+   SECTION 5 — WISHES (STICKY NOTES BOARD)
+   ============================================ */
+.wishes-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-xl);
+  margin-top: var(--space-2xl);
+}
+
+.wish-post-it {
+  background: #FFFDF0; /* Light yellow post-it */
+  border: 1px solid #EAE0C8;
+  padding: 24px;
+  position: relative;
+  box-shadow: 4px 12px 20px rgba(0,0,0,0.05);
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform var(--dur-fast);
+}
+[data-theme="dark"] .wish-post-it {
+  background: #252420;
+  border-color: #3C3A34;
+}
+
+.wish-post-it:nth-child(1) { transform: rotate(-2deg); }
+.wish-post-it:nth-child(2) { transform: rotate(1deg); }
+.wish-post-it:nth-child(3) { transform: rotate(-1deg); }
+
+.wish-post-it:hover {
+  transform: scale(1.03) rotate(0deg);
+  box-shadow: 6px 16px 24px rgba(0,0,0,0.08);
+}
+
+.post-it-pin {
+  position: absolute;
+  top: -8px; left: 50%;
+  transform: translateX(-50%);
+  width: 12px; height: 12px;
+  background: var(--pin-color);
+  border-radius: 50%;
+  box-shadow: 1px 2px 2px rgba(0,0,0,0.2);
+}
+
+.wish-index {
+  font-size: 11px;
+  color: var(--tertiary);
+  font-weight: 700;
+  margin-bottom: var(--space-sm);
+  display: block;
+}
+.wish-text {
+  font-size: 1.7rem;
+  line-height: 1.25;
+  color: var(--primary);
+}
+.wish-doodle-sun,
+.wish-doodle-star,
+.wish-doodle-heart {
+  align-self: flex-end;
+  width: 32px; height: 32px;
+  color: var(--pin-color);
+  opacity: 0.65;
+  margin-top: var(--space-sm);
+}
+
+
+/* ============================================
+   SECTION 6 — SCENE POLAROIDS (COLLAGE)
+   ============================================ */
+.polaroid-collage-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--grid-margin);
+}
+
+.collage-item {
+  position: relative;
+  transition: transform var(--dur-fast);
+  cursor: pointer;
+}
+.collage-item:hover {
+  z-index: 10;
+  transform: scale(1.05) rotate(0deg) !important;
+}
+
+.polaroid-frame-mini {
+  background: #FFF;
+  border: 1px solid var(--border-light);
+  padding: 10px 10px 30px 10px;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.05);
+  width: 220px;
+}
+.polaroid-frame-mini img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+.mini-caption {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-top: 8px;
+  color: var(--primary);
+}
+
+.collage-tape {
+  position: absolute;
+  top: -10px; left: 50%;
+  transform: translateX(-50%);
+  width: 70px; height: 20px;
+  background: var(--tape-color);
+}
+
+/* Scrapbook randomness */
+.collage-item.pos-1 { transform: rotate(-4deg); }
+.collage-item.pos-2 { transform: rotate(3deg); }
+.collage-item.pos-3 { transform: rotate(-2deg); }
+.collage-item.pos-4 { transform: rotate(5deg); }
+.collage-item.pos-5 { transform: rotate(-3deg); }
+.collage-item.pos-6 { transform: rotate(2deg); }
+
+
+/* ============================================
+   SECTION 7 — FAVORITE QUOTE
+   ============================================ */
+.handwritten-billboard-section {
+  padding: var(--space-5xl) 0;
+}
+.banner-hanging {
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  padding: var(--space-3xl) var(--space-lg);
+  border-radius: 16px;
+  box-shadow: 6px 6px 0 var(--border);
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+}
+.billboard-quote-title {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  line-height: 1.1;
+  color: var(--primary);
+}
+.doodle-loop-large {
+  position: absolute;
+  bottom: 10px; right: 20px;
+  width: 80px; height: 40px;
+  color: var(--tertiary);
+  opacity: 0.3;
+}
+
+
+/* ============================================
+   SECTION 8 — FOOTER / SIGNATURE
+   ============================================ */
+.notebook-footer {
+  padding: var(--space-3xl) 0 var(--space-2xl);
+  position: relative;
+}
+.doodle-divider {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto var(--space-xl);
+  color: var(--border-light);
+}
+.made-love {
+  font-size: 1.6rem;
+  color: var(--secondary);
+  margin-bottom: var(--space-sm);
+}
+.heart-doodle {
+  color: var(--pin-color);
+}
+.footer-signature-name {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  color: var(--primary);
+  margin-bottom: var(--space-xl);
+}
+
+.sketch-share-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-typewriter);
+  font-size: var(--fs-micro);
+  font-weight: 700;
+  border: 1px solid var(--border);
+  padding: 10px 24px;
+  background: var(--bg);
+  color: var(--primary);
+  box-shadow: 3px 3px 0 var(--border);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+.sketch-share-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--border);
+}
+.sketch-share-btn:active {
+  transform: translate(1px, 1px);
+  box-shadow: 2px 2px 0 var(--border);
+}
+
+.copyright-mono {
+  font-size: 9px;
+  color: var(--tertiary);
+  margin-top: var(--space-2xl);
+  letter-spacing: 0.05em;
+}
+
+/* ── Share Modal ── */
+.share-modal {
+  position: fixed; inset: 0;
+  z-index: var(--z-modal);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; visibility: hidden;
+  transition: opacity var(--dur-fast) var(--ease-out), visibility var(--dur-fast);
+}
+.share-modal.active { opacity: 1; visibility: visible; }
+.share-modal-bg {
+  position: absolute; inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(2px);
+}
+.share-modal-content {
+  position: relative;
+  background: var(--bg);
+  padding: var(--space-2xl);
+  border: 2px solid var(--border);
+  box-shadow: 5px 5px 0 var(--border);
+  max-width: 400px; width: 90%;
+  text-align: center;
+  transform: translateY(20px);
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.share-modal.active .share-modal-content { transform: translateY(0); }
+.share-modal-title {
+  font-size: var(--fs-small);
+  font-weight: 700;
+  margin-bottom: var(--space-md);
+  letter-spacing: 0.05em;
+}
+.share-modal-text {
+  font-size: var(--fs-small);
+  color: var(--secondary);
+  margin-bottom: var(--space-lg);
+}
+.share-url { display: flex; gap: var(--space-xs); margin-bottom: var(--space-lg); }
+.share-url input {
+  flex: 1; padding: var(--space-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-secondary);
+  font-family: var(--font-typewriter);
+  font-size: var(--fs-micro);
+  color: var(--primary); outline: none;
+}
+.share-url button {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--bg); color: var(--primary);
+  font-family: var(--font-typewriter);
+  font-size: var(--fs-micro); font-weight: 700;
+  border: 1px solid var(--border);
+  box-shadow: 2px 2px 0 var(--border);
+  cursor: pointer;
+}
+.share-url button:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--border);
+}
+.share-close {
+  font-size: var(--fs-micro);
+  color: var(--secondary);
+  cursor: pointer;
+}
+
+/* ── Confetti Canvas ── */
+.confetti-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9998;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 1024px) {
+  .wishes-board { grid-template-columns: 1fr; gap: var(--space-lg); max-width: 400px; margin: var(--space-xl) auto 0; }
+  .scrapbook-photo-layout { flex-direction: column; text-align: center; }
+  .photo-side-doodle-text { align-items: center; }
+  .sketch-speech-bubble::after { left: 50%; transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  :root { --grid-margin: 1.25rem; }
+  section { padding: var(--space-3xl) 0; }
+  .hero-content { padding-left: 20px; }
+  .notebook-bg-pattern::before { left: 15px; }
+  .timeline-sketch-track { left: 16px; transform: none; }
+  .timeline-step-node { justify-content: flex-start; padding-left: 45px; }
+  .timeline-step-node::before { left: 16px; transform: translateX(-50%); }
+  .step-card { width: 100%; }
+  .doodle { display: none; }
+}
+
+@media (max-width: 480px) {
+  .hero-title-main { font-size: clamp(2rem, 11vw, 3.5rem); }
+}
