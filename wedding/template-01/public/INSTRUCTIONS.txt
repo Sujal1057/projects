@@ -1,0 +1,7 @@
+Place your 6 generated background images here:
+- bg-hero.jpg
+- bg-story.jpg
+- bg-couple.jpg
+- bg-details.jpg
+- bg-countdown.jpg
+- bg-footer.jpg

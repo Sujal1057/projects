@@ -1,0 +1,923 @@
+body,
+html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #000;
+    overflow-x: hidden;
+}
+
+.image-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.hero-foreground {
+    position: relative;
+    width: 100%;
+    height: auto;
+    display: block;
+    z-index: 5;
+}
+
+.image-container .couple-photo {
+    position: absolute;
+    bottom: 25%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 18%;
+    /* Made it slightly bigger as requested */
+    height: auto;
+    z-index: 6;
+    transition: transform 0.4s ease-out;
+    will-change: transform;
+}
+
+.image-container .bg-1 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 130vh;
+    object-fit: cover;
+    z-index: 1;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+.bg-2-wrapper,
+.bg-3-wrapper,
+.bg-4-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.image-container .bg-2,
+.image-container .bg-3,
+.image-container .bg-4 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 30;
+    display: block;
+}
+
+.bg-5-wrapper,
+.bg-6-wrapper {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.image-container .bg-5,
+.image-container .bg-6 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 30;
+    display: block;
+}
+
+.seam-blur {
+    position: absolute;
+    bottom: -150px;
+    /* Hangs over the edge between hero and bg-2 */
+    left: 0;
+    width: 100%;
+    height: 300px;
+    /* 150px overlaps hero, 150px overlaps bg-2 */
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent, black 50%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 50%, transparent);
+    z-index: 40;
+    pointer-events: none;
+}
+
+
+
+/* Premium text overlay for the couple's names */
+.couple-names {
+    position: absolute;
+    top: 5vh;
+    left: 0;
+    width: 100%;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    z-index: 20;
+    pointer-events: none;
+    /* Allows clicking through the text if needed */
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 25px rgba(255, 255, 255, 0.2);
+    will-change: transform;
+    /* Hint for browser to use GPU hardware acceleration */
+}
+
+.couple-names .name {
+    font-family: 'Great Vibes', cursive;
+    font-size: 12vw;
+    /* Increased size since they have their own line */
+    color: #ffffff;
+    opacity: 0;
+    /* Starting state for animation */
+}
+
+.couple-names .weds {
+    font-family: 'Playfair Display', serif;
+    font-size: 4vw;
+    font-style: italic;
+    color: #f0e6d2;
+    /* Slightly golden/champagne color */
+    margin: -10px 0;
+    /* Brings the names slightly closer to 'weds' */
+    opacity: 0;
+}
+
+/* Animations for Left, Center, and Right reveals */
+@keyframes slideFromLeft {
+    0% {
+        opacity: 0;
+        transform: translateX(-150px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideFromRight {
+    0% {
+        opacity: 0;
+        transform: translateX(150px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes scaleFromCenter {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Apply staggered animations with smooth cubic-bezier easing */
+.couple-names>div {
+    opacity: 0;
+    /* Starting state */
+}
+
+.couple-names>div:nth-child(1) {
+    animation: slideFromLeft 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.couple-names>div:nth-child(2) {
+    animation: scaleFromCenter 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
+.couple-names>div:nth-child(3) {
+    animation: slideFromRight 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+}
+
+/* Scroll Down Indicator */
+.scroll-indicator {
+    position: absolute;
+    top: 90vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    z-index: 30;
+    opacity: 0;
+    animation: framerReveal 1.4s cubic-bezier(0.16, 1, 0.3, 1) 1s forwards;
+}
+
+.scroll-indicator .line {
+    width: 1px;
+    height: 40px;
+    background-color: #fff;
+    margin-top: 10px;
+    transform-origin: top;
+    animation: scrollLine 2s cubic-bezier(0.77, 0, 0.175, 1) infinite;
+}
+
+@keyframes scrollLine {
+    0% {
+        transform: scaleY(0);
+        transform-origin: top;
+    }
+
+    50% {
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+
+    50.1% {
+        transform: scaleY(1);
+        transform-origin: bottom;
+    }
+
+    100% {
+        transform: scaleY(0);
+        transform-origin: bottom;
+    }
+}
+
+/* Generic class for revealing elements on scroll (Framer style) */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mobile responsiveness: increase font sizes on smaller screens for better readability */
+@media (max-width: 768px) {
+    .couple-names {
+        top: 35vh;
+    }
+
+    .couple-names .name {
+        font-size: 14vw;
+        /* Increased slightly for better visibility while staying centered */
+    }
+
+    .couple-names .weds {
+        font-size: 6.5vw;
+        /* Larger cursive 'weds' */
+        margin: -5px 0;
+        /* Adjust spacing slightly */
+    }
+}
+
+.invitation-overlay {
+    position: relative;
+    z-index: 40;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 20px;
+}
+
+.invitation-content {
+    width: 90%;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 50px 30px;
+}
+
+.image-container .bappa-img {
+    width: 50px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.inv-small {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #000;
+    font-weight: 500;
+    margin: 0;
+}
+
+.inv-names {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #000;
+    margin: 5px 0;
+    letter-spacing: 1px;
+}
+
+.inv-divider {
+    width: 60px;
+    height: 1px;
+    background-color: #000;
+    margin: 20px 0;
+}
+
+.inv-invite {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: 6px;
+    margin: 25px 0;
+    color: #000;
+}
+
+.inv-couple {
+    font-family: 'Great Vibes', cursive;
+    font-size: 5rem;
+    font-weight: 600;
+    margin: 15px 0;
+    color: #000;
+    text-shadow: none;
+}
+
+.inv-amp {
+    font-family: 'Great Vibes', cursive;
+    font-size: 3rem;
+    font-weight: 600;
+    color: #000;
+    margin: -10px 0;
+}
+
+/* Stagger transition delays for a cinematic cascading reveal effect */
+.invitation-content>.reveal-on-scroll:nth-child(1) {
+    transition-delay: 0.05s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(2) {
+    transition-delay: 0.15s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(3) {
+    transition-delay: 0.25s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(4) {
+    transition-delay: 0.35s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(5) {
+    transition-delay: 0.45s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(6) {
+    transition-delay: 0.55s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(7) {
+    transition-delay: 0.65s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(8) {
+    transition-delay: 0.75s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(9) {
+    transition-delay: 0.85s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(10) {
+    transition-delay: 0.95s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(11) {
+    transition-delay: 1.05s;
+}
+
+.invitation-content>.reveal-on-scroll:nth-child(12) {
+    transition-delay: 1.15s;
+}
+
+@media (max-width: 768px) {
+    .inv-couple {
+        font-size: 3.5rem;
+    }
+
+    .inv-names {
+        font-size: 1.1rem;
+    }
+
+    .inv-small {
+        font-size: 0.9rem;
+    }
+
+    .inv-invite {
+        font-size: 1.4rem;
+        margin: 15px 0;
+    }
+
+    .invitation-content {
+        padding: 30px 15px;
+    }
+}
+
+.meet-couple-overlay {
+    position: relative;
+    z-index: 40;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 20px;
+}
+
+.meet-couple-container {
+    width: 100%;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.section-title {
+    font-family: 'Great Vibes', cursive;
+    font-size: 4.5rem;
+    color: #000;
+    margin: 0;
+    font-weight: bold;
+}
+
+.flower-icon {
+    font-size: 2rem;
+    color: #000;
+    margin: 10px 0 40px;
+}
+
+.couple-text-columns {
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+    width: 100%;
+    max-width: 900px;
+    justify-content: center;
+}
+
+.couple-text-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #000;
+    padding: 0 20px;
+}
+
+
+
+.title-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #000;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+}
+
+.name-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000;
+    margin: 0 0 20px 0;
+    letter-spacing: 2px;
+}
+
+.desc-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #000;
+    line-height: 1.7;
+    margin: 0;
+}
+
+.joint-quote-frame {
+    margin-top: 60px;
+    max-width: 800px;
+    border: 2px solid #000;
+    border-radius: 10px;
+    padding: 40px;
+    color: #000;
+}
+
+.joint-quote-frame p {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #000;
+    line-height: 1.8;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Staggered animation for the new section */
+.meet-couple-container>.reveal-on-scroll:nth-child(1) {
+    transition-delay: 0.0s;
+}
+
+.meet-couple-container>.reveal-on-scroll:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+.meet-couple-container>.reveal-on-scroll:nth-child(3) {
+    transition-delay: 0.2s;
+}
+
+.couple-text-columns .couple-text-block:nth-child(1) {
+    transition-delay: 0.3s;
+}
+
+.couple-text-columns .couple-text-block:nth-child(2) {
+    transition-delay: 0.5s;
+}
+
+.joint-quote-frame {
+    transition-delay: 0.7s;
+}
+
+@media (max-width: 768px) {
+    .couple-text-columns {
+        flex-direction: column;
+        align-items: center;
+        gap: 40px;
+    }
+
+    .section-title {
+        font-size: 3.5rem;
+    }
+
+    .name-text {
+        font-size: 2rem;
+    }
+
+    .joint-quote-frame p {
+        font-size: 1.1rem;
+    }
+}
+
+.events-overlay {
+    position: relative;
+    z-index: 40;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 20px;
+}
+
+.events-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.event-card {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: transparent;
+    color: #000;
+}
+
+.event-photo-container {
+    position: relative;
+    width: 250px;
+    height: auto;
+    min-height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.event-frame-img {
+    position: relative;
+    width: 100%;
+    height: auto;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.event-photo-placeholder {
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    width: 70%;
+    height: 70%;
+    background: rgba(255, 255, 255, 0.6);
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    color: #000;
+    font-weight: bold;
+}
+
+.event-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
+}
+
+.event-time {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Staggered animation for the events grid */
+.events-container>.reveal-on-scroll:nth-child(1) {
+    transition-delay: 0.0s;
+}
+
+.events-container>.reveal-on-scroll:nth-child(2) {
+    transition-delay: 0.1s;
+}
+
+.events-grid .event-card:nth-child(1) {
+    transition-delay: 0.2s;
+}
+
+.events-grid .event-card:nth-child(2) {
+    transition-delay: 0.3s;
+}
+
+.events-grid .event-card:nth-child(3) {
+    transition-delay: 0.4s;
+}
+
+.events-grid .event-card:nth-child(4) {
+    transition-delay: 0.5s;
+}
+
+.events-grid .event-card:nth-child(5) {
+    transition-delay: 0.6s;
+}
+
+.events-grid .event-card:nth-child(6) {
+    transition-delay: 0.7s;
+}
+
+@media (max-width: 900px) {
+    .events-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .events-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .event-card {
+        padding: 5px;
+    }
+
+    .event-photo-container {
+        width: 100%;
+        min-height: 150px;
+        margin-bottom: 10px;
+    }
+
+    .event-title {
+        font-size: 1.3rem;
+    }
+
+    .event-time {
+        font-size: 0.9rem;
+    }
+}
+
+.dome-container {
+    transform: translateY(-20px) scale(1.01);
+}
+
+@media (max-width: 768px) {
+    .dome-container {
+        transform: translateY(-20px) scale(1.25);
+    }
+}
+
+.center-transition {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+    position: relative;
+    z-index: 35;
+}
+
+@media (max-width: 768px) {
+    .center-transition {
+        min-height: 80px;
+    }
+}
+
+/* Elegant Venue Section */
+.venue-elegant-overlay {
+    position: relative;
+    z-index: 40;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 20px;
+    box-sizing: border-box;
+    background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+}
+
+.venue-elegant-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    padding: 60px 40px;
+    box-sizing: border-box;
+    transform: translateY(-60px);
+}
+
+.venue-elegant-title {
+    font-family: 'Great Vibes', cursive, 'Playfair Display', serif;
+    font-size: 5rem;
+    color: #111;
+    margin-bottom: 20px;
+    text-shadow: none;
+    font-weight: 400;
+}
+
+.venue-elegant-divider {
+    width: 60px;
+    height: 2px;
+    background-color: #b8860b;
+    margin: 30px 0;
+}
+
+.venue-elegant-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    color: #111;
+    margin-bottom: 15px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+}
+
+.venue-elegant-address {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.1rem;
+    color: #333;
+    line-height: 1.8;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+.venue-elegant-note {
+    font-family: 'Lato', sans-serif;
+    font-size: 1.1rem;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 50px;
+    font-style: italic;
+    max-width: 600px;
+}
+
+.venue-elegant-actions {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.elegant-btn {
+    padding: 15px 45px;
+    font-family: 'Lato', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    border: 1px solid #ffd700;
+}
+
+.elegant-btn.outline-btn {
+    background: transparent;
+    color: #ffd700;
+}
+
+.elegant-btn.outline-btn:hover {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+.elegant-btn.solid-btn {
+    background: #ffd700;
+    color: #1a1a1a;
+}
+
+.elegant-btn.solid-btn:hover {
+    background: #e6c200;
+    border-color: #e6c200;
+}
+
+/* Stagger animations for elegant venue */
+.venue-elegant-overlay .reveal-on-scroll:nth-child(1) { transition-delay: 0.0s; }
+.venue-elegant-overlay .reveal-on-scroll:nth-child(2) { transition-delay: 0.1s; }
+.venue-elegant-overlay .reveal-on-scroll:nth-child(3) { transition-delay: 0.2s; }
+.venue-elegant-overlay .reveal-on-scroll:nth-child(4) { transition-delay: 0.3s; }
+.venue-elegant-overlay .reveal-on-scroll:nth-child(5) { transition-delay: 0.4s; }
+.venue-elegant-overlay .reveal-on-scroll:nth-child(6) { transition-delay: 0.5s; }
+
+@media (max-width: 768px) {
+    .venue-elegant-content {
+        padding: 40px 15px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .venue-elegant-title {
+        font-size: 3.5rem;
+    }
+    
+    .venue-elegant-name {
+        font-size: 1.5rem;
+    }
+    
+    .venue-elegant-address {
+        font-size: 1rem;
+    }
+    
+    .venue-elegant-note {
+        font-size: 1rem;
+    }
+    
+    .venue-elegant-actions {
+        flex-direction: column;
+        width: 100%;
+        gap: 15px;
+        box-sizing: border-box;
+    }
+    
+    .elegant-btn {
+        width: 100%;
+        text-align: center;
+        padding: 15px 20px;
+        box-sizing: border-box;
+    }
+}
