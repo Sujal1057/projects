@@ -105,7 +105,14 @@ Create template folder
 
 The user's only regular task should be creating the correct category/template folder and pushing it to GitHub.
 
-## 10. Important Principle
+## 10. React / Vite / Compiled Templates Rule
+
+Since the Vercel repository is served statically (`buildCommand: ""`), if a template uses a framework like React or Vite that requires compilation:
+1. The project MUST be built locally (e.g., `npm run build`) to generate a `dist/` folder before pushing to GitHub.
+2. In `vite.config.ts`, `base: './'` must be set so built assets use relative paths.
+3. The `previewUrl` in the generated `template.json` MUST point to the `/dist/` folder (e.g., `/LOVE/tempate-02/dist/`) so that Vercel serves the compiled HTML/JS, preventing a blank screen on live preview.
+
+## 11. Important Principle
 
 Keep the repository clean, predictable, scalable, and easy to maintain.
 
