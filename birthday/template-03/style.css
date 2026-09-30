@@ -1,0 +1,757 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+
+.container {
+  background-color: #ffffff;
+  height: 2718px;
+  position: relative;
+  width: 100%;
+  min-width: 1440px;
+  overflow: hidden;
+}
+
+.container .bg {
+  height: 917px;
+  left: 0;
+  right: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.container .img {
+  height: 810px;
+  left: 0;
+  right: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 720px;
+  width: 100%;
+}
+
+.container .bg-2 {
+  height: 320px;
+  left: 0;
+  right: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 1530px;
+  width: 100%;
+}
+
+.container .love-letter {
+  aspect-ratio: 1.29;
+  height: 490px;
+  left: 420px;
+  object-fit: cover;
+  position: absolute;
+  top: 164px;
+  width: 580px;
+  rotate: -8deg;
+  animation: gentle-bounce 4s ease-in-out infinite;
+}
+
+@keyframes gentle-bounce {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.container .hand {
+  aspect-ratio: 1.05;
+  height: 465px;
+  left: 71px;
+  object-fit: cover;
+  position: absolute;
+  top: 465px;
+  width: 486px;
+}
+
+.container .hand-2 {
+  aspect-ratio: 1.05;
+  height: 469px;
+  left: 863px;
+  object-fit: cover;
+  position: absolute;
+  top: 418px;
+  width: 489px;
+  transform: scaleX(-1);
+}
+
+.container .happy-birthday {
+  position: absolute;
+  top: 360px;
+  left: 120px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 70px;
+  color: #000000;
+  transform: rotate(-15deg);
+  z-index: 15;
+  text-align: center;
+  line-height: 1.1;
+}
+
+.container .scroll-down {
+  position: absolute;
+  top: 670px;
+  width: 100%;
+  left: 550px;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 6px;
+  color: #ffffff;
+  /* Made it white so it contrasts better */
+  opacity: 0.8;
+  /* Increased opacity slightly to make it visible */
+  z-index: 10;
+  /* Brought to the front */
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  /* Added shadow for visibility against any background */
+  animation: gentle-bounce 3s ease-in-out infinite;
+}
+
+.container .f-1 {
+  aspect-ratio: 1.02;
+  height: 271px;
+  left: 1100px;
+  object-fit: cover;
+  position: absolute;
+  top: 650px;
+  width: 276px;
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.container .sticker {
+  aspect-ratio: 0.72;
+  height: 332px;
+  right: -80px;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  width: 390px;
+  transform: scaleX(-1);
+}
+
+.container .sticker-9 {
+  position: absolute;
+  right: 80px;
+  top: 150px;
+  height: 500px;
+  width: auto;
+  object-fit: contain;
+  z-index: 5;
+  rotate: 25deg;
+}
+
+.container .f {
+  aspect-ratio: 1.02;
+  height: 271px;
+  left: 57px;
+  object-fit: cover;
+  position: absolute;
+  top: 28px;
+  width: 275px;
+  animation: spin 20s linear infinite;
+}
+
+.container .rectangle {
+  background-color: #ffffff;
+  height: 944px;
+  left: 213px;
+  position: absolute;
+  top: 900px;
+  transform: rotate(-8.89deg);
+  width: 1143px;
+
+}
+
+.container .f-2 {
+  height: auto;
+  left: 0;
+  object-fit: contain;
+  position: absolute;
+  top: 754px;
+  width: 399px;
+  animation: spin 20s linear infinite;
+}
+
+.container .disc {
+  aspect-ratio: 1;
+  height: 455px;
+  left: 822px;
+  object-fit: cover;
+  position: absolute;
+  top: 1114px;
+  width: 455px;
+  animation: spin 20s linear infinite;
+  transition: all 0.5s ease;
+}
+
+.container .disc.fast-spin {
+  animation: spin 2s linear infinite;
+}
+
+.container .group {
+  background-image: url(./assets/bg7.png);
+  background-position: 50% 50%;
+  background-size: cover;
+  display: flex;
+  height: 500px;
+  left: 643px;
+  position: absolute;
+  top: 1091px;
+  width: 323px;
+}
+
+.container .songl {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.container .sticker-2 {
+  aspect-ratio: 0.56;
+  height: 740px;
+  left: 252px;
+  position: absolute;
+  top: 1014px;
+  width: 509px;
+  rotate: -5deg;
+}
+
+.container .bg-3 {
+  height: 868px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  top: 1850px;
+  width: 100%;
+}
+
+.container .sticker-3 {
+  aspect-ratio: 0.8;
+  height: 527px;
+  left: -50px;
+  object-fit: cover;
+  position: absolute;
+  top: 2250px;
+  width: 437px;
+}
+
+.container .rectangle-2 {
+  height: 700px;
+  left: 687px;
+  position: absolute;
+  top: 1900px;
+  width: 600px;
+}
+
+.container .cal {
+  aspect-ratio: 0.79;
+  height: 889px;
+  left: 202px;
+  position: absolute;
+  top: 1805px;
+  width: 542px;
+}
+
+
+.container .f-4 {
+  aspect-ratio: 1.11;
+  height: 276px;
+  left: 60px;
+  object-fit: cover;
+  position: absolute;
+  top: 1650px;
+  width: 305px;
+  animation: spin 20s linear infinite;
+}
+
+.container .sticker-4 {
+  aspect-ratio: 1;
+  height: 399px;
+  left: 0;
+  object-fit: cover;
+  position: absolute;
+  top: 1800px;
+  width: 353px;
+  rotate: -45deg;
+}
+
+.container .f-5 {
+  aspect-ratio: 1;
+  height: 358px;
+  right: 80px;
+  position: absolute;
+  top: 1707px;
+  width: 208px;
+  scale: 1.2;
+  rotate: 90deg;
+}
+
+.mobile-bottom {
+  display: none;
+}
+
+@media (max-aspect-ratio: 1440/2718) {
+  .container {
+    height: 100vh;
+  }
+
+  .mobile-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 2718px;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  .mobile-bottom .bg-7 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .mobile-bottom .white-box {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 60px 80px;
+    border-radius: 35px;
+    z-index: 2;
+    font-size: 45px;
+    font-weight: 800;
+    font-family: 'Montserrat', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    color: #ff4d6d;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    box-shadow: 0 20px 50px rgba(255, 77, 109, 0.2);
+    border: 4px solid #ff4d6d;
+    max-width: 85%;
+    line-height: 1.4;
+  }
+}
+
+.container-landscape {
+  background-color: #000;
+  height: 112.5vw;
+  /* 56.25vw per image (16:9 ratio) */
+  width: 100%;
+  min-width: 1440px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.container-landscape .bg-8 {
+  width: 56.25vw;
+  /* Visual height */
+  height: 100vw;
+  /* Visual width */
+  object-fit: cover;
+  position: absolute;
+  top: 84.375vw;
+  /* Center of second image */
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.container-landscape .bg-4 {
+  width: 56.25vw;
+  /* Visual height */
+  height: 100vw;
+  /* Visual width */
+  object-fit: cover;
+  position: absolute;
+  top: 28.125vw;
+  /* Center of first image */
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.container-landscape .hbd-sticker {
+  position: absolute;
+  top: 28.125vw;
+  /* exact physical center of bg-4 */
+  left: 50%;
+  /* exact physical center */
+  width: 35vw;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.container-landscape .printer-img {
+  position: absolute;
+  top: 72vw;
+  /* slightly above center of bg-8 */
+  left: 50%;
+  width: 35vw;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  z-index: 12;
+}
+
+@keyframes printerBounce {
+  0%, 100% { transform: translate(-50%, -50%); }
+  50% { transform: translate(-45%, -50%); }
+}
+
+.container-landscape .printer-img.bouncing {
+  animation: printerBounce 1s infinite;
+}
+
+.container-landscape .printer-mask {
+  position: absolute;
+  top: 72vw;
+  left: 0;
+  width: 100%;
+  height: 40.5vw;
+  overflow: hidden;
+  z-index: 13;
+}
+
+.container-landscape .printer-output {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 1.5s ease-out;
+  transform: translateY(-100%);
+}
+
+.container-landscape .printer-output.printed {
+  transform: translateY(0);
+}
+
+.container-landscape .sticker-7-bg {
+  position: absolute;
+  top: 18vw;
+  /* same as sticker-7 */
+  left: 50%;
+  width: 34vw;
+  height: 15vw;
+  background-color: #ffffff;
+  border-radius: 10px;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  z-index: 11;
+  /* exactly one below sticker-7 */
+}
+
+.container-landscape .sticker-7 {
+  position: absolute;
+  top: 18vw;
+  /* below printer */
+  left: 50%;
+  width: 15vw;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-50%, -50%);
+  z-index: 12;
+}
+
+.container-landscape .letter-img {
+  position: absolute;
+  top: 90vw;
+  /* same vertical line as sticker-7 */
+  left: 20%;
+  /* to the left of sticker-7 */
+  width: 25vw;
+  height: auto;
+  object-fit: contain;
+  transform: translate(-50%, -50%)rotate(-10deg);
+  z-index: 12;
+}
+
+.container-landscape .click-me-text {
+  position: absolute;
+  top: 98vw;
+  /* below the letter-img */
+  left: 24%;
+  font-family: 'Dancing Script', cursive;
+  font-size: 2vw;
+  color: #000000;
+  transform: translate(-50%, -50%) rotate(-17deg);
+  z-index: 15;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.container-landscape .flower-cluster {
+  position: absolute;
+  top: 90vw;
+  left: 80%;
+  width: 25vw;
+  height: 25vw;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  z-index: 10;
+}
+
+.container-landscape .flower-cluster img {
+  position: absolute;
+  object-fit: contain;
+  transform: rotate(90deg);
+}
+
+.container-landscape .fc-f5 {
+  top: 0;
+  left: 30%;
+  width: 20vw;
+}
+
+.container-landscape .fc-f3-1 {
+  top: 30%;
+  left: 10%;
+  width: 12vw;
+}
+
+.container-landscape .fc-f1-1 {
+  top: 60%;
+  left: 15%;
+  width: 10vw;
+}
+
+.container-landscape .fc-f3-2 {
+  top: 40%;
+  right: -5%;
+  width: 10vw;
+}
+
+.container-landscape .fc-f1-2 {
+  top: 70%;
+  right: 10%;
+  width: 8vw;
+}
+
+.container-landscape .fc-f2 {
+  bottom: -10%;
+  left: 40%;
+  width: 12vw;
+}
+
+.container-landscape .back-btn {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  border-radius: 10px;
+  padding: 15px 30px;
+  font-size: 24px;
+  font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+  font-weight: 700;
+  color: #ff4d6d;
+  cursor: pointer;
+  z-index: 50;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s;
+}
+
+.container-landscape .back-btn:hover {
+  background-color: #ffffff;
+}
+
+.container-landscape .popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container-landscape .popup-content {
+  width: 70vh;
+  height: 70vw;
+  transform: rotate(-90deg);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.container-landscape .popup-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.container-landscape .popup-close {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  transform: rotate(90deg);
+  font-size: 24px;
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 101;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+  font-family: Arial, sans-serif;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.4);
+  border-radius: 50%;
+  transition: background 0.3s;
+}
+
+.container-landscape .popup-close:hover {
+  background: rgba(0,0,0,0.7);
+}
+
+.container-landscape .popup-content {
+  position: relative;
+}
+
+.container-landscape .card-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(90deg);
+  width: 43%;
+  height: auto;
+  z-index: 9;
+  clip-path: polygon(0 0, 100% 0, 100% 70%, 0 70%);
+}
+
+.container-landscape .popup-card {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.container-landscape .card-text {
+  position: absolute;
+  top: 0;
+  left: 2%;
+  width: 99%;
+  height: 100%;
+  padding: 10%;
+  box-sizing: border-box;
+  font-family: 'Dancing Script', cursive;
+  font-size: 1.8vw;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  text-align: left;
+  opacity: 0;
+  transition: opacity 0.5s 1.5s;
+  /* fades in as the card reaches its final size */
+}
+
+.container-landscape .card-container.open-card .card-text {
+  opacity: 1;
+}
+
+.container-landscape .card-container.open-card {
+  animation: pullOutCard 2s forwards ease-in-out;
+}
+
+@keyframes pullOutCard {
+  0% {
+    left: 50%;
+    width: 43%;
+    clip-path: polygon(0 0, 100% 0, 100% 70%, 0 70%);
+    z-index: 9;
+  }
+
+  30% {
+    left: 70%;
+    width: 43%;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    z-index: 9;
+  }
+
+  40% {
+    z-index: 15;
+  }
+
+  100% {
+    left: 50%;
+    width: 80%;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    z-index: 15;
+  }
+}
+
+.container-landscape .popup-envlb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)rotate(90deg);
+  width: 50%;
+  height: auto;
+  object-fit: contain;
+  z-index: 10;
+}
+
+.container-landscape .popup-envlb.fade-out {
+  animation: fadeOutEnv 2s forwards ease-in-out;
+}
+
+@keyframes fadeOutEnv {
+  0% {
+    opacity: 1;
+  }
+
+  30% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+.container-landscape .click-to-read {
+  position: absolute;
+  top: 50%;
+  left: 25%;
+  /* visual bottom when viewed in portrait */
+  transform: translate(-50%, -50%) rotate(90deg);
+  font-family: 'Dancing Script', cursive;
+  font-size: 2vw;
+  color: #ffffff;
+  z-index: 10;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+}
