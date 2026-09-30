@@ -28,6 +28,7 @@ import hbd from "./assets/hbd.png";
 import printer1 from "./assets/printer.png";
 import letterImg1 from "./assets/letter.png";
 import envlb1 from "./assets/envlb.png";
+import bgSong from "./Tu Chahiye Bajrangi Bhaijaan 320 Kbps.mp3";
 import "./style.css";
 
 export const LoveTemplate = (): JSX.Element => {
@@ -45,24 +46,94 @@ export const LoveTemplate = (): JSX.Element => {
     const [isPrinted, setIsPrinted] = React.useState(false);
     const audioRef = React.useRef(null) as any;
 
-    const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
+    const [isMobile, setIsMobile] = React.useState(false);
+    const [isPortrait, setIsPortrait] = React.useState(false);
+    const [hasStarted, setHasStarted] = React.useState(false);
+    const [scale, setScale] = React.useState(1);
 
     React.useEffect(() => {
-        const handleResize = () => setIsMobile(window.innerWidth <= 768);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+        const checkOrientation = () => {
+            const mobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+            const portrait = window.innerHeight > window.innerWidth;
+            setIsMobile(mobileDevice);
+            setIsPortrait(portrait);
+            
+            const currentWidth = window.innerWidth;
+            if (currentWidth < 1440) {
+                setScale(currentWidth / 1440);
+            } else {
+                setScale(1);
+            }
+
+            if (!mobileDevice) {
+                setHasStarted(true);
+            }
+        };
+
+        checkOrientation();
+        window.addEventListener('resize', checkOrientation);
+        window.addEventListener('orientationchange', checkOrientation);
+        return () => {
+            window.removeEventListener('resize', checkOrientation);
+            window.removeEventListener('orientationchange', checkOrientation);
+        };
     }, []);
 
     React.useEffect(() => {
         if (showPopup) {
             document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+        } else if (isMobile && !showPage2) {
+            // On mobile Page 1, body stays overflow:hidden — the wrapper div handles scrolling
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
         } else {
             document.body.style.overflow = 'auto';
+            document.documentElement.style.overflow = 'auto';
         }
         return () => {
-            document.body.style.overflow = 'auto';
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
         };
-    }, [showPopup]);
+    }, [showPopup, isMobile, showPage2]);
+
+    React.useEffect(() => {
+        const handleFullscreenChange = () => {
+            const isFS = !!(
+                document.fullscreenElement ||
+                (document as any).webkitFullscreenElement ||
+                (document as any).mozFullScreenElement ||
+                (document as any).msFullscreenElement
+            );
+            if (!isFS && isMobile) {
+                setHasStarted(false);
+            }
+        };
+
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+
+        return () => {
+            document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
+        };
+    }, [isMobile]);
+
+    const handleEnterFullscreen = () => {
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(() => {});
+        } else if ((elem as any).webkitRequestFullscreen) {
+            (elem as any).webkitRequestFullscreen();
+        } else if ((elem as any).msRequestFullscreen) {
+            (elem as any).msRequestFullscreen();
+        }
+        setHasStarted(true);
+    };
 
     const togglePlay = () => {
         if (isPlaying) {
@@ -73,10 +144,48 @@ export const LoveTemplate = (): JSX.Element => {
         setIsPlaying(!isPlaying);
     };
 
+    if (isMobile && (!hasStarted || isPortrait)) {
+        return (
+            <div className="orientation-prompt-overlay">
+                <div className="orientation-prompt-card">
+                    <div className="orientation-icon-container">
+                        {isPortrait ? (
+                            <svg className="phone-icon-portrait" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+                                <line x1="12" y1="18" x2="12.01" y2="18" />
+                            </svg>
+                        ) : (
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                            </svg>
+                        )}
+                    </div>
+                    <h2 className="orientation-title">
+                        {isPortrait ? "Rotate Your Device" : "Ready For Magic?"}
+                    </h2>
+                    <p className="orientation-subtitle">
+                        {isPortrait
+                            ? "Please turn your phone sideways to landscape mode to unlock the experience."
+                            : "You are in landscape mode! Click below to enter full screen."}
+                    </p>
+                    <button
+                        disabled={isPortrait}
+                        onClick={handleEnterFullscreen}
+                        className={`orientation-btn ${isPortrait ? "disabled" : "active"}`}
+                    >
+                        {isPortrait ? "Waiting for rotation..." : "Enter Fullscreen ⛶"}
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     if (showPage2) {
         return (
             <div className="container-landscape">
+
                 <img className="bg-8" alt="Bg 8" src={bg81} />
+                <img className="sticker-8" alt="Sticker 8" src={sticker81} />
                 <img className="bg-4" alt="Bg 4" src={bg4} />
                 <img className="hbd-sticker" alt="HBD" src={hbd} />
                 <img 
@@ -147,54 +256,110 @@ export const LoveTemplate = (): JSX.Element => {
         );
     }
 
-    return (
-        <div className="container">
-            <img className="bg" alt="Bg" src={bg81} />
-            <img className="img" alt="Bg" src={bg11} />
-            <img className="bg-2" alt="Bg" src={bg12} />
-            <img
-                className="love-letter"
-                alt="Love letter"
-                src={loveLetter1}
-                onClick={() => handleSetShowPage2(true)}
-                style={{ cursor: 'pointer' }}
-            />
-            <div className="happy-birthday">Happy<br />Birthday</div>
-            <img className="hand" alt="Hand" src={hand1} />
-            <img className="hand-2" alt="Hand" src={hand2} />
-            <div className="scroll-down">SCROLL DOWN</div>
-            <img className="sticker" alt="Sticker" src={sticker31} />
-            <img className="sticker-9" alt="Sticker 9" src={sticker91} />
-            <img className="f" alt="F" src={f31} />
-            <div className="rectangle" />
-            <img className="f-1" alt="F" src={f31} />
-            <img className="f-2" alt="F" src={f32} />
-            <img
-                className={`disc ${isPlaying ? 'fast-spin' : ''}`}
-                alt="Disc"
-                src={disc1}
-                onClick={togglePlay}
-                style={{ cursor: 'pointer' }}
-            />
-            <audio ref={audioRef} src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" loop />
-            <div className="group">
-                <img className="songl" alt="Songl" src={songl1} />
+    if (!isMobile) {
+        return (
+            <div className="container">
+                <img className="bg" alt="Bg" src={bg81} />
+                <img className="img" alt="Bg" src={bg11} />
+                <img className="bg-2" alt="Bg" src={bg12} />
+                <img
+                    className="love-letter"
+                    alt="Love letter"
+                    src={loveLetter1}
+                    onClick={() => handleSetShowPage2(true)}
+                    style={{ cursor: 'pointer' }}
+                />
+                <div className="happy-birthday">Happy<br />Birthday</div>
+                <img className="hand" alt="Hand" src={hand1} />
+                <img className="hand-2" alt="Hand" src={hand2} />
+                <div className="scroll-down">SCROLL DOWN</div>
+                <img className="sticker" alt="Sticker" src={sticker31} />
+                <img className="sticker-9" alt="Sticker 9" src={sticker91} />
+                <img className="f" alt="F" src={f31} />
+                <div className="rectangle" />
+                <img className="f-1" alt="F" src={f31} />
+                <img className="f-2" alt="F" src={f32} />
+                <img
+                    className={`disc ${isPlaying ? 'fast-spin' : ''}`}
+                    alt="Disc"
+                    src={disc1}
+                    onClick={togglePlay}
+                    style={{ cursor: 'pointer' }}
+                />
+                <audio ref={audioRef} src={bgSong} loop />
+                <div className="group">
+                    <img className="songl" alt="Songl" src={songl1} />
+                </div>
+                <img className="sticker-2" alt="Sticker" src={sticker61} />
+                <img className="bg-3" alt="Bg" src={bg82} />
+                <img className="sticker-3" alt="Sticker" src={sticker51} />
+                <img className="rectangle-2" alt="Rectangle" src={rectangle2} />
+                <img className="cal" alt="Cal" src={cal1} />
+                <img className="f-4" alt="F" src={f41} />
+                <img className="f-5" alt="F" src={f51} />
             </div>
-            <img className="sticker-2" alt="Sticker" src={sticker61} />
-            <img className="bg-3" alt="Bg" src={bg82} />
-            <img className="sticker-3" alt="Sticker" src={sticker51} />
-            <img className="rectangle-2" alt="Rectangle" src={rectangle2} />
-            <img className="cal" alt="Cal" src={cal1} />
-            <img className="f-4" alt="F" src={f41} />
-            <img className="f-5" alt="F" src={f51} />
-            <img className="sticker-4" alt="Sticker" src={sticker81} />
-            <div className="mobile-bottom">
-                <img className="bg-7" alt="Bg 7" src={bg71} />
-                {!isMobile && (
-                    <div className="white-box">
-                        GO FIRST AND CLICK THE ENVELOP
+        );
+    }
+
+    const mobileHeight = 2718;
+    const scaledHeight = Math.round(mobileHeight * scale);
+    // transform:scale does NOT change layout size — inner div still occupies 2718px in flow.
+    // We must collapse that extra space with a negative marginBottom.
+    const marginCollapse = scaledHeight - mobileHeight; // negative value
+    return (
+        <div style={{
+            width: '100vw',
+            height: '100vh',
+            overflowX: 'hidden',
+            overflowY: 'scroll',
+        }}>
+            <div style={{
+                width: '1440px',
+                height: `${mobileHeight}px`,
+                transform: `scale(${scale})`,
+                transformOrigin: 'top left',
+                marginBottom: `${marginCollapse}px`, // collapses extra layout space
+            }}>
+                <div className="container" style={{ width: '1440px', height: `${mobileHeight}px`, minWidth: 'auto' }}>
+                    <img className="bg" alt="Bg" src={bg81} />
+                    <img className="img" alt="Bg" src={bg11} />
+                    <img className="bg-2" alt="Bg" src={bg12} />
+                    <img
+                        className="love-letter"
+                        alt="Love letter"
+                        src={loveLetter1}
+                        onClick={() => handleSetShowPage2(true)}
+                        style={{ cursor: 'pointer' }}
+                    />
+                    <div className="happy-birthday">Happy<br />Birthday</div>
+                    <img className="hand" alt="Hand" src={hand1} />
+                    <img className="hand-2" alt="Hand" src={hand2} />
+                    <div className="scroll-down">SCROLL DOWN</div>
+                    <img className="sticker" alt="Sticker" src={sticker31} />
+                    <img className="sticker-9" alt="Sticker 9" src={sticker91} />
+                    <img className="f" alt="F" src={f31} />
+                    <div className="rectangle" />
+                    <img className="f-1" alt="F" src={f31} />
+                    <img className="f-2" alt="F" src={f32} />
+                    <img
+                        className={`disc ${isPlaying ? 'fast-spin' : ''}`}
+                        alt="Disc"
+                        src={disc1}
+                        onClick={togglePlay}
+                        style={{ cursor: 'pointer' }}
+                    />
+                    <audio ref={audioRef} src={bgSong} loop />
+                    <div className="group">
+                        <img className="songl" alt="Songl" src={songl1} />
                     </div>
-                )}
+                    <img className="sticker-2" alt="Sticker" src={sticker61} />
+                    <img className="bg-3" alt="Bg" src={bg82} />
+                    <img className="sticker-3" alt="Sticker" src={sticker51} />
+                    <img className="rectangle-2" alt="Rectangle" src={rectangle2} />
+                    <img className="cal" alt="Cal" src={cal1} />
+                    <img className="f-4" alt="F" src={f41} />
+                    <img className="f-5" alt="F" src={f51} />
+                </div>
             </div>
         </div>
     );
