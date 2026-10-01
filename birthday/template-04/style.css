@@ -63,7 +63,10 @@ body {
     color: #111;
     clip-path: inset(0 0 10px 0);
     /* Hides the bottom 70px of the letter */
-    animation: slideUpLetter 1.2s ease-out 1s both;
+}
+
+.start-animation .letter {
+    animation: slideUpLetter 1.2s ease-out 0.5s both;
 }
 
 @keyframes slideUpLetter {
@@ -136,44 +139,114 @@ body {
     }
 }
 
-/* Orientation Prompt Overlay CSS */
-.orientation-prompt-overlay {
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: #0f172a; z-index: 999999;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  color: #ffffff; text-align: center; box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif;
+/* Custom Surprise Popup Modal */
+.blue-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(5, 12, 28, 0.85);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
 }
-.orientation-prompt-overlay.hidden { display: none !important; }
-.orientation-prompt-card {
-  background: rgba(30, 41, 59, 0.95); border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px; padding: 20px 24px; max-width: 360px; width: 90%; max-height: 90vh;
-  display: flex; flex-direction: column; align-items: center; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7); box-sizing: border-box;
+
+.blue-popup-card {
+    background: #1e3a8a;
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    padding: 36px 32px;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-sizing: border-box;
 }
-.orientation-icon-container {
-  width: 52px; height: 52px; border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 105, 180, 0.25));
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
+
+.blue-popup-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 34px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+    line-height: 1.2;
 }
-.phone-icon-portrait { animation: rotatePhone 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite; }
-@keyframes rotatePhone {
-  0%, 20% { transform: rotate(0deg) scale(1); }
-  50%, 70% { transform: rotate(90deg) scale(1.1); }
-  90%, 100% { transform: rotate(0deg) scale(1); }
+
+.blue-popup-sub {
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;
+    color: #cbd5e1;
+    margin: 0;
+    line-height: 1.4;
 }
-.orientation-title { font-size: 18px; font-weight: 700; margin: 0 0 6px 0; color: #ffffff; }
-.orientation-subtitle { font-size: 13px; line-height: 1.4; color: rgba(255, 255, 255, 0.8); margin: 0 0 16px 0; }
-.orientation-btn {
-  width: 100%; padding: 12px 18px; border-radius: 40px; font-size: 13px; font-weight: 700;
-  letter-spacing: 0.5px; text-transform: uppercase; border: none; transition: all 0.3s ease;
-  display: flex; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box;
+
+.blue-start-btn {
+    margin-top: 10px;
+    padding: 12px 36px;
+    border-radius: 10px;
+    border: 2px solid #ffffff;
+    background: #ffffff;
+    color: #1e3a8a;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
-.orientation-btn.disabled { background: rgba(255, 255, 255, 0.12); color: rgba(255, 255, 255, 0.4); cursor: not-allowed; }
-.orientation-btn.active {
-  background: linear-gradient(135deg, #ff416c, #ff4b2b); color: #ffffff;
-  box-shadow: 0 6px 20px rgba(255, 65, 108, 0.5); cursor: pointer; animation: pulseGlow 2s infinite;
+
+.blue-start-btn:hover {
+    background: #1e3a8a;
+    color: #ffffff;
 }
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 6px 20px rgba(255, 65, 108, 0.5); }
-  50% { box-shadow: 0 10px 28px rgba(255, 65, 108, 0.8); }
+
+/* Rotating Vinyl Music Disk Widget */
+.music-disk-btn {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+    z-index: 10000;
+    cursor: pointer;
+    background: none;
+    border: none;
+    box-shadow: none;
+    transition: transform 0.2s ease;
+}
+
+.music-disk-btn:hover {
+    transform: scale(1.08);
+}
+
+.music-disk-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border: none;
+    box-shadow: none;
+    animation: rotateDisk 4s linear infinite;
+    animation-play-state: paused;
+}
+
+.music-disk-img.playing {
+    animation-play-state: running;
+}
+
+@keyframes rotateDisk {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }

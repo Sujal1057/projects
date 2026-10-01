@@ -25,86 +25,99 @@
     </div>
   </section>
 
-  <script src="script.js"></script>
-
-  <div id="orientation-overlay" class="orientation-prompt-overlay hidden">
-    <div class="orientation-prompt-card">
-      <div class="orientation-icon-container">
-        <svg id="phone-icon" class="phone-icon-portrait" width="32" height="32" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
-          <line x1="12" y1="18" x2="12.01" y2="18" />
-        </svg>
-      </div>
-      <h2 id="orientation-title" class="orientation-title">Rotate Your Device</h2>
-      <p id="orientation-subtitle" class="orientation-subtitle">Please turn your phone sideways to landscape mode to
-        unlock the experience.</p>
-      <button id="start-fullscreen-btn" class="orientation-btn disabled" disabled>Waiting for rotation...</button>
+  <!-- Surprise Popup -->
+  <div id="surprise-popup" class="blue-popup-overlay">
+    <div class="blue-popup-card">
+      <h2 class="blue-popup-title">Are you ready for the surprise?</h2>
+      <p class="blue-popup-sub">You can also watch by rotating your phone 🔄</p>
+      <button id="surprise-start-btn" class="blue-start-btn">Start</button>
     </div>
   </div>
+
+  <!-- Vinyl Music Disk Button -->
+  <div id="music-disk-btn" class="music-disk-btn">
+    <img id="music-disk-img" src="assets/disk.png" alt="Music Disk" class="music-disk-img">
+  </div>
+
+  <!-- Audio Player -->
+  <audio id="bg-music" loop src="assets/music.mp3" preload="auto"></audio>
+
+  <script src="script.js"></script>
   <script>
-    (function () {
-      var overlay = document.getElementById('orientation-overlay');
-      var btn = document.getElementById('start-fullscreen-btn');
-      var title = document.getElementById('orientation-title');
-      var subtitle = document.getElementById('orientation-subtitle');
-      var phoneIcon = document.getElementById('phone-icon');
-      var hasStarted = false;
+    document.addEventListener('DOMContentLoaded', function () {
+      var startBtn = document.getElementById('surprise-start-btn');
+      var popup = document.getElementById('surprise-popup');
+      var audio = document.getElementById('bg-music');
+      var diskBtn = document.getElementById('music-disk-btn');
+      var diskImg = document.getElementById('music-disk-img');
 
-      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight > window.innerWidth);
-
-      if (!isMobile) {
-        overlay.style.display = 'none';
-        document.body.classList.add('start-animation');
-        return;
-      }
-
-      function checkOrientation() {
-        if (hasStarted) return;
-
-        var isPortrait = window.innerHeight > window.innerWidth;
-        if (isPortrait) {
-          overlay.classList.remove('hidden');
-          overlay.style.display = 'flex';
-
-          title.innerText = "Rotate Your Device";
-          subtitle.innerText = "Please turn your phone sideways to landscape mode to unlock the experience.";
-          btn.innerText = "Waiting for rotation...";
-          btn.classList.add('disabled');
-          btn.classList.remove('active');
-          btn.disabled = true;
-
-          phoneIcon.classList.add('phone-icon-portrait');
-          phoneIcon.innerHTML = '<rect x="5" y="2" width="14" height="20" rx="2" ry="2" /><line x1="12" y1="18" x2="12.01" y2="18" />';
+      function updateDiskState() {
+        if (!diskImg) return;
+        if (sessionStorage.getItem('bg_music_playing') === 'true' && sessionStorage.getItem('bg_music_paused') !== 'true') {
+          diskImg.classList.add('playing');
         } else {
-          overlay.style.display = 'flex'; // Keep it visible until they click
-          title.innerText = "Ready For Magic?";
-          subtitle.innerText = "You are in landscape mode! Click below to enter full screen.";
-          btn.innerText = "Enter Fullscreen ⛶";
-          btn.classList.remove('disabled');
-          btn.classList.add('active');
-          btn.disabled = false;
-
-          phoneIcon.classList.remove('phone-icon-portrait');
-          phoneIcon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />';
+          diskImg.classList.remove('playing');
         }
       }
 
-      window.addEventListener('resize', checkOrientation);
-      checkOrientation();
+      function syncAudio() {
+        if (!audio) return;
+        audio.ontimeupdate = function () {
+          sessionStorage.setItem('bg_music_time', audio.currentTime);
+        };
+      }
 
-      btn.addEventListener('click', function () {
-        hasStarted = true;
-        
-        overlay.style.display = 'none';
+      // Check state on load
+      if (sessionStorage.getItem('bg_music_playing') === 'true') {
+        if (popup) popup.style.display = 'none';
         document.body.classList.add('start-animation');
 
-        var audio = document.querySelector('audio');
-        if (audio) {
+        if (audio && sessionStorage.getItem('bg_music_paused') !== 'true') {
+          var savedTime = parseFloat(sessionStorage.getItem('bg_music_time')) || 0;
+          audio.currentTime = savedTime;
           audio.play().catch(function (e) { console.log(e); });
+          syncAudio();
         }
-      });
-    })();
+        updateDiskState();
+      }
+
+      if (startBtn && popup) {
+        startBtn.addEventListener('click', function () {
+          popup.style.display = 'none';
+          document.body.classList.add('start-animation');
+
+          if (audio) {
+            sessionStorage.setItem('bg_music_playing', 'true');
+            sessionStorage.setItem('bg_music_paused', 'false');
+            var savedTime = parseFloat(sessionStorage.getItem('bg_music_time')) || 0;
+            audio.currentTime = savedTime;
+            audio.play().catch(function (e) { console.log(e); });
+            syncAudio();
+            updateDiskState();
+          }
+        });
+      }
+
+      // Disk click toggle play/pause
+      if (diskBtn) {
+        diskBtn.addEventListener('click', function () {
+          if (!audio) return;
+          if (audio.paused) {
+            sessionStorage.setItem('bg_music_playing', 'true');
+            sessionStorage.setItem('bg_music_paused', 'false');
+            var savedTime = parseFloat(sessionStorage.getItem('bg_music_time')) || 0;
+            audio.currentTime = savedTime;
+            audio.play().catch(function (e) { console.log(e); });
+            syncAudio();
+            updateDiskState();
+          } else {
+            audio.pause();
+            sessionStorage.setItem('bg_music_paused', 'true');
+            updateDiskState();
+          }
+        });
+      }
+    });
   </script>
 </body>
 

@@ -247,7 +247,7 @@
         }
 
         .postcard-wrapper.animate-in {
-            animation: slideInBottomLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: slideInBottomLeft 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .postcard-img {
@@ -281,7 +281,7 @@
         }
 
         .polaroid-wrapper-4th.animate-in {
-            animation: slideInBottomRight 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+            animation: slideInBottomRight 2.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
         }
 
         .polaroid-rect-4th {
@@ -373,12 +373,12 @@
         /* Replaced left/right sliding with a simple fade-up to avoid 'scroll' look */
 
         .animate-left {
-            animation: fadeInUp 1s ease-out forwards;
+            animation: fadeInUp 2.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
         .animate-right {
-            animation: fadeInUp 1s ease-out forwards;
-            animation-delay: 0.2s; /* Slight delay for the second one */
+            animation: fadeInUp 2.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation-delay: 0.4s; /* Smooth stagger delay */
         }
 
         @keyframes fadeInUp {
@@ -413,10 +413,13 @@
 </head>
 
 <body>
-    <!-- Background Music (Will play automatically if browser allows, when you add the file) -->
-    <audio id="bg-music" autoplay loop>
-        <source src="assets/song.mp3" type="audio/mpeg">
-    </audio>
+    <!-- Vinyl Music Disk Button -->
+    <div id="music-disk-btn" class="music-disk-btn">
+        <img id="music-disk-img" src="assets/disk.png" alt="Music Disk" class="music-disk-img">
+    </div>
+
+    <!-- Background Music -->
+    <audio id="bg-music" loop src="assets/music.mp3" preload="auto"></audio>
 
     <div class="page2-content">
         <!-- Back Button in Section 1 -->
@@ -493,9 +496,59 @@
         </div>
     </section>
 
-    <!-- Scroll Animation Script -->
+    <!-- Scroll Animation & Music Sync Script -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
+            // Background Music & Disk Sync
+            var audio = document.getElementById('bg-music');
+            var diskBtn = document.getElementById('music-disk-btn');
+            var diskImg = document.getElementById('music-disk-img');
+
+            function updateDiskState() {
+                if (!diskImg) return;
+                if (sessionStorage.getItem('bg_music_playing') === 'true' && sessionStorage.getItem('bg_music_paused') !== 'true') {
+                    diskImg.classList.add('playing');
+                } else {
+                    diskImg.classList.remove('playing');
+                }
+            }
+
+            function syncAudio() {
+                if (!audio) return;
+                audio.ontimeupdate = function () {
+                    sessionStorage.setItem('bg_music_time', audio.currentTime);
+                };
+            }
+
+            if (audio && sessionStorage.getItem('bg_music_playing') === 'true') {
+                if (sessionStorage.getItem('bg_music_paused') !== 'true') {
+                    var savedTime = parseFloat(sessionStorage.getItem('bg_music_time')) || 0;
+                    audio.currentTime = savedTime;
+                    audio.play().catch(function (e) { console.log(e); });
+                    syncAudio();
+                }
+                updateDiskState();
+            }
+
+            if (diskBtn) {
+                diskBtn.addEventListener('click', function () {
+                    if (!audio) return;
+                    if (audio.paused) {
+                        sessionStorage.setItem('bg_music_playing', 'true');
+                        sessionStorage.setItem('bg_music_paused', 'false');
+                        var savedTime = parseFloat(sessionStorage.getItem('bg_music_time')) || 0;
+                        audio.currentTime = savedTime;
+                        audio.play().catch(function (e) { console.log(e); });
+                        syncAudio();
+                        updateDiskState();
+                    } else {
+                        audio.pause();
+                        sessionStorage.setItem('bg_music_paused', 'true');
+                        updateDiskState();
+                    }
+                });
+            }
+
             const section2 = document.querySelector('.page2-section-two');
             const halfRows = section2.querySelectorAll('.half-row');
 
