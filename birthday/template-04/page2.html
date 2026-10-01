@@ -243,7 +243,8 @@
             justify-content: center;
             align-items: center;
             opacity: 0;
-            transform: translate(-100vw, 100vh); /* Start bottom left */
+            transform: translate(-100vw, 100vh);
+            /* Start bottom left */
         }
 
         .postcard-wrapper.animate-in {
@@ -277,7 +278,8 @@
             /* Size of the polaroid */
             z-index: 5;
             opacity: 0;
-            transform: translate(100vw, 100vh) rotate(15deg); /* Start bottom right */
+            transform: translate(100vw, 100vh) rotate(15deg);
+            /* Start bottom right */
         }
 
         .polaroid-wrapper-4th.animate-in {
@@ -328,7 +330,8 @@
             justify-content: center;
             width: 100%;
             padding: 20px 40px;
-            opacity: 0; /* Hidden initially for animation */
+            opacity: 0;
+            /* Hidden initially for animation */
         }
 
         .half-row.reverse {
@@ -369,6 +372,7 @@
             max-width: 80%;
             text-align: center;
         }
+
         /* --- Animations --- */
         /* Replaced left/right sliding with a simple fade-up to avoid 'scroll' look */
 
@@ -378,46 +382,89 @@
 
         .animate-right {
             animation: fadeInUp 2.0s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            animation-delay: 0.4s; /* Smooth stagger delay */
+            animation-delay: 0.4s;
+            /* Smooth stagger delay */
         }
 
         @keyframes fadeInUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         @keyframes stopMotionStrip {
-            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
-            25% { transform: translate(-49%, -51%) rotate(1deg); }
-            50% { transform: translate(-51%, -49%) rotate(-1deg); }
-            75% { transform: translate(-50%, -52%) rotate(2deg); }
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+
+            25% {
+                transform: translate(-49%, -51%) rotate(1deg);
+            }
+
+            50% {
+                transform: translate(-51%, -49%) rotate(-1deg);
+            }
+
+            75% {
+                transform: translate(-50%, -52%) rotate(2deg);
+            }
         }
 
         @keyframes stopMotionPolaroid {
-            0%, 100% { transform: translateY(-50%) rotate(15deg); }
-            25% { transform: translateY(-52%) rotate(16deg); }
-            50% { transform: translateY(-48%) rotate(14deg); }
-            75% { transform: translateY(-51%) rotate(17deg); }
+
+            0%,
+            100% {
+                transform: translateY(-50%) rotate(15deg);
+            }
+
+            25% {
+                transform: translateY(-52%) rotate(16deg);
+            }
+
+            50% {
+                transform: translateY(-48%) rotate(14deg);
+            }
+
+            75% {
+                transform: translateY(-51%) rotate(17deg);
+            }
         }
 
         @keyframes slideInBottomLeft {
-            from { transform: translate(-100vw, 100vh); opacity: 0; }
-            to { transform: translateX(-15%); opacity: 1; }
+            from {
+                transform: translate(-100vw, 100vh);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(-15%);
+                opacity: 1;
+            }
         }
 
         @keyframes slideInBottomRight {
-            from { transform: translate(100vw, 100vh) rotate(15deg); opacity: 0; }
-            to { transform: translateY(-50%) rotate(15deg); opacity: 1; }
+            from {
+                transform: translate(100vw, 100vh) rotate(15deg);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(-50%) rotate(15deg);
+                opacity: 1;
+            }
         }
     </style>
 </head>
 
 <body>
-    <!-- Vinyl Music Disk Button -->
-    <div id="music-disk-btn" class="music-disk-btn">
-        <img id="music-disk-img" src="assets/disk.png" alt="Music Disk" class="music-disk-img">
-    </div>
-
     <!-- Background Music -->
     <audio id="bg-music" loop src="assets/music.mp3" preload="auto"></audio>
 
@@ -499,19 +546,8 @@
     <!-- Scroll Animation & Music Sync Script -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            // Background Music & Disk Sync
+            // Background Music Sync
             var audio = document.getElementById('bg-music');
-            var diskBtn = document.getElementById('music-disk-btn');
-            var diskImg = document.getElementById('music-disk-img');
-
-            function updateDiskState() {
-                if (!diskImg) return;
-                if (sessionStorage.getItem('bg_music_playing') === 'true' && sessionStorage.getItem('bg_music_paused') !== 'true') {
-                    diskImg.classList.add('playing');
-                } else {
-                    diskImg.classList.remove('playing');
-                }
-            }
 
             function syncAudio() {
                 if (!audio) return;
@@ -527,26 +563,6 @@
                     audio.play().catch(function (e) { console.log(e); });
                     syncAudio();
                 }
-                updateDiskState();
-            }
-
-            if (diskBtn) {
-                diskBtn.addEventListener('click', function () {
-                    if (!audio) return;
-                    if (audio.paused) {
-                        sessionStorage.setItem('bg_music_playing', 'true');
-                        sessionStorage.setItem('bg_music_paused', 'false');
-                        var savedTime = parseFloat(sessionStorage.getItem('bg_music_time')) || 0;
-                        audio.currentTime = savedTime;
-                        audio.play().catch(function (e) { console.log(e); });
-                        syncAudio();
-                        updateDiskState();
-                    } else {
-                        audio.pause();
-                        sessionStorage.setItem('bg_music_paused', 'true');
-                        updateDiskState();
-                    }
-                });
             }
 
             const section2 = document.querySelector('.page2-section-two');
