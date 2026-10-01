@@ -150,11 +150,15 @@ body {
     height: 100vh !important;
     background-color: #080f25 !important;
     z-index: 999999 !important;
-    display: flex !important;
-    justify-content: center !important;
-    align-items: center !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     padding: 24px;
     box-sizing: border-box;
+}
+
+.blue-popup-overlay.hidden {
+    display: none !important;
 }
 
 .blue-popup-card {

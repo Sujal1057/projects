@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=1280">
   <title>Envelope Template</title>
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 
 <body>
@@ -44,6 +44,13 @@
       var popup = document.getElementById('surprise-popup');
       var audio = document.getElementById('bg-music');
 
+      function hidePopup() {
+        if (popup) {
+          popup.style.setProperty('display', 'none', 'important');
+          popup.classList.add('hidden');
+        }
+      }
+
       function syncAudio() {
         if (!audio) return;
         audio.ontimeupdate = function () {
@@ -53,7 +60,7 @@
 
       // Check state on load
       if (sessionStorage.getItem('bg_music_playing') === 'true') {
-        if (popup) popup.style.display = 'none';
+        hidePopup();
         document.body.classList.add('start-animation');
 
         if (audio && sessionStorage.getItem('bg_music_paused') !== 'true') {
@@ -64,9 +71,9 @@
         }
       }
 
-      if (startBtn && popup) {
+      if (startBtn) {
         startBtn.addEventListener('click', function () {
-          popup.style.display = 'none';
+          hidePopup();
           document.body.classList.add('start-animation');
 
           if (audio) {
