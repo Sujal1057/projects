@@ -60,9 +60,6 @@
       }
 
       function checkOrientation() {
-        // Force layout reflow for centering
-        document.body.style.height = window.innerHeight + 'px';
-
         if (hasStarted) return;
 
         var isPortrait = window.innerHeight > window.innerWidth;
@@ -98,10 +95,7 @@
 
       btn.addEventListener('click', function () {
         hasStarted = true;
-        var docElm = document.documentElement;
-        if (docElm.requestFullscreen) docElm.requestFullscreen();
-        else if (docElm.webkitRequestFullscreen) docElm.webkitRequestFullscreen();
-
+        
         overlay.style.display = 'none';
         document.body.classList.add('start-animation');
 
