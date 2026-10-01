@@ -141,18 +141,18 @@ body {
 
 /* Custom Surprise Popup Modal */
 .blue-popup-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    background: #080f25;
-    z-index: 99999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: #080f25 !important;
+    z-index: 999999 !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     padding: 24px;
     box-sizing: border-box;
 }
