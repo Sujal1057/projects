@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1280">
+  <title>Envelope Template</title>
+  <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+  <section class="section-one">
+    <div class="envelope-container">
+      <div class="letter">
+        <h2>Happy Birthday!</h2>
+        <p>Wishing you a wonderful day!</p>
+      </div>
+      <img src="assets/envlb2.png" alt="Envelope" class="envelope-img">
+      <img src="assets/f1.png" alt="f1 decor" class="f1-img">
+      <img src="assets/sticker5.png" alt="Sticker 5" class="f5-img">
+    </div>
+
+    <div class="click-text">
+      <p>Click the Envelope!</p>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+
+  <div id="orientation-overlay" class="orientation-prompt-overlay hidden">
+    <div class="orientation-prompt-card">
+      <div class="orientation-icon-container">
+        <svg id="phone-icon" class="phone-icon-portrait" width="32" height="32" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+          <line x1="12" y1="18" x2="12.01" y2="18" />
+        </svg>
+      </div>
+      <h2 id="orientation-title" class="orientation-title">Rotate Your Device</h2>
+      <p id="orientation-subtitle" class="orientation-subtitle">Please turn your phone sideways to landscape mode to
+        unlock the experience.</p>
+      <button id="start-fullscreen-btn" class="orientation-btn disabled" disabled>Waiting for rotation...</button>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var overlay = document.getElementById('orientation-overlay');
+      var btn = document.getElementById('start-fullscreen-btn');
+      var title = document.getElementById('orientation-title');
+      var subtitle = document.getElementById('orientation-subtitle');
+      var phoneIcon = document.getElementById('phone-icon');
+      var hasStarted = false;
+
+      var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || (window.innerWidth <= 768 && window.innerHeight > window.innerWidth);
+
+      if (!isMobile) {
+        overlay.style.display = 'none';
+        document.body.classList.add('start-animation');
+        return;
+      }
+
+      function checkOrientation() {
+        // Force layout reflow for centering
+        document.body.style.height = window.innerHeight + 'px';
+
+        if (hasStarted) return;
+
+        var isPortrait = window.innerHeight > window.innerWidth;
+        if (isPortrait) {
+          overlay.classList.remove('hidden');
+          overlay.style.display = 'flex';
+
+          title.innerText = "Rotate Your Device";
+          subtitle.innerText = "Please turn your phone sideways to landscape mode to unlock the experience.";
+          btn.innerText = "Waiting for rotation...";
+          btn.classList.add('disabled');
+          btn.classList.remove('active');
+          btn.disabled = true;
+
+          phoneIcon.classList.add('phone-icon-portrait');
+          phoneIcon.innerHTML = '<rect x="5" y="2" width="14" height="20" rx="2" ry="2" /><line x1="12" y1="18" x2="12.01" y2="18" />';
+        } else {
+          overlay.style.display = 'flex'; // Keep it visible until they click
+          title.innerText = "Ready For Magic?";
+          subtitle.innerText = "You are in landscape mode! Click below to enter full screen.";
+          btn.innerText = "Enter Fullscreen ⛶";
+          btn.classList.remove('disabled');
+          btn.classList.add('active');
+          btn.disabled = false;
+
+          phoneIcon.classList.remove('phone-icon-portrait');
+          phoneIcon.innerHTML = '<path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />';
+        }
+      }
+
+      window.addEventListener('resize', checkOrientation);
+      checkOrientation();
+
+      btn.addEventListener('click', function () {
+        hasStarted = true;
+        var docElm = document.documentElement;
+        if (docElm.requestFullscreen) docElm.requestFullscreen();
+        else if (docElm.webkitRequestFullscreen) docElm.webkitRequestFullscreen();
+
+        overlay.style.display = 'none';
+        document.body.classList.add('start-animation');
+
+        var audio = document.querySelector('audio');
+        if (audio) {
+          audio.play().catch(function (e) { console.log(e); });
+        }
+      });
+    })();
+  </script>
+</body>
+
+</html>

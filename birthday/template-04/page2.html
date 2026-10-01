@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280">
+    <title>Happy Birthday!</title>
+    <link rel="stylesheet" href="style.css?v=4">
+    <style>
+        html,
+        body {
+            overflow-x: hidden !important;
+            overflow-y: auto !important;
+            height: auto !important;
+            display: block !important;
+            background: none !important;
+        }
+
+        .page2-content {
+            width: 100%;
+            height: 100vh;
+            min-height: 800px;
+            background-image: url('assets/bg1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 100;
+            transition: background 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .book-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            animation: fadeIn 1.5s ease-in-out;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+        }
+
+        .book-bg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .book-left {
+            position: absolute;
+            top: 15%;
+            left: 10%;
+            width: 38%;
+            height: 80%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .polaroid-img {
+            width: 65%;
+            transform: rotate(-5deg);
+        }
+
+        .book-right {
+            position: absolute;
+            top: 15%;
+            right: 12%;
+            width: 38%;
+            height: 65%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #222;
+            font-family: 'Dancing Script', cursive;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .book-right h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #d14769;
+            /* nice warm color for birthday */
+        }
+
+        .book-right p {
+            font-size: 1.3rem;
+            line-height: 1.6;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .page2-section-two {
+            width: 100%;
+            height: 100vh;
+            min-height: 800px;
+            background-image: url('assets/bg1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 5;
+            /* Higher than section 3 so overflow shows on top */
+        }
+
+        .page2-section-three {
+            width: 100%;
+            height: 100vh;
+            min-height: 800px;
+            background-image: url('assets/bg1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .page2-section-four {
+            width: 100%;
+            height: 100vh;
+            min-height: 800px;
+            background-image: url('assets/bg1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .strip-container {
+            position: absolute;
+            top: 70%;
+            /* Moved lower like you wanted */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 800px;
+        }
+
+        .strip-rect {
+            position: absolute;
+            /* You can change these to move the rectangle! */
+            top: 15px;
+            left: 15px;
+            width: 95%;
+            height: 89%;
+            background-color: white;
+            z-index: 0;
+        }
+
+        .strip-img {
+            position: relative;
+            width: 100%;
+            display: block;
+            z-index: 1;
+        }
+
+        .strip-sticker {
+            position: absolute;
+            left: -40px;
+            /* Touching left */
+            bottom: -30px;
+            /* At the bottom */
+            width: 100px;
+            z-index: 5;
+            transform: rotate(-15deg);
+        }
+
+        .strip-sticker-top-right {
+            position: absolute;
+            right: -40px;
+            /* Touching right */
+            top: -30px;
+            /* At the top */
+            width: 140px;
+            /* A bit bigger as requested */
+            z-index: 5;
+            transform: rotate(15deg);
+        }
+
+        .strip-sticker-bottom-right {
+            position: absolute;
+            right: -30px;
+            /* Touching right */
+            bottom: -20px;
+            /* At the bottom */
+            width: 90px;
+            z-index: 5;
+            transform: rotate(-10deg);
+        }
+
+        .postcard-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            transform: translateX(-15%);
+            /* Moved slightly to the left */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translate(-100vw, 100vh); /* Start bottom left */
+        }
+
+        .postcard-wrapper.animate-in {
+            animation: slideInBottomLeft 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .postcard-img {
+            width: 100%;
+            display: block;
+        }
+
+        .postcard-text {
+            position: absolute;
+            top: 20%;
+            left: 18%;
+            width: 60%;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .polaroid-wrapper-4th {
+            position: absolute;
+            right: 15%;
+            /* Right side center */
+            top: 50%;
+            transform: translateY(-50%) rotate(15deg);
+            /* Rotated 15 degrees */
+            width: 300px;
+            /* Size of the polaroid */
+            z-index: 5;
+            opacity: 0;
+            transform: translate(100vw, 100vh) rotate(15deg); /* Start bottom right */
+        }
+
+        .polaroid-wrapper-4th.animate-in {
+            animation: slideInBottomRight 1.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        .polaroid-rect-4th {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            /* Exact size rectangle */
+            z-index: 0;
+        }
+
+        .polaroid-img-4th {
+            position: relative;
+            width: 100%;
+            display: block;
+            z-index: 1;
+        }
+
+        .sticker5-polaroid {
+            position: absolute;
+            top: -20px;
+            left: -30px;
+            width: 120px;
+            z-index: 5;
+            transform: rotate(10deg);
+        }
+
+        .sticker3-polaroid {
+            position: absolute;
+            bottom: -50px;
+            left: -80px;
+            width: 140px;
+            z-index: 5;
+            transform: rotate(-10deg);
+            /* -10 deg rotate */
+        }
+
+        .half-row {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 20px 40px;
+            opacity: 0; /* Hidden initially for animation */
+        }
+
+        .half-row.reverse {
+            flex-direction: row-reverse;
+        }
+
+        .half-img,
+        .half-text {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .half-img img {
+            width: 100%;
+            max-width: 350px;
+            background-image: linear-gradient(black, black);
+            background-size: 85% 85%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: transparent;
+            transform: rotate(-4deg);
+        }
+
+        .half-row.reverse .half-img img {
+            transform: rotate(4deg);
+        }
+
+        .half-text p {
+            font-size: 1.8rem;
+            color: #555555;
+            /* Not black */
+            font-weight: 400;
+            /* Not bold */
+            font-family: 'Dancing Script', cursive;
+            line-height: 1.6;
+            max-width: 80%;
+            text-align: center;
+        }
+        /* --- Animations --- */
+        /* Replaced left/right sliding with a simple fade-up to avoid 'scroll' look */
+
+        .animate-left {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .animate-right {
+            animation: fadeInUp 1s ease-out forwards;
+            animation-delay: 0.2s; /* Slight delay for the second one */
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes stopMotionStrip {
+            0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-49%, -51%) rotate(1deg); }
+            50% { transform: translate(-51%, -49%) rotate(-1deg); }
+            75% { transform: translate(-50%, -52%) rotate(2deg); }
+        }
+
+        @keyframes stopMotionPolaroid {
+            0%, 100% { transform: translateY(-50%) rotate(15deg); }
+            25% { transform: translateY(-52%) rotate(16deg); }
+            50% { transform: translateY(-48%) rotate(14deg); }
+            75% { transform: translateY(-51%) rotate(17deg); }
+        }
+
+        @keyframes slideInBottomLeft {
+            from { transform: translate(-100vw, 100vh); opacity: 0; }
+            to { transform: translateX(-15%); opacity: 1; }
+        }
+
+        @keyframes slideInBottomRight {
+            from { transform: translate(100vw, 100vh) rotate(15deg); opacity: 0; }
+            to { transform: translateY(-50%) rotate(15deg); opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Music (Will play automatically if browser allows, when you add the file) -->
+    <audio id="bg-music" autoplay loop>
+        <source src="assets/song.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="page2-content">
+        <!-- Back Button in Section 1 -->
+        <a href="index.html" class="back-btn">&times;</a>
+
+        <div class="book-container">
+            <img src="assets/book.png" alt="Book" class="book-bg">
+
+            <div class="book-left">
+                <img src="assets/polaroid3.png" alt="Polaroid" class="polaroid-img">
+            </div>
+
+            <div class="book-right">
+                <h2>Happy Birthday!</h2>
+                <p>Wishing you the absolute happiest of birthdays! May this special day bring you endless joy, wonderful
+                    surprises, and beautiful memories that you will cherish forever. You deserve all the love, success,
+                    and happiness in the world today and always. Have a truly amazing and fantastic year ahead!</p>
+            </div>
+        </div>
+    </div>
+
+    <section class="page2-section-two">
+        <!-- Top Half: Image Left, Text Right -->
+        <div class="half-row">
+            <div class="half-img">
+                <img src="assets/polaroid1.png" alt="Memory 1">
+            </div>
+            <div class="half-text">
+                <p>You are the kindest, most incredible person I know. Your smile brightens up the room and your
+                    beautiful energy makes everyone around you so happy. This day is all about celebrating the wonderful
+                    soul that you are!</p>
+            </div>
+        </div>
+
+        <!-- Bottom Half: Text Left, Image Right (Row Reverse) -->
+        <div class="half-row reverse">
+            <div class="half-img">
+                <img src="assets/polaroid2.jpg" alt="Memory 2">
+            </div>
+            <div class="half-text">
+                <p>From the little moments we share to the big milestones, every second with you is a treasure. Keep
+                    shining like the beautiful star you are. Here's to making many more unforgettable memories together!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="page2-section-three">
+        <div class="strip-container">
+            <div class="strip-rect"></div>
+            <img src="assets/strip.png" alt="Strip" class="strip-img">
+            <img src="assets/sticker.png" alt="Sticker" class="strip-sticker">
+            <img src="assets/sticker7.png" alt="Sticker 7" class="strip-sticker-top-right">
+            <img src="assets/sticker6.png" alt="Sticker 6" class="strip-sticker-bottom-right">
+        </div>
+    </section>
+
+    <section class="page2-section-four">
+        <div class="postcard-wrapper">
+            <img src="assets/post_card.png" alt="Post Card" class="postcard-img">
+            <div class="postcard-text">
+                My dearest friend,<br><br>
+                Wishing you a birthday as beautiful and wonderful as you are. I hope this year brings you countless
+                reasons to smile and memories you'll treasure forever. Thank you for always being there. Happy
+                Birthday!<br><br>
+                With love.
+            </div>
+        </div>
+        <div class="polaroid-wrapper-4th">
+            <div class="polaroid-rect-4th"></div>
+            <img src="assets/polaroid3.png" alt="Polaroid 3" class="polaroid-img-4th">
+            <img src="assets/sticker5.png" alt="Sticker 5" class="sticker5-polaroid">
+            <img src="assets/sticker3.png" alt="Sticker 3" class="sticker3-polaroid">
+        </div>
+    </section>
+
+    <!-- Scroll Animation Script -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const section2 = document.querySelector('.page2-section-two');
+            const halfRows = section2.querySelectorAll('.half-row');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Animate both together
+                        halfRows[0].classList.add('animate-left');
+                        halfRows[1].classList.add('animate-right');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 }); // Trigger when 30% of section 2 is visible
+
+            observer.observe(section2);
+
+            // Section 4 Animation
+            const section4 = document.querySelector('.page2-section-four');
+            const postcardWrapper = section4.querySelector('.postcard-wrapper');
+            const polaroidWrapper4th = section4.querySelector('.polaroid-wrapper-4th');
+
+            const observer4 = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        postcardWrapper.classList.add('animate-in');
+                        polaroidWrapper4th.classList.add('animate-in');
+                        observer4.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.3 }); // Trigger when 30% of section 4 is visible
+
+            observer4.observe(section4);
+        });
+    </script>
+</body>
+
+</html>
