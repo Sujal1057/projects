@@ -187,8 +187,10 @@ body.page2-body {
     /* Move "Click the Envelope!" text UP/DOWN */
   }
 
-  /* Ensure Section 2 polaroid memories & text are 100% visible on Mobile */
-  .half-row {
+  /* Ensure Section 2 & Section 4 (Postcard & Polaroid) are 100% visible on Mobile */
+  .half-row,
+  .postcard-wrapper,
+  .polaroid-wrapper-4th {
     opacity: 1 !important;
   }
 }
@@ -735,8 +737,8 @@ body.page2-body {
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 105, 180, 0.25));
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(37, 99, 235, 0.25);
+  border: 2px solid #2563eb;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -803,21 +805,27 @@ body.page2-body {
 }
 
 .orientation-btn.active {
-  background: linear-gradient(135deg, #ff416c, #ff4b2b);
+  background: #2563eb;
   color: #ffffff;
-  box-shadow: 0 6px 20px rgba(255, 65, 108, 0.5);
+  border: 1px solid #3b82f6;
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
   cursor: pointer;
   animation: pulseGlow 2s infinite;
+}
+
+.orientation-btn.active:hover {
+  background: #1d4ed8;
+  transform: scale(1.02);
 }
 
 @keyframes pulseGlow {
 
   0%,
   100% {
-    box-shadow: 0 6px 20px rgba(255, 65, 108, 0.5);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
   }
 
   50% {
-    box-shadow: 0 10px 28px rgba(255, 65, 108, 0.8);
+    box-shadow: 0 10px 28px rgba(37, 99, 235, 0.8);
   }
 }

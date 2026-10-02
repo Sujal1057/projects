@@ -19,8 +19,8 @@ export default function BirthdayBookPage() {
   const section2Ref = useRef(null);
   const section4Ref = useRef(null);
 
-  const [section2Visible, setSection2Visible] = useState(false);
-  const [section4Visible, setSection4Visible] = useState(false);
+  const [section2Visible, setSection2Visible] = useState(true);
+  const [section4Visible, setSection4Visible] = useState(true);
 
   useEffect(() => {
     document.body.classList.add('page2-body');
@@ -33,7 +33,7 @@ export default function BirthdayBookPage() {
   }, []);
 
   useEffect(() => {
-    // Observer for section 2 with lower threshold (0.1) for reliable mobile trigger
+    // Observer for section 2 with lower threshold (0.1)
     const observer2 = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
