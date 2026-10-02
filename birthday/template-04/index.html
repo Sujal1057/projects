@@ -2,92 +2,17 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=1280">
-  <title>Envelope Template</title>
-  <link rel="stylesheet" href="style.css?v=6">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
-  <section class="section-one">
-    <div class="envelope-container">
-      <div class="letter">
-        <h2>Happy Birthday!</h2>
-        <p>Wishing you a wonderful day!</p>
-      </div>
-      <img src="assets/envlb2.png" alt="Envelope" class="envelope-img">
-      <img src="assets/f1.png" alt="f1 decor" class="f1-img">
-      <img src="assets/sticker5.png" alt="Sticker 5" class="f5-img">
-    </div>
-
-    <div class="click-text">
-      <p>Click the Envelope!</p>
-    </div>
-  </section>
-
-  <!-- Surprise Popup -->
-  <div id="surprise-popup" class="blue-popup-overlay">
-    <div class="blue-popup-card">
-      <h2 class="blue-popup-title">Are you ready for the surprise?</h2>
-      <p class="blue-popup-sub">You can also watch by rotating your phone 🔄</p>
-      <button id="surprise-start-btn" class="blue-start-btn">Start</button>
-    </div>
-  </div>
-
-  <!-- Audio Player -->
-  <audio id="bg-music" loop src="assets/music.mp3" preload="auto"></audio>
-
-  <script src="script.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var startBtn = document.getElementById('surprise-start-btn');
-      var popup = document.getElementById('surprise-popup');
-      var audio = document.getElementById('bg-music');
-
-      function hidePopup() {
-        if (popup) {
-          popup.style.setProperty('display', 'none', 'important');
-          popup.classList.add('hidden');
-        }
-      }
-
-      function syncAudio() {
-        if (!audio) return;
-        audio.ontimeupdate = function () {
-          sessionStorage.setItem('bg_music_time', audio.currentTime);
-        };
-      }
-
-      // Check state on load
-      if (sessionStorage.getItem('bg_music_playing') === 'true') {
-        hidePopup();
-        document.body.classList.add('start-animation');
-
-        if (audio && sessionStorage.getItem('bg_music_paused') !== 'true') {
-          var savedTime = parseFloat(sessionStorage.getItem('bg_music_time')) || 0;
-          audio.currentTime = savedTime;
-          audio.play().catch(function (e) { console.log(e); });
-          syncAudio();
-        }
-      }
-
-      if (startBtn) {
-        startBtn.addEventListener('click', function () {
-          hidePopup();
-          document.body.classList.add('start-animation');
-
-          if (audio) {
-            sessionStorage.setItem('bg_music_playing', 'true');
-            sessionStorage.setItem('bg_music_paused', 'false');
-            var savedTime = parseFloat(sessionStorage.getItem('bg_music_time')) || 0;
-            audio.currentTime = savedTime;
-            audio.play().catch(function (e) { console.log(e); });
-            syncAudio();
-          }
-        });
-      }
-    });
-  </script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 
 </html>
