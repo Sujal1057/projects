@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, useRef } from 'react';
 import './mobileGate.css';
+import bgMusic from '../../assets/until_i_found_you.mp3';
 
 /**
  * MobileGate — phone-only wrapper (desktop/tablet render children untouched).
@@ -51,6 +52,14 @@ export default function MobileGate({ children }) {
   const [vp, setVp] = useState(readViewport);
   const [isFullscreen, setIsFullscreen] = useState(() => !!getFullscreenElement());
   const [canFullscreen] = useState(fullscreenSupported);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    // Initialize the background music
+    audioRef.current = new Audio(bgMusic);
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.5; // Set volume to 50%
+  }, []);
 
   useEffect(() => {
     const onResize = () => {
@@ -77,6 +86,9 @@ export default function MobileGate({ children }) {
 
   const goFullscreen = useCallback(() => {
     requestFullscreen();
+    if (audioRef.current) {
+      audioRef.current.play().catch(err => console.log('Audio playback failed:', err));
+    }
   }, []);
 
   // Desktop / tablet: no changes at all
