@@ -1,0 +1,197 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: #9AEDFF;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* The page is a size container: all inner sizing uses cqw/cqh so it scales
+   with the page box (desktop = viewport, phone = scaled stage in MobileGate) */
+.page-container {
+  background-color: #9AEDFF;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  container-type: size;
+  container-name: page;
+}
+
+/* Horizontal drifting cloud keyframe animations */
+@keyframes driftLeftToRight {
+  0% {
+    transform: translateX(-350px);
+  }
+  100% {
+    transform: translateX(100cqw);
+  }
+}
+
+@keyframes driftRightToLeft {
+  0% {
+    transform: translateX(100cqw);
+  }
+  100% {
+    transform: translateX(-350px);
+  }
+}
+
+.cloud-drift-ltr-1 {
+  animation: driftLeftToRight 32s linear infinite;
+}
+
+.cloud-drift-ltr-2 {
+  animation: driftLeftToRight 42s linear infinite;
+  animation-delay: -15s;
+}
+
+.cloud-drift-rtl-1 {
+  animation: driftRightToLeft 36s linear infinite;
+}
+
+.cloud-drift-rtl-2 {
+  animation: driftRightToLeft 48s linear infinite;
+  animation-delay: -20s;
+}
+
+/* ===== Wishes Page: sticker grid ===== */
+.wishes-wrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 24px 24px;
+  overflow-y: auto;
+}
+
+.wishes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(12px, 2.5cqw, 36px);
+  width: 100%;
+  max-width: 1200px;
+  /* each row fits within the page height (minus nav + padding) */
+  --cell-h: calc((100cqh - 104px - clamp(12px, 2.5cqw, 36px)) / 2);
+}
+
+.wish-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--cell-h);
+  min-height: 0;
+  container-type: size;
+}
+
+/* Card keeps the sticker's aspect ratio so text % positions map onto the paper */
+.wish-card {
+  --ratio: 0.96; /* sticker2.png width / height */
+  position: relative;
+  aspect-ratio: 0.96;
+  width: min(100cqw, calc(100cqh * var(--ratio)));
+  container-type: inline-size;
+  transform: rotate(var(--rot, 0deg));
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35));
+  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.35s ease;
+  cursor: pointer;
+  animation: stickerIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+}
+
+.wish-sticker {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* Text area: on the beige paper, slightly below center, away from the stars */
+.wish-text {
+  position: absolute;
+  left: 15%;
+  width: 50%;
+  top: 40%;
+  height: 27%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: 'Caveat', cursive, sans-serif;
+  font-weight: 700;
+  font-size: clamp(10px, 7.2cqw, 25px);
+  line-height: 1.08;
+  color: #1e3a5f;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  transform: rotate(-2deg);
+  pointer-events: none;
+}
+
+.wish-cell:nth-child(1) .wish-card { animation-delay: 0.00s; }
+.wish-cell:nth-child(2) .wish-card { animation-delay: 0.06s; }
+.wish-cell:nth-child(3) .wish-card { animation-delay: 0.12s; }
+.wish-cell:nth-child(4) .wish-card { animation-delay: 0.18s; }
+.wish-cell:nth-child(5) .wish-card { animation-delay: 0.24s; }
+.wish-cell:nth-child(6) .wish-card { animation-delay: 0.30s; }
+.wish-cell:nth-child(7) .wish-card { animation-delay: 0.36s; }
+.wish-cell:nth-child(8) .wish-card { animation-delay: 0.42s; }
+
+.wish-card:hover {
+  transform: rotate(0deg) scale(1.08);
+  filter: drop-shadow(0 18px 32px rgba(0, 0, 0, 0.45));
+  z-index: 5;
+}
+
+@keyframes stickerIn {
+  from {
+    opacity: 0;
+    transform: rotate(var(--rot, 0deg)) scale(0.7) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(var(--rot, 0deg)) scale(1) translateY(0);
+  }
+}
+
+/* Tablet: 3 columns, scrollable */
+@container page (max-width: 900px) {
+  .wishes-wrapper {
+    align-items: flex-start;
+  }
+  .wishes-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .wish-cell {
+    height: auto;
+    container-type: inline-size;
+  }
+  .wish-card {
+    width: 100%;
+  }
+}
+
+/* Mobile: 2 columns, scrollable */
+@container page (max-width: 560px) {
+  .wishes-wrapper {
+    padding: 76px 14px 20px;
+  }
+  .wishes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

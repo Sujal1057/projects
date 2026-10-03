@@ -1,0 +1,100 @@
+/* ===== Phone-only styles (used by MobileGate.jsx) ===== */
+
+.mg-viewport {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.mg-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+}
+
+/* ---------- Overlay (blurred page behind) ---------- */
+.mg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 24px;
+  margin: 0;
+  border: none;
+  color: #ffffff;
+  text-align: center;
+  background: rgba(10, 18, 30, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  animation: mgFade 0.5s ease both;
+}
+
+.mg-overlay--tap {
+  width: 100%;
+  cursor: pointer;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* ---------- Typography (matches the site's nav) ---------- */
+.mg-title {
+  margin: 0;
+  font-family: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.1;
+  letter-spacing: 2px;
+  text-transform: lowercase;
+}
+
+.mg-rule {
+  display: block;
+  width: 36px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.mg-sub {
+  margin: 0;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.mg-overlay--tap .mg-sub {
+  animation: mgBreath 2.4s ease-in-out infinite;
+}
+
+/* ---------- Phone outline ---------- */
+.mg-phone {
+  margin-bottom: 6px;
+  color: #ffffff;
+  animation: mgRotate 3s ease-in-out infinite;
+}
+
+/* ---------- Keyframes ---------- */
+@keyframes mgRotate {
+  0%, 25% { transform: rotate(0deg); }
+  50%, 80% { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes mgFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mgBreath {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 0.35; }
+}
