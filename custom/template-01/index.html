@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Story of My Life — Pixel Camera</title>
+  <meta name="description" content="Look into an old pixel-art computer and see yourself as live 8-bit pixel art. Capture, save and share your pixel portrait — your camera never leaves your device." />
+  <meta name="theme-color" content="#f3efe4" />
+  <meta name="color-scheme" content="light" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet" />
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Cpath fill='%23141414' d='M1 2h14v10H1z'/%3E%3Cpath fill='%23f3efe4' d='M3 4h10v6H3z'/%3E%3Cpath fill='%23141414' d='M5 5h2v2H5zM9 5h2v2H9zM6 8h4v1H6zM6 12h4v2H6zM4 14h8v1H4z'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app" id="app" data-state="idle">
+
+    <!-- ✏️ Change the heading text here. Everything else (typing effect, exported PNG caption, share text) picks it up automatically. -->
+    <h1 class="title" id="heading">Story of my life:</h1>
+
+    <section class="monitor" aria-label="Retro computer showing your camera">
+      <div class="monitor__body">
+        <div class="monitor__bezel">
+          <div class="screen" id="screen">
+            <!-- Raw camera stream: never shown, only sampled into the low-res canvas. -->
+            <video id="camera-video" class="screen__video" playsinline muted autoplay aria-hidden="true"></video>
+
+            <canvas id="camera-canvas" class="screen__canvas" role="img" aria-label="Live pixelated camera feed"></canvas>
+
+            <!-- HUD -->
+            <div class="hud" aria-hidden="true">
+              <div class="hud__row">
+                <span class="hud__rec"><i class="hud__dot"></i>REC</span>
+                <span class="hud__cap">CAPTURED</span>
+                <span id="hud-cam">FRONT</span>
+              </div>
+              <div class="hud__row">
+                <span id="hud-res">120x213</span>
+                <span id="hud-shot-mode">1-SHOT</span>
+                <span id="hud-mode">TV TOON</span>
+              </div>
+            </div>
+
+            <!-- Idle -->
+            <div class="panel panel--idle">
+              <svg class="panel__icon" viewBox="0 0 12 11" shape-rendering="crispEdges" aria-hidden="true">
+                <path fill="currentColor" d="M3 0h6v1H3zM2 1h1v1H2zM9 1h1v1H9zM1 2h1v1H1zM10 2h1v1h-1zM0 3h1v5H0zM11 3h1v5h-1zM3 3h2v2H3zM7 3h2v2H7zM2 6h1v1H2zM9 6h1v1H9zM3 7h1v1H3zM8 7h1v1H8zM1 8h1v1H1zM10 8h1v1h-1zM4 8h4v1H4zM2 9h1v1H2zM9 9h1v1H9zM3 10h6v1H3z"/>
+              </svg>
+              <p class="panel__title">KANVERSE CAM</p>
+              <p class="panel__text">Insert face to continue.</p>
+              <button type="button" class="btn btn--small" id="btn-start">
+                <span class="blink">PRESS START</span>
+              </button>
+              <p class="panel__fine">Your camera stays on this device.<br />Nothing is uploaded.</p>
+            </div>
+
+            <!-- Loading -->
+            <div class="panel panel--loading">
+              <p class="panel__title">BOOTING CAMERA</p>
+              <div class="loader" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+              <p class="panel__text">Allow camera access when your browser asks.</p>
+            </div>
+
+            <!-- Error -->
+            <div class="panel panel--error" role="alert">
+              <svg class="panel__icon" viewBox="0 0 12 11" shape-rendering="crispEdges" aria-hidden="true">
+                <path fill="currentColor" d="M3 0h6v1H3zM2 1h1v1H2zM9 1h1v1H9zM1 2h1v1H1zM10 2h1v1h-1zM0 3h1v5H0zM11 3h1v5h-1zM3 3h1v1H3zM4 4h1v1H4zM4 3h1v1H4zM3 4h1v1H3zM7 3h2v1H7zM7 4h2v1H7zM4 6h4v1H4zM3 7h1v1H3zM8 7h1v1H8zM1 8h1v1H1zM10 8h1v1h-1zM2 9h1v1H2zM9 9h1v1H9zM3 10h6v1H3z"/>
+              </svg>
+              <p class="panel__title" id="error-title">CAMERA NOT FOUND</p>
+              <p class="panel__text" id="error-msg">Please allow camera access to enter pixel mode.</p>
+              <p class="panel__fine" id="error-hint"></p>
+              <button type="button" class="btn btn--small" id="btn-retry">RETRY</button>
+            </div>
+
+            <div class="countdown" id="countdown" aria-hidden="true"></div>
+            <div class="screen__flash" id="screen-flash" aria-hidden="true"></div>
+            <div class="screen__scanlines" aria-hidden="true"></div>
+            <div class="screen__noise" aria-hidden="true"></div>
+            <div class="screen__glass" aria-hidden="true"></div>
+          </div>
+        </div>
+
+        <div class="monitor__chin" aria-hidden="true">
+          <span class="monitor__brand">KANVERSE</span>
+          <span class="monitor__vents"></span>
+          <span class="monitor__led"></span>
+        </div>
+      </div>
+      <div class="monitor__neck" aria-hidden="true"></div>
+      <div class="monitor__base" aria-hidden="true"></div>
+    </section>
+
+    <nav class="controls" aria-label="Camera controls">
+      <div class="controls__live">
+        <button type="button" class="btn btn--icon" id="btn-switch" aria-label="Switch camera" title="Switch camera">
+          <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
+            <path fill="currentColor" d="M2 5h9v2H2zM10 3h1v6h-1zM11 4h1v4h-1zM12 5h1v2h-1zM2 7h2v2H2zM5 10h9v2H5zM5 8h1v6H5zM4 9h1v4H4zM3 10h1v2H3zM12 7h2v3h-2z"/>
+          </svg>
+        </button>
+
+        <button type="button" class="btn btn--capture" id="btn-capture" aria-label="Capture photo">
+          <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
+            <path fill="currentColor" fill-rule="evenodd" d="M1 4h4V2h6v2h4v10H1zM6 7v4h4V7z"/>
+            <path fill="currentColor" d="M7 8h2v2H7z"/>
+          </svg>
+          <span id="capture-label">CAPTURE</span>
+        </button>
+
+        <button type="button" class="btn btn--icon" id="btn-shot-mode" aria-label="Toggle photo strip mode" title="Shot Mode: 1-Shot / 3x Strip">
+          <svg viewBox="0 0 16 16" shape-rendering="crispEdges" aria-hidden="true">
+            <path fill="currentColor" d="M3 2h10v3H3zM3 6.5h10v3H3zM3 11h10v3H3z"/>
+          </svg>
+          <span class="btn__micro" id="shot-mode-label">1-SHOT</span>
+        </button>
+
+        <button type="button" class="btn btn--icon btn--mode" id="btn-mode" aria-label="Change pixel palette" title="Change pixel palette">
+          <span class="btn__swatch" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span class="btn__micro" id="mode-label">TV TOON</span>
+        </button>
+      </div>
+
+      <div class="controls__step">
+        <div class="controls__row">
+          <button type="button" class="btn" id="btn-step-retake"><span class="btn__label" id="step-retake-label">RETAKE SHOT 1</span></button>
+          <button type="button" class="btn btn--primary" id="btn-step-next"><span class="btn__label" id="step-next-label">CONFIRM & SHOT 2</span></button>
+        </div>
+      </div>
+
+      <div class="controls__captured">
+        <div class="controls__row">
+          <button type="button" class="btn" id="btn-retake"><span class="btn__label" id="retake-label">RETAKE</span></button>
+          <button type="button" class="btn btn--primary" id="btn-save"><span class="btn__label" id="save-label">SAVE PHOTO</span></button>
+        </div>
+        <button type="button" class="btn btn--secondary" id="btn-share"><span class="btn__label">SHARE</span></button>
+      </div>
+    </nav>
+
+    <p class="sr-only" id="status" aria-live="polite"></p>
+  </main>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

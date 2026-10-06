@@ -1,0 +1,734 @@
+/* =========================================================================
+   PIXL-86 — Pixel camera
+   Design tokens → layout → monitor → screen effects → panels → controls
+   ========================================================================= */
+
+:root {
+  /* Palette: aged off-white plastic + ink */
+  --paper: #f3efe4;
+  --paper-hi: #fffdf6;
+  --paper-2: #e7e1d0;
+  --shade: #cbc3ac;
+  --shade-2: #a39b85;
+  --ink: #141414;
+  --ink-2: #3a3833;
+  --phosphor: #0c0e0c;
+  --accent: #e2483d; /* REC dot / LED only */
+
+  /* One "art pixel" — every border is a multiple of this */
+  --px: 4px;
+
+  /* Screen proportion (portrait on mobile) */
+  --rw: 9;
+  --rh: 16;
+
+  /* Monitor chrome, used to fit the screen into the available space */
+  --body-pad: 10px;
+  --bezel-pad: 8px;
+  --chin-h: 30px;
+  --stand-h: 22px;
+
+  --font-pixel: "Press Start 2P", "Courier New", monospace;
+  --font-term: "VT323", "Courier New", monospace;
+
+  --step: steps(4, end);
+}
+
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background-color: var(--paper);
+  /* Faint 1-bit dither so the paper doesn't look like flat digital white */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6' shape-rendering='crispEdges'%3E%3Crect x='0' y='0' width='1' height='1' fill='%23141414' fill-opacity='.07'/%3E%3Crect x='3' y='3' width='1' height='1' fill='%23141414' fill-opacity='.05'/%3E%3C/svg%3E");
+  color: var(--ink);
+  font-family: var(--font-pixel);
+  -webkit-font-smoothing: none;
+  -webkit-tap-highlight-color: transparent;
+  text-rendering: optimizeSpeed;
+  overscroll-behavior: none;
+}
+
+button { font: inherit; color: inherit; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* -------------------------------------------------------------------------
+   Layout: title / monitor (fills) / controls — always fits one viewport
+   ------------------------------------------------------------------------- */
+.app {
+  height: 100vh;
+  height: 100svh;
+  min-height: 520px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 14px;
+  padding:
+    max(14px, env(safe-area-inset-top))
+    max(14px, env(safe-area-inset-right))
+    max(14px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
+}
+
+/* -------------------------------------------------------------------------
+   Heading
+   ------------------------------------------------------------------------- */
+.title {
+  margin: 4px 0 0;
+  padding: 0 var(--px);
+  font-size: clamp(13px, 4.4vw, 20px);
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-shadow: 2px 2px 0 var(--shade);
+  min-height: 1.5em;
+  overflow-wrap: anywhere;
+}
+
+.title__cursor {
+  display: inline-block;
+  width: 0.6em;
+  height: 1em;
+  margin-left: 0.25em;
+  vertical-align: -0.1em;
+  background: var(--ink);
+  box-shadow: 2px 2px 0 var(--shade);
+  animation: blink 1s steps(1, end) infinite;
+}
+
+/* -------------------------------------------------------------------------
+   Monitor
+   ------------------------------------------------------------------------- */
+.monitor {
+  container-type: size;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* Leaves room for the outside pixel border */
+  padding: var(--px);
+}
+
+.monitor__body {
+  position: relative;
+  padding: var(--body-pad) var(--body-pad) 0;
+  background: var(--paper-2);
+  /* Pixel border with notched corners + bevelled plastic */
+  box-shadow:
+    inset var(--px) var(--px) 0 0 var(--paper-hi),
+    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 0 var(--shade),
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink);
+}
+
+.monitor__bezel {
+  padding: var(--bezel-pad);
+  background: var(--shade);
+  /* Recessed: dark top-left, light bottom-right */
+  box-shadow:
+    inset var(--px) var(--px) 0 0 var(--shade-2),
+    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 0 var(--paper-hi);
+}
+
+.monitor__chin {
+  height: var(--chin-h);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 4px;
+}
+
+.monitor__brand {
+  font-size: 7px;
+  color: var(--shade-2);
+  text-shadow: 1px 1px 0 var(--paper-hi);
+  letter-spacing: 1px;
+}
+
+.monitor__vents {
+  flex: 1;
+  height: 8px;
+  background: repeating-linear-gradient(90deg, var(--shade-2) 0 4px, transparent 4px 8px);
+  opacity: 0.6;
+}
+
+.monitor__led {
+  width: 8px;
+  height: 4px;
+  background: var(--shade-2);
+}
+
+.app[data-state="live"] .monitor__led,
+.app[data-state="countdown"] .monitor__led,
+.app[data-state="captured"] .monitor__led {
+  background: #58c26b;
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+.monitor__neck {
+  width: 28%;
+  height: 8px;
+  margin-top: var(--px);
+  background: var(--shade);
+  box-shadow:
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink);
+}
+
+.monitor__base {
+  width: 56%;
+  height: 10px;
+  background: var(--paper-2);
+  box-shadow:
+    inset 0 calc(var(--px) * -1) 0 0 var(--shade),
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink);
+  margin-bottom: var(--px);
+}
+
+/* -------------------------------------------------------------------------
+   Screen — sized from the monitor container so it never overflows
+   horizontal chrome: 2 × (outer px + body pad + bezel pad)        ≈ 2 × 22
+   vertical chrome:   top + bezel×2 + chin + neck/base + borders   ≈ 98
+   ------------------------------------------------------------------------- */
+.screen {
+  --hchrome: calc((var(--px) * 2 + var(--body-pad) + var(--bezel-pad)) * 2);
+  --vchrome: calc(var(--px) * 6 + var(--body-pad) + var(--bezel-pad) * 2 + var(--chin-h) + var(--stand-h));
+
+  position: relative;
+  width: min(
+    calc(100vw - 92px),
+    calc((100svh - 330px) * var(--rw) / var(--rh))
+  );
+  width: min(
+    calc(100cqw - var(--hchrome)),
+    calc((100cqh - var(--vchrome)) * var(--rw) / var(--rh))
+  );
+  aspect-ratio: var(--rw) / var(--rh);
+  overflow: hidden;
+  isolation: isolate;
+  background-color: var(--phosphor);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' shape-rendering='crispEdges'%3E%3Crect width='2' height='2' fill='%23ffffff' fill-opacity='.05'/%3E%3Crect x='2' y='2' width='2' height='2' fill='%23ffffff' fill-opacity='.05'/%3E%3C/svg%3E");
+  border: var(--px) solid var(--ink);
+  /* Stepped, pixel-art corners (no smooth radius) */
+  clip-path: polygon(
+    var(--px) 0, calc(100% - var(--px)) 0, calc(100% - var(--px)) var(--px), 100% var(--px),
+    100% calc(100% - var(--px)), calc(100% - var(--px)) calc(100% - var(--px)),
+    calc(100% - var(--px)) 100%, var(--px) 100%, var(--px) calc(100% - var(--px)),
+    0 calc(100% - var(--px)), 0 var(--px), var(--px) var(--px)
+  );
+}
+
+.screen__video {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.screen__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+  image-rendering: pixelated;
+  opacity: 0;
+  transition: opacity 0.3s steps(3, end);
+}
+
+.app[data-state="live"] .screen__canvas,
+.app[data-state="countdown"] .screen__canvas,
+.app[data-state="strip-step"] .screen__canvas,
+.app[data-state="captured"] .screen__canvas { opacity: 1; }
+
+/* CRT scanlines + slow rolling bar */
+.screen__scanlines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0 1px,
+    transparent 1px 3px
+  );
+  mix-blend-mode: multiply;
+}
+
+.screen__scanlines::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 18%;
+  top: -20%;
+  background: rgba(255, 255, 255, 0.045);
+  animation: roll 7s linear infinite;
+}
+
+/* Animated grain — texture generated in JS (see app.js) */
+.screen__noise {
+  position: absolute;
+  inset: -64px;
+  pointer-events: none;
+  z-index: 21;
+  background-image: var(--noise, none);
+  background-size: 128px 128px;
+  image-rendering: pixelated;
+  opacity: 0.07;
+  animation: grain 0.5s steps(1, end) infinite;
+}
+
+/* Glass: very soft vignette + a single pixel glare */
+.screen__glass {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 22;
+  box-shadow: inset 0 0 36px rgba(0, 0, 0, 0.55), inset 0 0 4px rgba(0, 0, 0, 0.6);
+}
+
+.screen__glass::before {
+  content: "";
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 16px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.28);
+  box-shadow: -4px 4px 0 0 rgba(255, 255, 255, 0.28), -4px 8px 0 0 rgba(255, 255, 255, 0.18);
+}
+
+.screen__flash {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  pointer-events: none;
+  background: var(--paper-hi);
+  opacity: 0;
+}
+
+.screen__flash.is-on { animation: flash 0.5s steps(5, end) forwards; }
+
+/* HUD overlay */
+.hud {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 10px 12px;
+  pointer-events: none;
+  font-family: var(--font-term);
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 1px;
+  color: var(--paper);
+  text-shadow: 1px 0 0 var(--ink), -1px 0 0 var(--ink), 0 1px 0 var(--ink), 0 -1px 0 var(--ink);
+}
+
+.hud__row { display: flex; justify-content: space-between; gap: 8px; }
+.hud__rec { display: inline-flex; align-items: center; gap: 5px; }
+.hud__dot {
+  width: 6px; height: 6px;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--ink);
+  animation: blink 1.2s steps(1, end) infinite;
+}
+.hud__cap { display: none; }
+
+.app[data-state="live"] .hud,
+.app[data-state="countdown"] .hud,
+.app[data-state="strip-step"] .hud,
+.app[data-state="captured"] .hud { display: flex; }
+.app[data-state="strip-step"] .hud__rec,
+.app[data-state="captured"] .hud__rec { display: none; }
+.app[data-state="strip-step"] .hud__cap,
+.app[data-state="captured"] .hud__cap { display: inline; animation: blink 1s steps(1, end) 3; }
+
+/* Countdown */
+.countdown {
+  position: absolute;
+  inset: 0;
+  z-index: 25;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  font-size: clamp(48px, 28vw, 120px);
+  color: var(--paper);
+  text-shadow:
+    6px 0 0 var(--ink), -6px 0 0 var(--ink), 0 6px 0 var(--ink), 0 -6px 0 var(--ink),
+    6px 6px 0 var(--ink), -6px -6px 0 var(--ink), 6px -6px 0 var(--ink), -6px 6px 0 var(--ink),
+    10px 10px 0 rgba(0, 0, 0, 0.35);
+}
+
+.countdown span { display: block; animation: pop 0.9s steps(6, end) forwards; }
+
+/* -------------------------------------------------------------------------
+   In-screen dialog panels (idle / loading / error)
+   ------------------------------------------------------------------------- */
+.panel {
+  position: absolute;
+  z-index: 18;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  width: calc(100% - 28px);
+  max-width: 280px;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 12px 16px;
+  text-align: center;
+  background: var(--paper);
+  color: var(--ink);
+  box-shadow:
+    inset 0 calc(var(--px) * -1) 0 0 var(--shade),
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    var(--px) calc(var(--px) * 2) 0 0 rgba(0, 0, 0, 0.5);
+}
+
+/* Window title-bar stripes like old desktop dialogs */
+.panel::before {
+  content: "";
+  position: absolute;
+  left: 8px; right: 8px; top: 6px;
+  height: 6px;
+  background: repeating-linear-gradient(to bottom, var(--ink) 0 1px, transparent 1px 3px);
+  opacity: 0.8;
+}
+
+.app[data-state="idle"] .panel--idle,
+.app[data-state="loading"] .panel--loading,
+.app[data-state="error"] .panel--error { display: flex; animation: boot 0.35s steps(4, end); }
+
+.panel__icon { width: 44px; height: auto; display: block; margin-top: 6px; }
+
+.panel__title {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.panel__text {
+  margin: 0;
+  font-family: var(--font-term);
+  font-size: 19px;
+  line-height: 1.05;
+}
+
+.panel__fine {
+  margin: 0;
+  font-family: var(--font-term);
+  font-size: 15px;
+  line-height: 1.05;
+  color: var(--ink-2);
+}
+
+.panel__fine:empty { display: none; }
+
+.loader { display: flex; gap: 4px; }
+.loader i {
+  width: 8px; height: 8px;
+  background: var(--ink);
+  animation: load 1.2s steps(1, end) infinite;
+}
+.loader i:nth-child(2) { animation-delay: 0.2s; }
+.loader i:nth-child(3) { animation-delay: 0.4s; }
+.loader i:nth-child(4) { animation-delay: 0.6s; }
+.loader i:nth-child(5) { animation-delay: 0.8s; }
+.loader i:nth-child(6) { animation-delay: 1s; }
+
+/* -------------------------------------------------------------------------
+   Buttons — chunky bevelled pixel keys
+   ------------------------------------------------------------------------- */
+.btn {
+  --face: var(--paper);
+  --lo: var(--shade);
+  --hi: var(--paper-hi);
+  --fg: var(--ink);
+  --lift: var(--px);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 18px;
+  margin: var(--px) var(--px) calc(var(--px) * 2);
+  border: 0;
+  cursor: pointer;
+  user-select: none;
+  touch-action: manipulation;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--fg);
+  background: var(--face);
+  box-shadow:
+    inset var(--px) var(--px) 0 0 var(--hi),
+    inset calc(var(--px) * -1) calc(var(--px) * -1) 0 0 var(--lo),
+    0 calc(var(--px) * -1) 0 0 var(--ink),
+    0 var(--px) 0 0 var(--ink),
+    calc(var(--px) * -1) 0 0 0 var(--ink),
+    var(--px) 0 0 0 var(--ink),
+    0 calc(var(--px) + var(--lift)) 0 0 var(--ink);
+  transform: translateY(0);
+  transition: none;
+}
+
+.btn svg { width: 20px; height: 20px; display: block; flex: none; }
+
+@media (hover: hover) {
+  .btn:hover { --face: var(--paper-hi); }
+  .btn--primary:hover,
+  .btn--capture:hover { --face: #2a2925; }
+}
+
+.btn:active {
+  transform: translateY(var(--px));
+  --lift: 0px;
+}
+
+.btn:focus-visible {
+  outline: 2px dashed var(--ink);
+  outline-offset: 8px;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
+.btn--small { min-height: 40px; font-size: 10px; padding: 0 14px; }
+
+.btn--primary,
+.btn--capture {
+  --face: var(--ink);
+  --hi: #4a4842;
+  --lo: #000;
+  --fg: var(--paper);
+}
+
+.btn--capture {
+  min-height: 64px;
+  min-width: min(52vw, 220px);
+  font-size: 13px;
+  gap: 12px;
+}
+
+.btn--capture svg { width: 24px; height: 24px; }
+
+.btn--icon {
+  width: 52px;
+  min-height: 52px;
+  padding: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.btn--icon svg { width: 22px; height: 22px; }
+
+.btn__micro { font-family: var(--font-term); font-size: 14px; line-height: 1; }
+
+.btn__swatch {
+  display: grid;
+  grid-template-columns: repeat(2, 7px);
+  gap: 0;
+  box-shadow: 0 0 0 2px var(--ink);
+}
+.btn__swatch i { width: 7px; height: 7px; background: var(--sw, var(--ink)); }
+.btn__swatch i:nth-child(1) { background: var(--sw1, #e2483d); }
+.btn__swatch i:nth-child(2) { background: var(--sw2, #3d8be2); }
+.btn__swatch i:nth-child(3) { background: var(--sw3, #58c26b); }
+.btn__swatch i:nth-child(4) { background: var(--sw4, #f2c94c); }
+
+.is-hidden-soft { visibility: hidden; pointer-events: none; }
+.btn[hidden] { display: none; }
+
+/* -------------------------------------------------------------------------
+   Controls area — fixed height so the monitor never jumps between states
+   ------------------------------------------------------------------------- */
+.controls {
+  height: 124px;
+  display: grid;
+  align-items: center;
+}
+
+.controls__live,
+.controls__step,
+.controls__captured { grid-area: 1 / 1; }
+
+.controls__live {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 3vw, 16px);
+}
+
+.controls__step,
+.controls__captured {
+  display: none;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.controls__row {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 8px;
+}
+
+.controls__row .btn,
+.controls__captured > .btn { width: auto; }
+
+.btn--secondary { min-height: 42px; }
+
+.app[data-state="strip-step"] .controls__live { display: none; }
+.app[data-state="strip-step"] .controls__step { display: flex; animation: boot 0.3s steps(3, end); }
+
+.app[data-state="captured"] .controls__live,
+.app[data-state="captured"] .controls__step { display: none; }
+.app[data-state="captured"] .controls__captured { display: flex; animation: boot 0.3s steps(3, end); }
+
+.app:not([data-state="live"]) #btn-capture,
+.app:not([data-state="live"]) #btn-switch,
+.app:not([data-state="live"]) #btn-shot-mode,
+.app:not([data-state="live"]) #btn-mode {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------------------
+   Helpers & animation
+   ------------------------------------------------------------------------- */
+.blink { animation: blink 1s steps(1, end) infinite; }
+
+@keyframes blink { 50% { opacity: 0; } }
+
+@keyframes roll {
+  from { transform: translateY(0); }
+  to { transform: translateY(700%); }
+}
+
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-24px, 12px); }
+  40% { transform: translate(16px, -28px); }
+  60% { transform: translate(-8px, 32px); }
+  80% { transform: translate(28px, 4px); }
+}
+
+@keyframes flash {
+  0% { opacity: 0; }
+  20% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes pop {
+  0% { transform: scale(2.2); opacity: 0; }
+  30% { transform: scale(1); opacity: 1; }
+  75% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(0.6); opacity: 0; }
+}
+
+@keyframes boot {
+  0% { clip-path: inset(50% 0 50% 0); }
+  100% { clip-path: inset(0 0 0 0); }
+}
+
+@keyframes load {
+  0%, 100% { background: var(--ink); }
+  50% { background: var(--shade); }
+}
+
+/* -------------------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------------------- */
+
+/* Typical phones with browser bars visible: drop the stand, tighten spacing */
+@media (max-height: 720px) {
+  :root { --stand-h: 0px; --chin-h: 24px; }
+  .monitor__neck, .monitor__base { display: none; }
+  .app { gap: 10px; }
+  .controls { height: 112px; }
+  .btn--capture { min-height: 58px; }
+  .controls__row .btn { min-height: 44px; }
+  .btn--secondary { min-height: 38px; }
+}
+
+/* 360px class devices */
+@media (max-width: 374px) {
+  :root { --body-pad: 8px; --bezel-pad: 6px; }
+  .btn { font-size: 10px; padding: 0 12px; }
+  .btn--capture { font-size: 12px; }
+}
+
+/* Desktop / landscape tablets: classic 4:3 monitor */
+@media (min-width: 760px) and (min-aspect-ratio: 1/1) {
+  :root {
+    --rw: 4;
+    --rh: 3;
+    --px: 5px;
+    --body-pad: 18px;
+    --bezel-pad: 12px;
+    --chin-h: 40px;
+    --stand-h: 40px;
+  }
+  .app { max-width: 980px; gap: 18px; padding-top: 24px; }
+  .title { text-align: center; font-size: clamp(18px, 2.2vw, 26px); }
+  .monitor__neck { height: 14px; width: 18%; }
+  .monitor__base { height: 14px; width: 40%; }
+  .monitor__brand { font-size: 9px; }
+  .hud { font-size: 20px; padding: 14px 16px; }
+  .countdown { font-size: clamp(64px, 12vw, 140px); }
+  .controls { height: 84px; }
+  .controls__captured { flex-direction: row; justify-content: center; align-items: center; }
+  .controls__row { display: flex; }
+  .controls__row .btn,
+  .controls__captured > .btn { min-width: 180px; min-height: 52px; }
+}
+
+/* Portrait tablets */
+@media (min-width: 600px) and (max-aspect-ratio: 1/1) {
+  .app { max-width: 620px; }
+  :root { --rw: 3; --rh: 4; --body-pad: 16px; --bezel-pad: 12px; --chin-h: 38px; --stand-h: 36px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .screen__noise,
+  .screen__scanlines::after,
+  .title__cursor,
+  .blink,
+  .hud__dot { animation: none; }
+}
