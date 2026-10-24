@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import EnvelopePage from './components/EnvelopePage';
 import BirthdayBookPage from './components/BirthdayBookPage';
 import BackgroundAudio from './components/BackgroundAudio';
