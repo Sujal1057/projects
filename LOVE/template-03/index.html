@@ -1,0 +1,739 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Happy Valentine's Day - Pieces of My Heart</title>
+    <meta name="description" content="A romantic vintage Valentine typewriter letter and baroque memory gallery." />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Aboreto&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Dancing+Script:wght@400..700&family=Luxurious+Script&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Special+Elite&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="assets/app.css" />
+  </head>
+  <body>
+    <!-- Floating Audio Toggle Button -->
+    <button id="music-btn" class="music-btn" aria-label="Toggle background music" title="Toggle Music">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 18V5l12-2v13" />
+        <circle cx="6" cy="18" r="3" />
+        <circle cx="18" cy="16" r="3" />
+      </svg>
+    </button>
+    <audio id="bg-music" src="assets/music.mp3" loop preload="auto"></audio>
+
+    <!-- Main Mobile Application Viewport -->
+    <div class="app-container">
+
+      <!-- ========================================== -->
+      <!-- SECTION 1: HERO / TYPEWRITER LOVE LETTER   -->
+      <!-- ========================================== -->
+      <section class="section-1" id="section-1">
+        <!-- Title: "Happy valentine's day" -->
+        <div class="title-group">
+          <span class="title-happy">Happy</span>
+          <span class="title-valentines">valentine’s day</span>
+        </div>
+
+        <!-- Typewriter & Paper Scene -->
+        <div class="typewriter-scene">
+          <!-- Background Typewriter with Paper -->
+          <img
+            src="assets/typewriter.png"
+            alt="Vintage Typewriter"
+            class="typewriter-bg"
+            draggable="false"
+          />
+
+          <!-- Photo on Paper -->
+          <div class="paper-photo-wrap" id="paper-photo-wrap" title="Tap to view">
+            <img src="assets/COUPLE.jpg" alt="Us" class="paper-photo" draggable="false" />
+          </div>
+
+          <!-- Typed Message on Paper -->
+          <p class="paper-text">thank you for accepting me,and
+give a chance to happy with 
+you.</p>
+
+          <!-- Interactive keys layer (tap for click sound & hearts) -->
+          <div class="typewriter-keys-layer" title="Tap the keys"></div>
+
+          <!-- Scroll down indicator -->
+          <div class="scroll-indicator" id="scroll-to-gallery" title="View our memories">
+            <span>Our Memories</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 2: BAROQUE MEMORY GALLERY WALL     -->
+      <!-- ========================================== -->
+      <section class="section-2" id="section-2">
+        <!-- Center Typography -->
+        <div class="gallery-center-title">
+          <span class="gallery-pieces-of">pieces of</span>
+          <span class="gallery-my-heart">MY HEART</span>
+        </div>
+
+        <!-- Ornate Gallery Frames (14 exact Figma positions) -->
+        <div class="gallery-frames-wrap">
+          
+          <!-- Frame 1: Top left small square (f5) -->
+          <div class="frame-item frame-1" title="Memory 1">
+            <div class="photo-slot">
+              <img src="assets/photos/image1.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f5.png" alt="Ornate Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 2: Top center small square (f5) -->
+          <div class="frame-item frame-2" title="Memory 2">
+            <div class="photo-slot">
+              <img src="assets/photos/image2.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f5.png" alt="Ornate Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 3: Upper large blue ornate frame (f2) -->
+          <div class="frame-item frame-3" title="Memory 3">
+            <div class="photo-slot">
+              <img src="assets/photos/image3.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f2.png" alt="Ornate Blue Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 4: Top right white horizontal frame (f3) -->
+          <div class="frame-item frame-4" title="Memory 4">
+            <div class="photo-slot">
+              <img src="assets/photos/image4.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f3.png" alt="White Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 5: Upper left oval silver frame (f1) -->
+          <div class="frame-item frame-5 is-ellipse" title="Memory 5">
+            <div class="photo-slot">
+              <img src="assets/photos/image5.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f1.png" alt="Silver Oval Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 6: Mid-left small square frame (f5) -->
+          <div class="frame-item frame-6" title="Memory 6">
+            <div class="photo-slot">
+              <img src="assets/photos/image6.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f5.png" alt="Ornate Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 7: Mid-center square frame (f5) -->
+          <div class="frame-item frame-7" title="Memory 7">
+            <div class="photo-slot">
+              <img src="assets/photos/image7.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f5.png" alt="Ornate Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 8: Upper right vertical blue frame (f4) -->
+          <div class="frame-item frame-8" title="Memory 8">
+            <div class="photo-slot">
+              <img src="assets/photos/image8.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f4.png" alt="Blue Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 9: Mid-left vertical white frame (f3) -->
+          <div class="frame-item frame-9" title="Memory 9">
+            <div class="photo-slot">
+              <img src="assets/photos/image9.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f3.png" alt="White Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 10: Center horizontal white frame (f3) -->
+          <div class="frame-item frame-10" title="Memory 10">
+            <div class="photo-slot">
+              <img src="assets/photos/image10.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f3.png" alt="White Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 11: Lower right large blue frame (f2) -->
+          <div class="frame-item frame-11" title="Memory 11">
+            <div class="photo-slot">
+              <img src="assets/photos/image1.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f2.png" alt="Blue Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 12: Bottom center horizontal white frame (f3) -->
+          <div class="frame-item frame-12" title="Memory 12">
+            <div class="photo-slot">
+              <img src="assets/photos/image2.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f3.png" alt="White Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 13: Lower left oval silver frame (f1) -->
+          <div class="frame-item frame-13 is-ellipse" title="Memory 13">
+            <div class="photo-slot">
+              <img src="assets/photos/image3.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f1.png" alt="Silver Oval Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Frame 14: Mid-right oval silver frame (f1) -->
+          <div class="frame-item frame-14 is-ellipse" title="Memory 14">
+            <div class="photo-slot">
+              <img src="assets/photos/image4.jpg" alt="Memory" loading="lazy" />
+            </div>
+            <img src="assets/f1.png" alt="Silver Oval Frame" class="frame-img" draggable="false" />
+          </div>
+
+          <!-- Scroll to Section 3 Book -->
+          <div class="scroll-indicator scroll-to-book" id="scroll-to-book" title="Open our keepsake book">
+            <span>Keepsake Book</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 3: 10 REASONS WHY I LOVE YOU (BOOK) -->
+      <!-- ========================================== -->
+      <section class="section-3" id="section-3">
+        <!-- Section Header -->
+        <div class="sec3-header">
+          <span class="sec3-badge">A Love Keepsake</span>
+          <h2 class="sec3-title">10 Reasons Why I Love You</h2>
+          <p class="sec3-subtitle">Swipe or tap the page to turn 📖</p>
+        </div>
+
+        <!-- 3D Book Stage -->
+        <div class="book-stage">
+          <div class="book-container" id="book-container" aria-label="Interactive 3D Book">
+            
+            <!-- LEAF 0: COVER -->
+            <div class="book-leaf" data-leaf="0">
+              <div class="leaf-face leaf-front cover-front">
+                <div class="cover-gold-border"></div>
+                <span class="cover-header-tag">A Vintage Keepsake</span>
+                <div class="cover-title-group">
+                  <span class="cover-number">10</span>
+                  <h3 class="cover-main-title">Reasons</h3>
+                  <span class="cover-sub-title">Why I Love You</span>
+                  <div class="cover-heart-seal">&hearts;</div>
+                </div>
+                <div class="cover-footer-hint">
+                  <span>Swipe or tap to open</span>
+                  <span>&rarr;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 1: DEDICATION -->
+            <div class="book-leaf" data-leaf="1">
+              <div class="leaf-face leaf-front dedication-page">
+                <span class="inside-dedication-tag">Dedication</span>
+                <div class="dedication-heart">&hearts;</div>
+                <p class="inside-dedication-text">
+                  "To the one who holds my heart...<br/>
+                  every single page in this book was written with endless love for you."
+                </p>
+                <div class="inside-dedication-sign">Forever Yours</div>
+                <div class="dedication-footer">Turn to start our 10 reasons &rarr;</div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 2: REASON 1 -->
+            <div class="book-leaf" data-leaf="2">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 01</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">Your Radiant Smile</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image1.jpg" alt="Your Smile" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  The way your eyes crinkle whenever you laugh can instantly brighten my darkest days and turn any ordinary room into sunshine.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 1 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 3: REASON 2 -->
+            <div class="book-leaf" data-leaf="3">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 02</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">The Way You Listen</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image2.jpg" alt="Listening" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  You don't just hear my words; you listen with your whole heart. You understand my quietest thoughts and my loudest dreams.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 2 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 4: REASON 3 -->
+            <div class="book-leaf" data-leaf="4">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 03</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">Your Gentle Heart</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image3.jpg" alt="Gentle Heart" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  You treat everyone with such pure kindness. Being near your warmth constantly reminds me of all the beauty in this world.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 3 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 5: REASON 4 -->
+            <div class="book-leaf" data-leaf="5">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 04</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">Our Unstoppable Laughter</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image4.jpg" alt="Laughter" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  From silly inside jokes to uncontrollable giggles where our stomachs ache, with you every moment feels lighthearted and fun.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 4 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 6: REASON 5 -->
+            <div class="book-leaf" data-leaf="6">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 05</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">How Safe I Feel</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image5.jpg" alt="Safe Space" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  In a busy, noisy world, your embrace is the one place where my mind is quiet and completely at peace. You are my safe haven.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 5 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 7: REASON 6 -->
+            <div class="book-leaf" data-leaf="7">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 06</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">Your Cute Habits</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image6.jpg" alt="Cute Quirks" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  The tiny things that make you uniquely you&mdash;how your voice softens when sleepy, and the adorable way you get excited over small things.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 6 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 8: REASON 7 -->
+            <div class="book-leaf" data-leaf="8">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 07</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">How You Inspire Me</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image7.jpg" alt="Inspiration" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  You believe in me even when I second-guess myself. Your faith in our journey inspires me to grow into the best person I can be.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 7 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 9: REASON 8 -->
+            <div class="book-leaf" data-leaf="9">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 08</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">Your Warm Embraces</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image8.jpg" alt="Warm Hugs" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  Nothing cures a long, exhausting day like holding you close. It always feels like coming home after a long journey.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 8 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 10: REASON 9 -->
+            <div class="book-leaf" data-leaf="10">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 09</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">My Best Friend</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image9.jpg" alt="Best Friend" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  Beyond everything, you are my favorite confidant, my partner in crime, and the first person I want to tell every bit of good news to.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 9 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 11: REASON 10 -->
+            <div class="book-leaf" data-leaf="11">
+              <div class="leaf-face leaf-front page-paper">
+                <div class="page-top-bar">
+                  <span class="page-reason-tag">Reason 10</span>
+                  <span class="page-mini-heart">&hearts;</span>
+                </div>
+                <h4 class="page-reason-title">Choosing You Everyday</h4>
+                <div class="page-photo-card">
+                  <img src="assets/photos/image10.jpg" alt="Choosing You" class="page-photo-img" />
+                </div>
+                <p class="page-reason-text">
+                  Loving you isn't just a fleeting feeling&mdash;it is the sweetest, easiest, and most grateful choice I will make, today and always.
+                </p>
+                <div class="page-footer">
+                  <span class="page-number">&mdash; Page 10 of 10 &mdash;</span>
+                </div>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back">
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+            <!-- LEAF 12: FINAL PAGE / BACK COVER -->
+            <div class="book-leaf" data-leaf="12">
+              <div class="leaf-face leaf-front final-page">
+                <h4 class="final-title">Forever & Always</h4>
+                <p class="final-message">
+                  "Ten reasons could never be enough to capture all the love I have for you. You are my favorite story."
+                </p>
+                <div class="final-signature">Happy Valentine's Day &hearts;</div>
+                <button type="button" class="final-restart-btn" id="book-restart-btn">
+                  <span>Read Again</span>
+                  <span>&#8634;</span>
+                </button>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+              <div class="leaf-face leaf-back cover-front">
+                <div class="cover-gold-border"></div>
+                <div class="cover-heart-seal" style="margin: auto;">&hearts;</div>
+                <span class="cover-header-tag" style="margin-bottom: 20px;">The End</span>
+                <div class="leaf-spine-crease"></div>
+                <div class="leaf-shadow"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Handcrafted Keepsake Folio Controller -->
+        <div class="keepsake-controller">
+          <div class="keepsake-dock">
+            <!-- Left Page Turn Button -->
+            <button type="button" id="book-prev" class="folio-arrow-btn" aria-label="Previous Page" disabled>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+              </svg>
+            </button>
+            
+            <!-- Central Folio Indicator Badge -->
+            <div class="folio-center">
+              <span class="folio-tag">MEMOIR</span>
+              <span id="book-page-num" class="folio-title">Book Cover</span>
+              <div class="folio-fraction" id="book-folio-fraction">
+                <span class="folio-leaf-icon">&hearts;</span>
+                <span id="book-page-sub">Tap or Swipe to Open</span>
+                <span class="folio-leaf-icon">&hearts;</span>
+              </div>
+            </div>
+
+            <!-- Right Page Turn Button -->
+            <button type="button" id="book-next" class="folio-arrow-btn" aria-label="Next Page">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Silk Bookmark Ribbon Track -->
+          <div class="ribbon-track-wrap">
+            <div class="ribbon-thread"></div>
+            <div class="book-dots" id="book-dots"></div>
+          </div>
+
+          <p class="keepsake-hint">or swipe anywhere on the page &rarr;</p>
+
+          <!-- Scroll to Section 4 Finale -->
+          <div class="scroll-indicator scroll-to-finale" id="scroll-to-finale" title="The Final Question">
+            <span>The Final Question</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- SECTION 4: POLAROID VALENTINE PROPOSAL     -->
+      <!-- ========================================== -->
+      <section class="section-4" id="section-4">
+        <!-- Main Polaroid Photo Card (from user reference) -->
+        <div class="polaroid-frame" id="polaroid-frame">
+          <div class="polaroid-photo-area">
+            <!-- Background Couple Photo -->
+            <img
+              src="assets/COUPLE.jpg"
+              alt="Our Valentine Memory"
+              class="polaroid-bg-img"
+              id="polaroid-bg-img"
+            />
+
+            <!-- Aesthetic Graph Grid Lines Overlay -->
+            <div class="polaroid-grid-overlay" aria-hidden="true"></div>
+
+            <!-- 4 Corner Pastel Pink Hearts -->
+            <div class="corner-heart ch-tl" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="#fbd7e1" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <div class="corner-heart ch-tr" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="#fbd7e1" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <div class="corner-heart ch-bl" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="#fbd7e1" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+            <div class="corner-heart ch-br" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="#fbd7e1" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+              </svg>
+            </div>
+
+            <!-- Pink Letter Tiles Grid (Will you be my Valentine?) -->
+            <div class="letter-tiles-board" aria-label="Will you be my Valentine?">
+              <!-- Row 3: "Will" -->
+              <span class="letter-tile tile-W">W</span>
+              <span class="letter-tile tile-i1">i</span>
+              <span class="letter-tile tile-l1">l</span>
+              <span class="letter-tile tile-l2 tile-end">l</span>
+
+              <!-- Row 4: "you" -->
+              <span class="letter-tile tile-y1 tile-touch-top">y</span>
+              <span class="letter-tile tile-o tile-touch-top">o</span>
+              <span class="letter-tile tile-u tile-end">u</span>
+
+              <!-- Row 6: "be" -->
+              <span class="letter-tile tile-b">b</span>
+              <span class="letter-tile tile-e1 tile-end">e</span>
+
+              <!-- Row 8: "my" -->
+              <span class="letter-tile tile-m">m</span>
+              <span class="letter-tile tile-y2 tile-end">y</span>
+
+              <!-- Row 10: "Valen" -->
+              <span class="letter-tile tile-V">V</span>
+              <span class="letter-tile tile-a">a</span>
+              <span class="letter-tile tile-l3">l</span>
+              <span class="letter-tile tile-e2">e</span>
+              <span class="letter-tile tile-n1 tile-end">n</span>
+
+              <!-- Row 11: "tine?" -->
+              <span class="letter-tile tile-t tile-touch-top">t</span>
+              <span class="letter-tile tile-i2 tile-touch-top">i</span>
+              <span class="letter-tile tile-n2 tile-touch-top">n</span>
+              <span class="letter-tile tile-e3 tile-touch-top">e</span>
+              <span class="letter-tile tile-q tile-end">?</span>
+            </div>
+
+            <!-- Celebration Overlay (Revealed upon YES!) -->
+            <div class="polaroid-celebration-overlay" id="polaroid-celebration-overlay" aria-hidden="true">
+              <div class="celeb-heart-burst">&hearts;</div>
+              <span class="celeb-badge">She Said YES!</span>
+              <h3 class="celeb-title">Best Valentine Ever</h3>
+              <p class="celeb-quote">"Eternally mine, forever and always."</p>
+              <div class="celeb-date">February 14 &bull; Forever Us</div>
+              <button type="button" class="btn-relive" id="btn-relive-story" title="Relive our story from start">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="1 4 1 10 7 10"></polyline>
+                  <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+                </svg>
+                <span>Relive Our Story</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Decision Oval Buttons (Exact Reference Match) -->
+        <div class="proposal-oval-actions">
+          <!-- YES Oval Button -->
+          <button type="button" class="btn-oval btn-oval-yes" id="btn-oval-yes" aria-label="Yes">
+            <span class="oval-text">yes</span>
+            <svg class="oval-icon-heart" viewBox="0 0 24 24" fill="#ffdce5" stroke="#1a1a1a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+          </button>
+
+          <!-- NO Oval Button (Playful Runaway) -->
+          <button type="button" class="btn-oval btn-oval-no" id="btn-oval-no" aria-label="No">
+            <span class="oval-text">no</span>
+            <svg class="oval-icon-cross" viewBox="0 0 24 24" fill="#ffdce5" stroke="#1a1a1a" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">
+              <path d="M4.5 4.5 C5 3.5 6.5 3.5 7.5 4.5 L12 9 L16.5 4.5 C17.5 3.5 19 3.5 19.5 4.5 C20.5 5.5 20.5 7 19.5 8 L15 12 L19.5 16 C20.5 17 20.5 18.5 19.5 19.5 C18.5 20.5 17 20.5 16 19.5 L12 15 L8 19.5 C7 20.5 5.5 20.5 4.5 19.5 C3.5 18.5 3.5 17 4.5 16 L9 12 L4.5 8 C3.5 7 3.5 5.5 4.5 4.5 Z"></path>
+            </svg>
+          </button>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Lightbox Modal for Photo Tap -->
+    <div id="modal-overlay" class="modal-overlay" aria-hidden="true">
+      <div class="modal-card">
+        <button id="modal-close" class="modal-close" aria-label="Close dialog">&times;</button>
+        <div class="modal-img-wrap">
+          <img id="modal-img" src="" alt="Enlarged photo memory" />
+        </div>
+        <h3 id="modal-caption" class="modal-caption"></h3>
+        <p id="modal-subtext" class="modal-subtext"></p>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="restriction.js"></script>
+    <script src="assets/app.js"></script>
+  </body>
+</html>
+

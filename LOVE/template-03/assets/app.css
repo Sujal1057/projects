@@ -1,0 +1,2247 @@
+/* ==========================================================================
+   LOVE TEMPLATE 03 - Vintage Valentine & Baroque Memory Gallery
+   ========================================================================== */
+
+:root {
+  --bg-color: #F2F0EF;
+  --title-blue: #99C6E3;
+  --title-stroke: #C0D2DE;
+  --navy-text: #282F4D;
+  --paper-ink: #1a1a1a;
+  --viewport-width: 402px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background-color: #e5e3e1;
+  color: var(--navy-text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Background wallpaper pattern for desktop view */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  background-image:
+    radial-gradient(circle at 50% 20%, rgba(153, 198, 227, 0.18), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(200, 185, 175, 0.15), transparent 45%),
+    linear-gradient(135deg, #edeae7 0%, #dbd8d4 100%);
+}
+
+/* App container - 402px mobile viewport simulation on desktop, responsive on mobile */
+.app-container {
+  width: 100%;
+  max-width: var(--viewport-width);
+  background-color: var(--bg-color);
+  min-height: 100vh;
+  position: relative;
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12), 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  margin: 0 auto;
+}
+
+@media (max-width: 430px) {
+  body {
+    background: var(--bg-color);
+  }
+
+  .app-container {
+    box-shadow: none;
+  }
+}
+
+/* ==========================================================================
+   FLOATING AUDIO TOGGLE
+   ========================================================================== */
+.music-btn {
+  position: fixed;
+  top: 18px;
+  right: calc(50% - 185px);
+  z-index: 100;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+@media (max-width: 430px) {
+  .music-btn {
+    right: 18px;
+  }
+}
+
+.music-btn:hover {
+  transform: scale(1.08);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.music-btn:active {
+  transform: scale(0.95);
+}
+
+.music-btn svg {
+  width: 18px;
+  height: 18px;
+  color: var(--navy-text);
+  transition: transform 0.5s ease;
+}
+
+.music-btn.playing svg {
+  animation: spinRecord 4s linear infinite;
+}
+
+@keyframes spinRecord {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   SECTION 1: HERO / TYPEWRITER LOVE LETTER (Figma Node 3:3)
+   ========================================================================== */
+.section-1 {
+  width: 100%;
+  height: 874px;
+  position: relative;
+  background-color: var(--bg-color);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Title container: "Happy valentine's day" */
+.title-group {
+  position: absolute;
+  top: 79px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.title-happy {
+  font-family: 'Luxurious Script', cursive;
+  font-size: 40px;
+  line-height: 48px;
+  color: var(--title-blue);
+  -webkit-text-stroke: 1px var(--title-stroke);
+  text-stroke: 1px var(--title-stroke);
+  letter-spacing: 0;
+  display: block;
+  animation: fadeInDown 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.title-valentines {
+  font-family: 'Luxurious Script', cursive;
+  font-size: 96px;
+  line-height: 105px;
+  color: var(--title-blue);
+  -webkit-text-stroke: 1.2px var(--title-stroke);
+  text-stroke: 1.2px var(--title-stroke);
+  letter-spacing: 0;
+  margin-top: -32px;
+  /* Slight artistic flourish overlap */
+  display: block;
+  animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+  filter: drop-shadow(0 2px 8px rgba(153, 198, 227, 0.3));
+}
+
+/* Typewriter & paper scene */
+.typewriter-scene {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 586px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.typewriter-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 -4px 20px rgba(0, 0, 0, 0.05));
+}
+
+/* Photo on typewriter paper */
+.paper-photo-wrap {
+  position: absolute;
+  top: 67px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 235px;
+  height: 164px;
+  border-radius: 35px;
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  background-color: #f7f5f2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.paper-photo-wrap:hover {
+  transform: translateX(-50%) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.paper-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Message note typed on paper */
+.paper-text {
+  position: absolute;
+  top: 245px;
+  left: calc(50% - 117.5px);
+  /* Perfectly aligns with left of photo */
+  width: 175px;
+  font-family: 'Courier Prime', 'Special Elite', monospace;
+  font-size: 12px;
+  line-height: 15.6px;
+  color: var(--paper-ink);
+  white-space: pre-line;
+  z-index: 2;
+  letter-spacing: -0.1px;
+}
+
+/* Typewriter keyboard interaction layer */
+.typewriter-keys-layer {
+  position: absolute;
+  bottom: 12px;
+  left: 35px;
+  width: 332px;
+  height: 90px;
+  z-index: 15;
+  cursor: pointer;
+}
+
+/* Scroll down prompt to guide to Section 2 */
+.scroll-indicator {
+  position: absolute;
+  bottom: 12px;
+  right: 18px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  padding: 6px 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  transition: transform 0.2s ease;
+}
+
+.scroll-indicator:hover {
+  transform: translateY(-2px);
+}
+
+.scroll-indicator.scroll-to-book,
+.scroll-indicator.scroll-to-finale {
+  bottom: 18px;
+  right: 18px;
+  z-index: 25;
+}
+
+.scroll-indicator span {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--navy-text);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.scroll-indicator svg {
+  width: 14px;
+  height: 14px;
+  color: var(--navy-text);
+  animation: bounceDown 1.8s infinite;
+}
+
+@keyframes bounceDown {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* ==========================================================================
+   SECTION 2: BAROQUE MEMORY GALLERY (Figma Node 3:16)
+   ========================================================================== */
+.section-2 {
+  width: 100%;
+  height: 900px;
+  position: relative;
+  background-color: var(--bg-color);
+  overflow: visible;
+  /* To allow overlapping gallery frames along the borders */
+  border-top: 1px dashed rgba(40, 47, 77, 0.1);
+}
+
+/* Gallery Center Title */
+.gallery-center-title {
+  position: absolute;
+  top: 365px;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  text-align: center;
+  pointer-events: none;
+}
+
+.gallery-pieces-of {
+  font-family: 'Dancing Script', cursive;
+  font-size: 64px;
+  line-height: 1;
+  color: var(--navy-text);
+  font-weight: 700;
+  margin-bottom: -6px;
+  filter: drop-shadow(0 2px 4px rgba(40, 47, 77, 0.15));
+}
+
+.gallery-my-heart {
+  font-family: 'Aboreto', cursive;
+  font-size: 48px;
+  line-height: 1;
+  color: var(--navy-text);
+  letter-spacing: 3px;
+  font-weight: 400;
+}
+
+/* Baroque Gallery Frames Container */
+.gallery-frames-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Base frame item */
+.frame-item {
+  position: absolute;
+  cursor: pointer;
+  transform-origin: center center;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+  z-index: 2;
+}
+
+.frame-item:hover {
+  transform: scale(1.06) rotate(1deg);
+  z-index: 20;
+  filter: drop-shadow(0 12px 25px rgba(0, 0, 0, 0.2));
+}
+
+.frame-item:active {
+  transform: scale(0.98);
+}
+
+/* The ornate frame PNG image overlay */
+.frame-item .frame-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Inner photo slot behind the frame opening */
+.frame-item .photo-slot {
+  position: absolute;
+  z-index: 1;
+  overflow: hidden;
+  background-color: #d9d9d9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.frame-item .photo-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.frame-item:hover .photo-slot img {
+  transform: scale(1.08);
+}
+
+/* Ellipse frame masks for oval frames (f1) */
+.frame-item.is-ellipse .photo-slot {
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   INDIVIDUAL FRAME POSITIONS & DIMENSIONS (Exact Figma 3:16 coordinates)
+   ========================================================================== */
+
+/* 1. Group 2 - Top left square (f5) */
+.frame-1 {
+  left: 63px;
+  top: 18px;
+  width: 101px;
+  height: 100px;
+}
+
+.frame-1 .photo-slot {
+  left: 18px;
+  top: 19px;
+  width: 62px;
+  height: 63px;
+}
+
+/* 2. Group 3 - Top center square (f5) */
+.frame-2 {
+  left: 176px;
+  top: 18px;
+  width: 101px;
+  height: 100px;
+}
+
+.frame-2 .photo-slot {
+  left: 20px;
+  top: 18px;
+  width: 62px;
+  height: 63px;
+}
+
+/* 3. Group 6 - Upper blue large frame (f2) */
+.frame-3 {
+  left: 94px;
+  top: 139px;
+  width: 175px;
+  height: 233px;
+  z-index: 4;
+}
+
+.frame-3 .photo-slot {
+  left: 28px;
+  top: 34px;
+  width: 108px;
+  height: 157px;
+}
+
+/* 4. Group 5 - Top right white horizontal frame (f3) */
+.frame-4 {
+  left: 276px;
+  top: 94px;
+  width: 129px;
+  height: 96px;
+}
+
+.frame-4 .photo-slot {
+  left: 18px;
+  top: 21px;
+  width: 96px;
+  height: 58px;
+}
+
+/* 5. Group 4 - Upper left oval silver frame (f1) */
+.frame-5 {
+  left: -69px;
+  top: 80px;
+  width: 155px;
+  height: 207px;
+}
+
+.frame-5 .photo-slot {
+  left: 27px;
+  top: 46px;
+  width: 97px;
+  height: 134px;
+}
+
+/* 6. Group 7 - Mid-left small blue square frame (f5) */
+.frame-6 {
+  left: 18px;
+  top: 546px;
+  width: 90px;
+  height: 89px;
+}
+
+.frame-6 .photo-slot {
+  left: 16px;
+  top: 15px;
+  width: 58px;
+  height: 59px;
+}
+
+/* 7. Group 8 - Mid-center blue square frame (f5) */
+.frame-7 {
+  left: 141px;
+  top: 613px;
+  width: 122px;
+  height: 121px;
+  z-index: 3;
+}
+
+.frame-7 .photo-slot {
+  left: 23px;
+  top: 24px;
+  width: 76px;
+  height: 75px;
+}
+
+/* 8. Group 9 - Upper right blue vertical frame (f4) */
+.frame-8 {
+  left: 285px;
+  top: 190px;
+  width: 144px;
+  height: 180px;
+  z-index: 3;
+}
+
+.frame-8 .photo-slot {
+  left: 29px;
+  top: 28px;
+  width: 85px;
+  height: 131px;
+}
+
+/* 9. Group 10 - Mid-left white vertical frame (f3) */
+.frame-9 {
+  left: -82px;
+  top: 326px;
+  width: 163px;
+  height: 220px;
+}
+
+.frame-9 .photo-slot {
+  left: 39px;
+  top: 35px;
+  width: 90px;
+  height: 147px;
+}
+
+/* 10. Group 14 - Center white horizontal frame (f3) */
+.frame-10 {
+  left: 127px;
+  top: 484px;
+  width: 149px;
+  height: 111px;
+}
+
+.frame-10 .photo-slot {
+  left: 27px;
+  top: 26px;
+  width: 97px;
+  height: 62px;
+}
+
+/* 11. Group 13 - Lower right blue large frame (f2) */
+.frame-11 {
+  left: 299px;
+  top: 582px;
+  width: 162px;
+  height: 224px;
+  z-index: 4;
+}
+
+.frame-11 .photo-slot {
+  left: 28px;
+  top: 35px;
+  width: 101px;
+  height: 148px;
+}
+
+/* 12. Group 12 - Bottom center white horizontal frame (f3) */
+.frame-12 {
+  left: 165px;
+  top: 752px;
+  width: 120px;
+  height: 89px;
+}
+
+.frame-12 .photo-slot {
+  left: 16px;
+  top: 17px;
+  width: 86px;
+  height: 54px;
+}
+
+/* 13. Group 11 - Lower left silver oval frame (f1) */
+.frame-13 {
+  left: -43px;
+  top: 638px;
+  width: 170px;
+  height: 227px;
+}
+
+.frame-13 .photo-slot {
+  left: 29px;
+  top: 50px;
+  width: 110px;
+  height: 145px;
+}
+
+/* 14. Group 15 - Right side silver oval frame (f1) */
+.frame-14 {
+  left: 323px;
+  top: 379px;
+  width: 137px;
+  height: 183px;
+}
+
+.frame-14 .photo-slot {
+  left: 26px;
+  top: 41px;
+  width: 85px;
+  height: 116px;
+}
+
+/* ==========================================================================
+   PHOTO LIGHTBOX / MEMORY MODAL
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(15, 18, 30, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-card {
+  background: #ffffff;
+  padding: 16px 16px 24px;
+  border-radius: 18px;
+  max-width: 340px;
+  width: 100%;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.modal-overlay.active .modal-card {
+  transform: scale(1) translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--navy-text);
+  border: 1px solid rgba(40, 47, 77, 0.15);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 400;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.22);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease, color 0.2s ease;
+  z-index: 50;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.modal-close:hover {
+  transform: scale(1.15) rotate(90deg);
+  background: #fff0f3;
+  color: #c98a8a;
+}
+
+.modal-close:active {
+  transform: scale(0.92);
+}
+
+.modal-img-wrap {
+  width: 100%;
+  height: 320px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f0ede8;
+}
+
+.modal-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.modal-caption {
+  margin-top: 16px;
+  font-family: 'Dancing Script', cursive;
+  font-size: 26px;
+  color: var(--navy-text);
+  text-align: center;
+  font-weight: 600;
+}
+
+.modal-subtext {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #777;
+  margin-top: 4px;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   PARTICLE BURST ANIMATION
+   ========================================================================== */
+.floating-heart {
+  position: fixed;
+  pointer-events: none;
+  z-index: 150;
+  animation: floatUp 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.6) rotate(0deg);
+  }
+
+  50% {
+    opacity: 0.9;
+    transform: translate(calc(-50% + var(--dx)), calc(-50% - 60px)) scale(1.1) rotate(var(--rot));
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--dx) * 1.5), calc(-50% - 130px)) scale(0.8) rotate(calc(var(--rot) * 1.8));
+  }
+}
+
+/* Subtle animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================================================
+   SECTION 3: 10 REASONS WHY I LOVE YOU (3D INTERACTIVE BOOK)
+   ========================================================================== */
+.section-3 {
+  width: 100%;
+  min-height: 850px;
+  position: relative;
+  background-color: var(--bg-color);
+  padding: 40px 18px 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px dashed rgba(40, 47, 77, 0.12);
+  overflow: hidden;
+}
+
+/* Section 3 Header */
+.sec3-header {
+  text-align: center;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sec3-badge {
+  display: inline-block;
+  font-family: 'Aboreto', cursive;
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #8b9bb4;
+  margin-bottom: 6px;
+}
+
+.sec3-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 42px;
+  line-height: 1.15;
+  color: var(--navy-text);
+  font-weight: 700;
+  margin-bottom: 6px;
+  text-shadow: 0 1px 2px rgba(40, 47, 77, 0.08);
+}
+
+.sec3-subtitle {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #7b8394;
+  letter-spacing: 0.5px;
+}
+
+/* 3D Book Stage */
+.book-stage {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1800px;
+  -webkit-perspective: 1800px;
+  position: relative;
+  padding: 10px 0;
+  overflow: visible;
+}
+
+/* Main Book Container */
+.book-container {
+  width: 316px;
+  height: 466px;
+  position: relative;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  cursor: grab;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+  filter: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.14));
+}
+
+.book-container:active {
+  cursor: grabbing;
+}
+
+/* Book Leaf (Page Sheet) */
+.book-leaf {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  transition: transform 0.65s cubic-bezier(0.25, 1, 0.45, 1),
+              opacity 0.22s ease 0.4s,
+              visibility 0s linear 0.65s;
+  will-change: transform, opacity;
+  border-radius: 4px 14px 14px 4px;
+  box-shadow: 
+    0 8px 22px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.06);
+  visibility: visible;
+  opacity: 1;
+}
+
+/* When flipped, hide cleanly so NO text or edge sticks out on the left */
+.book-leaf.flipped {
+  transform: rotateY(-180deg);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Leaf Faces: Front and Back */
+.leaf-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 4px 14px 14px 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.leaf-front {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+/* Clean, blank parchment backing for all leaf backs - prevents any ghost text */
+.leaf-back {
+  transform: rotateY(180deg);
+  z-index: 1;
+  background: linear-gradient(135deg, #f2eadc 0%, #ebe2d2 100%);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Realistic Spine Crease overlay on every leaf */
+.leaf-spine-crease {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 28px;
+  height: 100%;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.05) 30%, transparent 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.leaf-back .leaf-spine-crease {
+  left: auto;
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.05) 30%, transparent 100%);
+}
+
+/* Dynamic Page Shadow overlay during turn */
+.leaf-shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  pointer-events: none;
+  transition: background 0.4s ease;
+  z-index: 12;
+}
+
+/* ==========================================================================
+   BOOK COVER STYLES (Pastel Typewriter Blue - Matches Section 1 Theme)
+   ========================================================================== */
+.cover-front {
+  background: 
+    radial-gradient(circle at 75% 25%, rgba(255, 255, 255, 0.45), transparent 55%),
+    linear-gradient(135deg, #a7c8e2 0%, #90b5d1 50%, #7aa2bf 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  color: var(--navy-text);
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  box-shadow: inset 0 0 35px rgba(255, 255, 255, 0.3), inset 0 0 15px rgba(40, 47, 77, 0.1);
+}
+
+/* Gold / Navy Debossed Border on Cover */
+.cover-gold-border {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  right: 14px;
+  bottom: 14px;
+  border: 1.5px solid rgba(40, 47, 77, 0.28);
+  border-radius: 2px 8px 8px 2px;
+  pointer-events: none;
+}
+
+.cover-gold-border::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  right: 3px;
+  bottom: 3px;
+  border: 0.5px dashed rgba(40, 47, 77, 0.22);
+}
+
+.cover-header-tag {
+  font-family: 'Aboreto', cursive;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--navy-text);
+  text-transform: uppercase;
+  margin-top: 18px;
+  opacity: 0.85;
+}
+
+.cover-title-group {
+  margin: auto 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cover-number {
+  font-family: 'Aboreto', cursive;
+  font-size: 40px;
+  color: var(--navy-text);
+  letter-spacing: 6px;
+  line-height: 1;
+}
+
+.cover-main-title {
+  font-family: 'Luxurious Script', cursive;
+  font-size: 62px;
+  color: #ffffff;
+  line-height: 1;
+  margin-top: -6px;
+  text-shadow: 0 2px 8px rgba(40, 47, 77, 0.25);
+  -webkit-text-stroke: 0.5px rgba(40, 47, 77, 0.2);
+}
+
+.cover-sub-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 24px;
+  color: var(--navy-text);
+  margin-top: 2px;
+  font-weight: 700;
+}
+
+.cover-heart-seal {
+  font-size: 24px;
+  color: #c98a8a;
+  margin-top: 12px;
+  animation: pulseHeart 2s infinite ease-in-out;
+}
+
+@keyframes pulseHeart {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.18); opacity: 1; }
+}
+
+.cover-footer-hint {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: var(--navy-text);
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.85;
+}
+
+/* Dedication Page (Inside Front Leaf) */
+.dedication-page {
+  background: 
+    radial-gradient(circle at 30% 70%, rgba(200, 185, 170, 0.2), transparent 70%),
+    linear-gradient(135deg, #fdfbf7 0%, #f4ede1 100%);
+  padding: 32px 24px 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  color: var(--navy-text);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: inset 14px 0 18px -10px rgba(0, 0, 0, 0.08);
+}
+
+.inside-dedication-tag {
+  font-family: 'Aboreto', cursive;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #7b8394;
+  text-transform: uppercase;
+}
+
+.dedication-heart {
+  font-size: 26px;
+  color: #c98a8a;
+  margin: 10px 0 6px;
+  animation: pulseHeart 2.5s infinite ease-in-out;
+}
+
+.inside-dedication-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 23px;
+  line-height: 1.45;
+  color: var(--navy-text);
+  margin: auto 0;
+}
+
+.inside-dedication-sign {
+  font-family: 'Luxurious Script', cursive;
+  font-size: 34px;
+  color: #5c7499;
+  margin-top: 10px;
+}
+
+.dedication-footer {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10.5px;
+  color: #8b92a0;
+  letter-spacing: 0.5px;
+  margin-top: 14px;
+}
+
+/* ==========================================================================
+   INTERIOR PAGES STYLES (Aged Vintage Parchment)
+   ========================================================================== */
+.page-paper {
+  background: 
+    linear-gradient(135deg, #fdfbf7 0%, #f7f2ea 55%, #f2ebdd 100%);
+  padding: 18px 18px 14px 24px; /* Extra left padding for book spine binding */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: inset 14px 0 18px -10px rgba(0, 0, 0, 0.08);
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Page Header */
+.page-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(40, 47, 77, 0.1);
+  padding-bottom: 5px;
+  margin-bottom: 8px;
+}
+
+.page-reason-tag {
+  font-family: 'Aboreto', cursive;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #8b6b23;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.page-mini-heart {
+  font-size: 12px;
+  color: #c98a8a;
+}
+
+/* Page Main Title */
+.page-reason-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 26px;
+  line-height: 1.15;
+  color: var(--navy-text);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* Page Scrapbook Polaroid Photo */
+.page-photo-card {
+  width: 100%;
+  height: 172px;
+  background: #ffffff;
+  padding: 5px 5px 14px;
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: rotate(-0.5deg);
+  transition: transform 0.3s ease;
+  margin-bottom: 8px;
+  box-sizing: border-box;
+}
+
+.page-photo-card:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* Vintage Washi Tape deco on photo */
+.page-photo-card::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  width: 48px;
+  height: 15px;
+  background: rgba(220, 210, 195, 0.85);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transform: rotate(1deg);
+  border-left: 2px dashed rgba(0, 0, 0, 0.05);
+  border-right: 2px dashed rgba(0, 0, 0, 0.05);
+}
+
+.page-photo-img {
+  width: 100%;
+  height: 144px;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+
+/* Page Reason Description */
+.page-reason-text {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #2b2b2b;
+  letter-spacing: -0.2px;
+  margin: 0;
+  flex-grow: 1;
+}
+
+/* Page Footer */
+.page-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 6px;
+  border-top: 1px dashed rgba(40, 47, 77, 0.1);
+  padding-top: 4px;
+}
+
+.page-number {
+  font-family: 'Aboreto', cursive;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: #8b92a0;
+}
+
+/* ==========================================================================
+   FINAL PAGE / BACK COVER
+   ========================================================================== */
+.final-page {
+  background: linear-gradient(135deg, #fbf8f2 0%, #ede3d3 100%);
+  padding: 30px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.final-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 36px;
+  color: var(--navy-text);
+  font-weight: 700;
+  margin-top: 16px;
+}
+
+.final-message {
+  font-family: 'Courier Prime', monospace;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: #333;
+  margin: 14px 0;
+}
+
+.final-signature {
+  font-family: 'Luxurious Script', cursive;
+  font-size: 42px;
+  color: #5c7499;
+}
+
+.final-restart-btn {
+  background: var(--navy-text);
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 25px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(40, 47, 77, 0.25);
+  transition: transform 0.2s ease, background 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.final-restart-btn:hover {
+  transform: translateY(-2px);
+  background: #374266;
+}
+
+/* ==========================================================================
+   HANDCRAFTED KEEPSAKE FOLIO CONTROLLER (Bespoke Artisan Luxury)
+   ========================================================================== */
+.keepsake-controller {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 20;
+}
+
+/* Floating Antique Parchment Glass Dock */
+.keepsake-dock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 245, 239, 0.92) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.38);
+  box-shadow: 
+    0 12px 34px rgba(40, 47, 77, 0.08),
+    0 2px 10px rgba(212, 175, 55, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  border-radius: 50px;
+  padding: 6px 10px;
+  width: 296px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+
+.keepsake-dock:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 16px 40px rgba(40, 47, 77, 0.12),
+    0 4px 14px rgba(212, 175, 55, 0.2);
+}
+
+/* Handcrafted Circular Feather-Arrow Buttons */
+.folio-arrow-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffffff 0%, #f9f6f0 100%);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: var(--navy-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(40, 47, 77, 0.06);
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+
+.folio-arrow-btn:hover:not(:disabled) {
+  transform: scale(1.12);
+  background: #ffffff;
+  border-color: rgba(212, 175, 55, 0.7);
+  box-shadow: 0 4px 14px rgba(212, 175, 55, 0.25);
+  color: #1a2033;
+}
+
+.folio-arrow-btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.folio-arrow-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: none;
+}
+
+.folio-arrow-btn svg {
+  width: 17px;
+  height: 17px;
+  transition: transform 0.2s ease;
+}
+
+.folio-arrow-btn:hover:not(:disabled) svg {
+  transform: scale(1.05);
+}
+
+/* Folio Center Calligraphy Badge */
+.folio-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 8px;
+  user-select: none;
+  flex-grow: 1;
+}
+
+.folio-tag {
+  font-family: 'Aboreto', cursive;
+  font-size: 8px;
+  letter-spacing: 2.5px;
+  color: #a08d6b;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.folio-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 20px;
+  line-height: 1.1;
+  color: var(--navy-text);
+  font-weight: 700;
+  transition: color 0.25s ease;
+}
+
+.folio-fraction {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 9.5px;
+  color: #8b92a0;
+  letter-spacing: 0.8px;
+  margin-top: 2px;
+}
+
+.folio-leaf-icon {
+  font-size: 8px;
+  color: #c98a8a;
+}
+
+/* Vintage Silk Ribbon Thread Track */
+.ribbon-track-wrap {
+  position: relative;
+  width: 220px;
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ribbon-thread {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.45) 15%, rgba(212, 175, 55, 0.45) 85%, transparent);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.book-dots {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.book-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #e3dacd;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+  position: relative;
+}
+
+.book-dot:hover {
+  transform: scale(1.4);
+  background: #d4af37;
+  border-color: #d4af37;
+}
+
+.book-dot.active {
+  width: 10px;
+  height: 10px;
+  background: #c98a8a;
+  border-color: #a85858;
+  box-shadow: 0 0 10px rgba(201, 138, 138, 0.6);
+  transform: scale(1.2);
+}
+
+.keepsake-hint {
+  font-family: 'Dancing Script', cursive;
+  font-size: 13.5px;
+  color: #8b9bb4;
+  margin-top: 10px;
+  letter-spacing: 0.3px;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   SECTION 4: POLAROID VALENTINE PROPOSAL (Exact Reference Match)
+   ========================================================================== */
+.section-4 {
+  width: 100%;
+  min-height: 820px;
+  position: relative;
+  background-color: #f7b4c2;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 5px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.035) 0px, rgba(0, 0, 0, 0.035) 2px, transparent 2px, transparent 5px);
+  background-size: 14px 14px, 8px 8px, 8px 8px;
+  padding: 44px 18px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Main Polaroid Photo Card */
+.polaroid-frame {
+  width: 100%;
+  max-width: 326px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 
+    0 18px 45px rgba(160, 60, 85, 0.28),
+    0 4px 14px rgba(0, 0, 0, 0.12);
+  padding: 14px 14px 22px 14px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 5;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.polaroid-frame:hover {
+  box-shadow: 
+    0 22px 55px rgba(160, 60, 85, 0.34),
+    0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Inner Photo Viewport with Exact 11:14 Aspect Ratio */
+.polaroid-photo-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 11 / 14;
+  overflow: hidden;
+  background-color: #2b2b2b;
+  border: 1px solid rgba(25, 25, 25, 0.65);
+  box-sizing: border-box;
+}
+
+/* Background Photo */
+.polaroid-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.92) contrast(1.05);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Aesthetic Graph Grid Overlay (11 columns by 14 rows) */
+.polaroid-grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-size: calc(100% / 11) calc(100% / 14);
+  background-image: 
+    linear-gradient(to right, rgba(20, 20, 20, 0.52) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 20, 20, 0.52) 1px, transparent 1px);
+}
+
+/* 4 Corner Pastel Pink Hearts */
+.corner-heart {
+  position: absolute;
+  z-index: 4;
+  width: 22px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.corner-heart svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+}
+
+.ch-tl { top: 8px; left: 8px; }
+.ch-tr { top: 8px; right: 8px; }
+.ch-bl { bottom: 8px; left: 8px; }
+.ch-br { bottom: 8px; right: 8px; }
+
+/* Letter Tiles Board (11x14 CSS Grid) */
+.letter-tiles-board {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(14, 1fr);
+  pointer-events: none;
+}
+
+/* Individual Pink Letter Tile (Scrabble / Crossword Style) */
+.letter-tile {
+  background-color: #ffdce5;
+  border-top: 1px solid #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+  border-left: 1px solid #1a1a1a;
+  border-right: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 15.5px;
+  color: #1a1a1a;
+  line-height: 1;
+  user-select: none;
+  text-shadow: 0 0.5px 0.5px rgba(255, 255, 255, 0.4);
+}
+
+.letter-tile.tile-end {
+  border-right: 1px solid #1a1a1a;
+}
+
+.letter-tile.tile-touch-top {
+  border-top: none;
+}
+
+/* Grid Coordinates matching reference image:
+   Row 3: "Will" */
+.tile-W  { grid-column: 3; grid-row: 3; }
+.tile-i1 { grid-column: 4; grid-row: 3; }
+.tile-l1 { grid-column: 5; grid-row: 3; }
+.tile-l2 { grid-column: 6; grid-row: 3; }
+
+/* Row 4: "you" */
+.tile-y1 { grid-column: 5; grid-row: 4; }
+.tile-o  { grid-column: 6; grid-row: 4; }
+.tile-u  { grid-column: 7; grid-row: 4; }
+
+/* Row 6: "be" */
+.tile-b  { grid-column: 8; grid-row: 6; }
+.tile-e1 { grid-column: 9; grid-row: 6; }
+
+/* Row 8: "my" */
+.tile-m  { grid-column: 3; grid-row: 8; }
+.tile-y2 { grid-column: 4; grid-row: 8; }
+
+/* Row 10: "Valen" */
+.tile-V  { grid-column: 4; grid-row: 10; }
+.tile-a  { grid-column: 5; grid-row: 10; }
+.tile-l3 { grid-column: 6; grid-row: 10; }
+.tile-e2 { grid-column: 7; grid-row: 10; }
+.tile-n1 { grid-column: 8; grid-row: 10; }
+
+/* Row 11: "tine?" */
+.tile-t  { grid-column: 5; grid-row: 11; }
+.tile-i2 { grid-column: 6; grid-row: 11; }
+.tile-n2 { grid-column: 7; grid-row: 11; }
+.tile-e3 { grid-column: 8; grid-row: 11; }
+.tile-q  { grid-column: 9; grid-row: 11; }
+
+/* Bottom Decision Oval Buttons */
+.proposal-oval-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 326px;
+  margin-top: 26px;
+  gap: 16px;
+  position: relative;
+  z-index: 10;
+}
+
+.btn-oval {
+  flex: 1;
+  height: 52px;
+  border-radius: 50% / 50%;
+  background: #ffffff;
+  border: 1px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, background-color 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0 16px;
+  position: relative;
+}
+
+.btn-oval:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-oval:active {
+  transform: scale(0.96);
+}
+
+.oval-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.oval-icon-heart {
+  width: 22px;
+  height: 20px;
+  display: block;
+}
+
+.oval-icon-cross {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* ==========================================================================
+   CELEBRATION STATE OVERLAY (Revealed upon YES!)
+   ========================================================================== */
+.polaroid-celebration-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 18px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.polaroid-frame.is-celebrating .polaroid-celebration-overlay {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.celeb-heart-burst {
+  font-size: 34px;
+  color: #e27d89;
+  animation: pulseHeart 1.6s infinite ease-in-out;
+  margin-bottom: 2px;
+}
+
+.celeb-badge {
+  font-family: 'Aboreto', cursive;
+  font-size: 9.5px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #a08d6b;
+  margin-bottom: 4px;
+}
+
+.celeb-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 36px;
+  font-weight: 700;
+  color: #282f4d;
+  margin: 2px 0 6px;
+  line-height: 1.1;
+}
+
+.celeb-quote {
+  font-family: 'Luxurious Script', cursive;
+  font-size: 28px;
+  color: #5c7499;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.celeb-date {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10px;
+  color: #777;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.btn-relive {
+  background: #ffffff;
+  border: 1px solid rgba(40, 47, 77, 0.25);
+  padding: 8px 18px;
+  border-radius: 25px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #282f4d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-relive:hover {
+  background: #fdfbf7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 47, 77, 0.12);
+}
+
+/* Confetti & Rose Petal Rain */
+.celebration-petal {
+  position: fixed;
+  pointer-events: none;
+  z-index: 180;
+  animation: petalFall var(--dur) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes petalFall {
+  0% {
+    opacity: 0;
+    transform: translate(0, -20px) rotate(0deg) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--sway), 100vh) rotate(var(--rot)) scale(1.1);
+  }
+}
+
+@keyframes fadeInZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ==========================================================================
+   SECTION 4: POLAROID VALENTINE PROPOSAL (Exact Reference Match)
+   ========================================================================== */
+.section-4 {
+  width: 100%;
+  min-height: 820px;
+  position: relative;
+  background-color: #f7b4c2;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 2px, transparent 2px, transparent 5px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, 0.035) 0px, rgba(0, 0, 0, 0.035) 2px, transparent 2px, transparent 5px);
+  background-size: 14px 14px, 8px 8px, 8px 8px;
+  padding: 44px 18px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* Main Polaroid Photo Card */
+.polaroid-frame {
+  width: 100%;
+  max-width: 326px;
+  background: #ffffff;
+  border-radius: 4px;
+  box-shadow: 
+    0 18px 45px rgba(160, 60, 85, 0.28),
+    0 4px 14px rgba(0, 0, 0, 0.12);
+  padding: 14px 14px 22px 14px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 5;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+}
+
+.polaroid-frame:hover {
+  box-shadow: 
+    0 22px 55px rgba(160, 60, 85, 0.34),
+    0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Inner Photo Viewport with Exact 11:14 Aspect Ratio */
+.polaroid-photo-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 11 / 14;
+  overflow: hidden;
+  background-color: #2b2b2b;
+  border: 1px solid rgba(25, 25, 25, 0.65);
+  box-sizing: border-box;
+}
+
+/* Background Photo */
+.polaroid-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: brightness(0.92) contrast(1.05);
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Aesthetic Graph Grid Overlay (11 columns by 14 rows) */
+.polaroid-grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background-size: calc(100% / 11) calc(100% / 14);
+  background-image: 
+    linear-gradient(to right, rgba(20, 20, 20, 0.52) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 20, 20, 0.52) 1px, transparent 1px);
+}
+
+/* 4 Corner Pastel Pink Hearts */
+.corner-heart {
+  position: absolute;
+  z-index: 4;
+  width: 22px;
+  height: 20px;
+  pointer-events: none;
+}
+
+.corner-heart svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+}
+
+.ch-tl { top: 8px; left: 8px; }
+.ch-tr { top: 8px; right: 8px; }
+.ch-bl { bottom: 8px; left: 8px; }
+.ch-br { bottom: 8px; right: 8px; }
+
+/* Letter Tiles Board (11x14 CSS Grid) */
+.letter-tiles-board {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(14, 1fr);
+  pointer-events: none;
+}
+
+/* Individual Pink Letter Tile (Scrabble / Crossword Style) */
+.letter-tile {
+  background-color: #ffdce5;
+  border-top: 1px solid #1a1a1a;
+  border-bottom: 1px solid #1a1a1a;
+  border-left: 1px solid #1a1a1a;
+  border-right: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 15.5px;
+  color: #1a1a1a;
+  line-height: 1;
+  user-select: none;
+  text-shadow: 0 0.5px 0.5px rgba(255, 255, 255, 0.4);
+}
+
+.letter-tile.tile-end {
+  border-right: 1px solid #1a1a1a;
+}
+
+.letter-tile.tile-touch-top {
+  border-top: none;
+}
+
+/* Grid Coordinates matching reference image:
+   Row 3: "Will" */
+.tile-W  { grid-column: 3; grid-row: 3; }
+.tile-i1 { grid-column: 4; grid-row: 3; }
+.tile-l1 { grid-column: 5; grid-row: 3; }
+.tile-l2 { grid-column: 6; grid-row: 3; }
+
+/* Row 4: "you" */
+.tile-y1 { grid-column: 5; grid-row: 4; }
+.tile-o  { grid-column: 6; grid-row: 4; }
+.tile-u  { grid-column: 7; grid-row: 4; }
+
+/* Row 6: "be" */
+.tile-b  { grid-column: 8; grid-row: 6; }
+.tile-e1 { grid-column: 9; grid-row: 6; }
+
+/* Row 8: "my" */
+.tile-m  { grid-column: 3; grid-row: 8; }
+.tile-y2 { grid-column: 4; grid-row: 8; }
+
+/* Row 10: "Valen" */
+.tile-V  { grid-column: 4; grid-row: 10; }
+.tile-a  { grid-column: 5; grid-row: 10; }
+.tile-l3 { grid-column: 6; grid-row: 10; }
+.tile-e2 { grid-column: 7; grid-row: 10; }
+.tile-n1 { grid-column: 8; grid-row: 10; }
+
+/* Row 11: "tine?" */
+.tile-t  { grid-column: 5; grid-row: 11; }
+.tile-i2 { grid-column: 6; grid-row: 11; }
+.tile-n2 { grid-column: 7; grid-row: 11; }
+.tile-e3 { grid-column: 8; grid-row: 11; }
+.tile-q  { grid-column: 9; grid-row: 11; }
+
+/* Bottom Decision Oval Buttons */
+.proposal-oval-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 326px;
+  margin-top: 26px;
+  gap: 16px;
+  position: relative;
+  z-index: 10;
+}
+
+.btn-oval {
+  flex: 1;
+  height: 52px;
+  border-radius: 50% / 50%;
+  background: #ffffff;
+  border: 1px solid #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, background-color 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  padding: 0 16px;
+  position: relative;
+}
+
+.btn-oval:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.btn-oval:active {
+  transform: scale(0.96);
+}
+
+.oval-text {
+  font-family: 'Dancing Script', cursive;
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  line-height: 1;
+}
+
+.oval-icon-heart {
+  width: 22px;
+  height: 20px;
+  display: block;
+}
+
+.oval-icon-cross {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* ==========================================================================
+   CELEBRATION STATE OVERLAY (Revealed upon YES!)
+   ========================================================================== */
+.polaroid-celebration-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 18px;
+  text-align: center;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.92);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+}
+
+.polaroid-frame.is-celebrating .polaroid-celebration-overlay {
+  opacity: 1;
+  pointer-events: auto;
+  transform: scale(1);
+}
+
+.celeb-heart-burst {
+  font-size: 34px;
+  color: #e27d89;
+  animation: pulseHeart 1.6s infinite ease-in-out;
+  margin-bottom: 2px;
+}
+
+.celeb-badge {
+  font-family: 'Aboreto', cursive;
+  font-size: 9.5px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #a08d6b;
+  margin-bottom: 4px;
+}
+
+.celeb-title {
+  font-family: 'Dancing Script', cursive;
+  font-size: 36px;
+  font-weight: 700;
+  color: #282f4d;
+  margin: 2px 0 6px;
+  line-height: 1.1;
+}
+
+.celeb-quote {
+  font-family: 'Luxurious Script', cursive;
+  font-size: 28px;
+  color: #5c7499;
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+
+.celeb-date {
+  font-family: 'Courier Prime', monospace;
+  font-size: 10px;
+  color: #777;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.btn-relive {
+  background: #ffffff;
+  border: 1px solid rgba(40, 47, 77, 0.25);
+  padding: 8px 18px;
+  border-radius: 25px;
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #282f4d;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-relive:hover {
+  background: #fdfbf7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(40, 47, 77, 0.12);
+}
+
+/* Confetti & Rose Petal Rain */
+.celebration-petal {
+  position: fixed;
+  pointer-events: none;
+  z-index: 180;
+  animation: petalFall var(--dur) cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes petalFall {
+  0% {
+    opacity: 0;
+    transform: translate(0, -20px) rotate(0deg) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--sway), 100vh) rotate(var(--rot)) scale(1.1);
+  }
+}
+
+@keyframes fadeInZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
