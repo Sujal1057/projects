@@ -4,7 +4,6 @@ import bg12 from "./assets/bg2.png";
 import bg81 from "./assets/bg8.jpg";
 import bg82 from "./assets/bg3.png";
 import bg71 from "./assets/bg7.png";
-import bg5 from "./assets/bg5.jpg";
 import bg4 from "./assets/bg4.jpg";
 import cal1 from "./assets/cal.png";
 import disc1 from "./assets/disc.png";
@@ -45,6 +44,7 @@ export const LoveTemplate = (): JSX.Element => {
     const [isCardOpen, setIsCardOpen] = React.useState(false);
     const [isPrinted, setIsPrinted] = React.useState(false);
     const audioRef = React.useRef(null) as any;
+    const mobileScrollRef = React.useRef(null) as { current: HTMLDivElement | null };
 
     const [isMobile, setIsMobile] = React.useState(false);
     const [isPortrait, setIsPortrait] = React.useState(false);
@@ -144,6 +144,77 @@ export const LoveTemplate = (): JSX.Element => {
         setIsPlaying(!isPlaying);
     };
 
+    const handleGoTop = () => {
+        mobileScrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    const renderPage1 = (containerStyle?: React.CSSProperties) => (
+        <div className="container" style={containerStyle}>
+            <img className="bg" alt="Bg" src={bg81} />
+            <img className="img" alt="Bg" src={bg11} />
+            <img className="bg-2" alt="Bg" src={bg12} />
+            <img
+                className="love-letter"
+                alt="Love letter"
+                src={loveLetter1}
+                onClick={() => handleSetShowPage2(true)}
+                style={{ cursor: 'pointer' }}
+            />
+            <div className="happy-birthday">Happy<br />Birthday</div>
+            <img className="hand" alt="Hand" src={hand1} />
+            <img className="hand-2" alt="Hand" src={hand2} />
+            <div className="scroll-down">SCROLL DOWN</div>
+            <img className="sticker" alt="Sticker" src={sticker31} />
+            <img className="sticker-9" alt="Sticker 9" src={sticker91} />
+            <img className="f" alt="F" src={f31} />
+            <div className="rectangle" />
+            <img className="f-1" alt="F" src={f31} />
+            <img className="f-2" alt="F" src={f32} />
+            <img
+                className={`disc ${isPlaying ? 'fast-spin' : ''}`}
+                alt="Disc"
+                src={disc1}
+                onClick={togglePlay}
+                style={{ cursor: 'pointer' }}
+            />
+            <audio ref={audioRef} src={bgSong} loop />
+            <div className="group">
+                <img className="songl" alt="Songl" src={songl1} />
+            </div>
+            <img className="sticker-2" alt="Sticker" src={sticker61} />
+            <img className="bg-3" alt="Bg" src={bg82} />
+            <img className="sticker-3" alt="Sticker" src={sticker51} />
+            <img className="rectangle-2" alt="Rectangle" src={rectangle2} />
+            <img className="cal" alt="Cal" src={cal1} />
+            <img className="f-4" alt="F" src={f41} />
+            <img className="f-5" alt="F" src={f51} />
+            <button
+                type="button"
+                className="go-top-glass-btn"
+                onClick={handleGoTop}
+                aria-label="Go to top and click envelope"
+            >
+                <svg
+                    className="go-top-icon"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                >
+                    <path d="M12 19V5" />
+                    <path d="m5 12 7-7 7 7" />
+                </svg>
+                <span>GO TOP • CLICK ENVELOPE</span>
+            </button>
+        </div>
+    );
+
     if (isMobile && (!hasStarted || isPortrait)) {
         return (
             <div className="orientation-prompt-overlay">
@@ -208,7 +279,7 @@ export const LoveTemplate = (): JSX.Element => {
                     style={{ cursor: 'pointer' }}
                     onClick={() => setShowPopup(true)}
                 />
-                <div className="click-me-text" style={{ cursor: 'pointer' }} onClick={() => setShowPopup(true)}>Click me</div>
+                <div className="click-me-text">Click me</div>
                 
                 <div className="flower-cluster">
                     <img className="fc-f5" src={f51} alt="f5" />
@@ -225,7 +296,6 @@ export const LoveTemplate = (): JSX.Element => {
                     <div className="popup-overlay" onClick={() => { setShowPopup(false); setIsCardOpen(false); }}>
                         <div className="popup-content" onClick={(e) => e.stopPropagation()}>
                             <div className="popup-close" onClick={(e) => { e.stopPropagation(); setShowPopup(false); setIsCardOpen(false); }}>✖</div>
-                            <img className="popup-img" src={bg5} alt="Popup Image" />
                             <div className={`card-container ${isCardOpen ? 'open-card' : ''}`}>
                                 <img className="popup-card" src={rectangle2} alt="Card" />
                                 <div className="card-text">
@@ -257,48 +327,7 @@ export const LoveTemplate = (): JSX.Element => {
     }
 
     if (!isMobile) {
-        return (
-            <div className="container">
-                <img className="bg" alt="Bg" src={bg81} />
-                <img className="img" alt="Bg" src={bg11} />
-                <img className="bg-2" alt="Bg" src={bg12} />
-                <img
-                    className="love-letter"
-                    alt="Love letter"
-                    src={loveLetter1}
-                    onClick={() => handleSetShowPage2(true)}
-                    style={{ cursor: 'pointer' }}
-                />
-                <div className="happy-birthday">Happy<br />Birthday</div>
-                <img className="hand" alt="Hand" src={hand1} />
-                <img className="hand-2" alt="Hand" src={hand2} />
-                <div className="scroll-down">SCROLL DOWN</div>
-                <img className="sticker" alt="Sticker" src={sticker31} />
-                <img className="sticker-9" alt="Sticker 9" src={sticker91} />
-                <img className="f" alt="F" src={f31} />
-                <div className="rectangle" />
-                <img className="f-1" alt="F" src={f31} />
-                <img className="f-2" alt="F" src={f32} />
-                <img
-                    className={`disc ${isPlaying ? 'fast-spin' : ''}`}
-                    alt="Disc"
-                    src={disc1}
-                    onClick={togglePlay}
-                    style={{ cursor: 'pointer' }}
-                />
-                <audio ref={audioRef} src={bgSong} loop />
-                <div className="group">
-                    <img className="songl" alt="Songl" src={songl1} />
-                </div>
-                <img className="sticker-2" alt="Sticker" src={sticker61} />
-                <img className="bg-3" alt="Bg" src={bg82} />
-                <img className="sticker-3" alt="Sticker" src={sticker51} />
-                <img className="rectangle-2" alt="Rectangle" src={rectangle2} />
-                <img className="cal" alt="Cal" src={cal1} />
-                <img className="f-4" alt="F" src={f41} />
-                <img className="f-5" alt="F" src={f51} />
-            </div>
-        );
+        return renderPage1();
     }
 
     const mobileHeight = 2718;
@@ -307,12 +336,15 @@ export const LoveTemplate = (): JSX.Element => {
     // We must collapse that extra space with a negative marginBottom.
     const marginCollapse = scaledHeight - mobileHeight; // negative value
     return (
-        <div style={{
-            width: '100vw',
-            height: '100vh',
-            overflowX: 'hidden',
-            overflowY: 'scroll',
-        }}>
+        <div
+            ref={mobileScrollRef}
+            style={{
+                width: '100vw',
+                height: '100vh',
+                overflowX: 'hidden',
+                overflowY: 'scroll',
+            }}
+        >
             <div style={{
                 width: '1440px',
                 height: `${mobileHeight}px`,
@@ -320,46 +352,7 @@ export const LoveTemplate = (): JSX.Element => {
                 transformOrigin: 'top left',
                 marginBottom: `${marginCollapse}px`, // collapses extra layout space
             }}>
-                <div className="container" style={{ width: '1440px', height: `${mobileHeight}px`, minWidth: 'auto' }}>
-                    <img className="bg" alt="Bg" src={bg81} />
-                    <img className="img" alt="Bg" src={bg11} />
-                    <img className="bg-2" alt="Bg" src={bg12} />
-                    <img
-                        className="love-letter"
-                        alt="Love letter"
-                        src={loveLetter1}
-                        onClick={() => handleSetShowPage2(true)}
-                        style={{ cursor: 'pointer' }}
-                    />
-                    <div className="happy-birthday">Happy<br />Birthday</div>
-                    <img className="hand" alt="Hand" src={hand1} />
-                    <img className="hand-2" alt="Hand" src={hand2} />
-                    <div className="scroll-down">SCROLL DOWN</div>
-                    <img className="sticker" alt="Sticker" src={sticker31} />
-                    <img className="sticker-9" alt="Sticker 9" src={sticker91} />
-                    <img className="f" alt="F" src={f31} />
-                    <div className="rectangle" />
-                    <img className="f-1" alt="F" src={f31} />
-                    <img className="f-2" alt="F" src={f32} />
-                    <img
-                        className={`disc ${isPlaying ? 'fast-spin' : ''}`}
-                        alt="Disc"
-                        src={disc1}
-                        onClick={togglePlay}
-                        style={{ cursor: 'pointer' }}
-                    />
-                    <audio ref={audioRef} src={bgSong} loop />
-                    <div className="group">
-                        <img className="songl" alt="Songl" src={songl1} />
-                    </div>
-                    <img className="sticker-2" alt="Sticker" src={sticker61} />
-                    <img className="bg-3" alt="Bg" src={bg82} />
-                    <img className="sticker-3" alt="Sticker" src={sticker51} />
-                    <img className="rectangle-2" alt="Rectangle" src={rectangle2} />
-                    <img className="cal" alt="Cal" src={cal1} />
-                    <img className="f-4" alt="F" src={f41} />
-                    <img className="f-5" alt="F" src={f51} />
-                </div>
+                {renderPage1({ width: '1440px', height: `${mobileHeight}px`, minWidth: 'auto' })}
             </div>
         </div>
     );
