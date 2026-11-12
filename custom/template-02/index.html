@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>For You</title>
+  <meta name="description" content="A little gift, a flower bloom, and a scrapbook made just for you." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Quicksand:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="assets/app.css" />
+
+  <script src="assets/vendor/page-flip.browser.min.js"></script>
+</head>
+
+<body>
+  <div id="gift-landing">
+    <div class="gift-fade-veil" aria-hidden="true"></div>
+    <div class="gift-stage">
+      <div class="gift-click-wrap">
+        <button id="gift-box-btn" class="gift-box-btn" aria-label="Click the flower">
+          <img src="assets/flowers/rose.png" alt="Flower" class="rose-btn-img" />
+        </button>
+        <p class="gift-caption">Click the flower</p>
+      </div>
+      <div class="bloom-backdrop" aria-hidden="true"></div>
+      <canvas id="bloom-canvas" class="bloom-field" aria-hidden="true"></canvas>
+      <div class="gift-burst" aria-hidden="true"></div>
+    </div>
+  </div>
+  <div id="scrapbook-stage">
+    <p class="hint-text">Drag & Click (on cornor)</p>
+
+    <div id="book-container">
+      <div id="book">
+        <div class="page page-cover" data-density="hard" data-spiral="left">
+          <img src="assets/scrapbook/1.jpg" alt="cover" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="right">
+          <img src="assets/scrapbook/2.jpg" alt="page 2" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="left">
+          <img src="assets/scrapbook/3.jpg" alt="page 3" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="right">
+          <img src="assets/scrapbook/4.jpg" alt="page 4" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="left">
+          <img src="assets/scrapbook/5.jpg" alt="page 5" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="right">
+          <img src="assets/scrapbook/6.jpg" alt="page 6" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="left">
+          <img src="assets/scrapbook/7.jpg" alt="page 7" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="right">
+          <img src="assets/scrapbook/8.jpg" alt="page 8" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="left">
+          <img src="assets/scrapbook/9.jpg" alt="page 9" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="right">
+          <img src="assets/scrapbook/10.jpg" alt="page 10" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="left">
+          <img src="assets/scrapbook/11.jpg" alt="page 11" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="right">
+          <img src="assets/scrapbook/12.jpg" alt="page 12" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="left">
+          <img src="assets/scrapbook/13.jpg" alt="page 13" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="right">
+          <img src="assets/scrapbook/14.jpg" alt="page 14" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="left">
+          <img src="assets/scrapbook/15.jpg" alt="page 15" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="right">
+          <img src="assets/scrapbook/16.jpg" alt="page 16" />
+        </div>
+        <div class="page" data-density="soft" data-spiral="left">
+          <img src="assets/scrapbook/17.jpg" alt="page 17" />
+        </div>
+        <div class="page page-cover" data-density="hard" data-spiral="right">
+          <img src="assets/scrapbook/18.jpg" alt="back cover" />
+        </div>
+      </div>
+
+      <div id="spine-shadow"></div>
+      <canvas id="spiral-canvas"></canvas>
+    </div>
+  </div>
+  <div id="orientation-overlay" class="orientation-prompt-overlay hidden" aria-hidden="true">
+    <div class="orientation-prompt-card">
+      <div class="orientation-icon-container">
+        <svg id="orientation-icon-portrait" class="phone-icon-portrait" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
+          <line x1="12" y1="18" x2="12.01" y2="18" />
+        </svg>
+        <svg id="orientation-icon-landscape" class="hidden" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+        </svg>
+      </div>
+      <h2 id="orientation-title" class="orientation-title">Rotate Your Device</h2>
+      <p id="orientation-subtitle" class="orientation-subtitle">
+        Please turn your phone sideways to landscape mode to unlock the experience.
+      </p>
+      <button id="orientation-btn" class="orientation-btn disabled" disabled>
+        Waiting for rotation...
+      </button>
+    </div>
+  </div>
+
+  <audio id="gift-music" src="gift-music.mp3" loop></audio>
+
+  <script src="assets/app.js"></script>
+</body>
+
+</html>
