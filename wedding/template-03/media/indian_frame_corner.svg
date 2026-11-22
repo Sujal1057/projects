@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" fill="none">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF2B2"/>
+      <stop offset="30%" stop-color="#E5BE64"/>
+      <stop offset="70%" stop-color="#C28B2B"/>
+      <stop offset="100%" stop-color="#7A4E0D"/>
+    </linearGradient>
+    <linearGradient id="goldLight" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8D6"/>
+      <stop offset="50%" stop-color="#DDB253"/>
+      <stop offset="100%" stop-color="#8F5D13"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="1" dy="2" stdDeviation="1.5" flood-color="#26000c" flood-opacity="0.6"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#shadow)">
+    <!-- Outer corner bracket base -->
+    <path d="M 4 36 L 4 12 C 4 7.57 7.57 4 12 4 L 36 4 C 33 9 28 14 21 16 C 18 24 12 30 4 36 Z" fill="#52051E" stroke="url(#goldGrad)" stroke-width="1.5"/>
+
+    <!-- Corner main paisley / lotus swirl -->
+    <path d="M 8 8 Q 28 6 38 18 Q 24 24 18 38 Q 6 28 8 8 Z" fill="url(#goldGrad)"/>
+    <path d="M 12 12 Q 24 10 30 18 Q 20 22 18 30 Q 10 24 12 12 Z" fill="#400316" opacity="0.8"/>
+
+    <!-- Delicate inner filigree leaf -->
+    <path d="M 14 14 C 22 13 26 19 24 24 C 19 26 13 22 14 14 Z" fill="url(#goldLight)"/>
+
+    <!-- Royal Indian acanthus / scroll tendril top -->
+    <path d="M 38 4 C 48 4 56 10 58 16 C 54 18 50 14 44 14 C 40 14 36 17 32 20 C 30 14 34 7 38 4 Z" fill="url(#goldGrad)"/>
+    <!-- Tendril bottom -->
+    <path d="M 4 38 C 4 48 10 56 16 58 C 18 54 14 50 14 44 C 14 40 17 36 20 32 C 14 30 7 34 4 38 Z" fill="url(#goldGrad)"/>
+
+    <!-- Flourish tips & pearls -->
+    <circle cx="62" cy="18" r="2.5" fill="url(#goldLight)"/>
+    <circle cx="18" cy="62" r="2.5" fill="url(#goldLight)"/>
+    <circle cx="48" cy="24" r="1.8" fill="url(#goldLight)"/>
+    <circle cx="24" cy="48" r="1.8" fill="url(#goldLight)"/>
+
+    <!-- Central corner jewel / floret -->
+    <circle cx="9" cy="9" r="4" fill="url(#goldGrad)"/>
+    <circle cx="9" cy="9" r="2" fill="#800A2A"/>
+    <circle cx="9" cy="9" r="0.8" fill="#FFF2B2"/>
+
+    <!-- Border beading along edges -->
+    <circle cx="18" cy="4" r="1.2" fill="url(#goldLight)"/>
+    <circle cx="26" cy="4" r="1.2" fill="url(#goldLight)"/>
+    <circle cx="4" cy="18" r="1.2" fill="url(#goldLight)"/>
+    <circle cx="4" cy="26" r="1.2" fill="url(#goldLight)"/>
+  </g>
+</svg>
+

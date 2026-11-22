@@ -1,0 +1,937 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Royale - Wedding Invitation</title>
+
+    <!-- Google Fonts online CDN for Cormorant Garamond, Fraunces, Sora, and Tiro Devanagari Sanskrit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Fraunces:opsz,wght@9..144,400..700;1,9..144,400..700&family=Sora:wght@100..800&family=Tiro+Devanagari+Sanskrit:ital@0;1&display=swap">
+
+    <!-- crossorigin because the symbol is painted as a CSS mask, and masks are
+         fetched in CORS mode - without it the preload would not be reused. -->
+    <link rel="preload" as="image" href="media/_ganesha.svg" crossorigin="">
+    <!-- Hidden behind the gate on load, but the first thing the guest sees
+         once the doors open - fetched up front so it is never late. Only the
+         one for this viewport: the video's poster on a phone, the mandap
+         picture from 700px up, which is where the hero switches between them. -->
+    <link rel="preload" as="image" href="media/garden_palace_poster.webp" media="(max-width: 699px)">
+    <link rel="preload" as="image" href="media/mandap_dusk.png" media="(min-width: 700px)">
+
+    <!-- The shared platform chrome's own styling: the music control and scroll cue.
+         Before styles.css, so this template can override any of it. -->
+    <link rel="stylesheet" href="_platform/music.css">
+    <link rel="stylesheet" href="_platform/scroll-cue.css">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- The gate: a fixed cover over the hero until it is tapped. Opening it
+         (app.js) slides the card - a band wrapped across the closed doors -
+         off the screen, then swings the two maroon doors open like the covers
+         of a book, sprigs and elephants painted on them, and finally opens
+         the two rectangular star-patterned flaps behind them. -->
+    <div class="royale-gate" id="ryGate" role="button" tabindex="0" aria-label="Open the invitation">
+        <!-- "start" and "end" rather than top/bottom and left/right: the gate
+             turns on its side in landscape (see styles.css), so the first
+             flap is the top one in portrait and the left one in landscape,
+             and the first door the left one or the top one. -->
+        <div class="royale-gate__flap royale-gate__flap--start" aria-hidden="true">
+            <span class="royale-gate__flap-pattern"></span>
+        </div>
+        <div class="royale-gate__flap royale-gate__flap--end" aria-hidden="true">
+            <span class="royale-gate__flap-pattern"></span>
+        </div>
+
+        <div class="royale-gate__door royale-gate__door--start" aria-hidden="true"></div>
+        <div class="royale-gate__door royale-gate__door--end" aria-hidden="true"></div>
+
+        <!-- Corner artwork, a layer per piece rather than children of the
+             doors: which door a piece is painted on changes with the
+             orientation (in landscape the top door carries both sprigs), so
+             each layer takes the size and the hinge of whichever door it is on
+             and turns with it. -->
+        <div class="royale-gate__decor royale-gate__decor--sprig-left" aria-hidden="true">
+            <img class="royale-gate__floral" src="media/floral1.png" alt="" draggable="false">
+        </div>
+        <div class="royale-gate__decor royale-gate__decor--sprig-right" aria-hidden="true">
+            <img class="royale-gate__floral" src="media/floral1.png" alt="" draggable="false">
+        </div>
+        <div class="royale-gate__decor royale-gate__decor--elephant-left" aria-hidden="true">
+            <img class="royale-gate__elephant" src="media/elephant.png" alt="" draggable="false">
+        </div>
+        <div class="royale-gate__decor royale-gate__decor--elephant-right" aria-hidden="true">
+            <img class="royale-gate__elephant" src="media/elephant.png" alt="" draggable="false">
+        </div>
+
+        <!-- The card: media/Wrapper_P.svg - a cream band edged top and bottom
+             in crimson - wrapped right across both doors, in front of them and
+             their artwork, so it slides up over the sprigs as it leaves. In
+             landscape it is Wrapper_D.svg, standing up the middle, and leaves
+             to the right. -->
+        <div class="royale-card">
+            <!-- The doors' motif lattice, faint on the card's cream. -->
+            <span class="royale-card__motif" aria-hidden="true"></span>
+            <!-- Painted as a mask so the artwork takes --royale-ink. -->
+            <span class="royale-card__symbol" aria-hidden="true"
+                style="mask-image: url(&quot;symbols/_ganesha.svg&quot;);"></span>
+            <p class="royale-card__mantra" id="ryInvocation" lang="sa" dir="ltr"
+                style="font-family: &quot;Tiro Devanagari Sanskrit&quot;, serif;">श्री गणेशाय नमः</p>
+            <p class="royale-card__guest" id="ryGuestGreeting" hidden=""></p>
+            <p class="royale-card__note" id="ryIntroNote">we cordially invite you to grace the auspicious occasion of
+                the marriage of…</p>
+
+            <!-- The cover's one instruction. A span, and aria-hidden, because
+                 the GATE is the button: #ryGate carries role="button" and the
+                 aria-label "Open the invitation", and a real <button> nested
+                 inside a role="button" is invalid and would add a second tab
+                 stop doing the same job. This is the visual half of an
+                 affordance that was already there.
+                 The frame is tap_to_open.svg inline rather than an <img>, so
+                 its fill and gold edge take the theme's colours from
+                 styles.css (--royale-cue-*, see .ry-plaque) instead of the file's own. -->
+            <span class="royale-card__cue ry-plaque" aria-hidden="true">
+                <svg class="ry-plaque__frame" viewBox="0 0 300 78" fill="none" focusable="false">
+                    <g filter="url(#ryCueInset)">
+                        <path class="ry-plaque__fill"
+                            d="M8 34C6.5 36.5 6 38.5 4 39C6 39.5 6.5 41.5 8 44C9.5 46.5 10 49 12.5 49C12.6667 53.3333 15.8 62 27 62C26.8333 66 28.6 74 37 74H263C271.4 74 273.167 66 273 62C284.2 62 287.333 53.3333 287.5 49C290 49 290.5 46.5 292 44C293.5 41.5 294 39.5 296 39C294 38.5 293.5 36.5 292 34C290.5 31.5 290 29 287.5 29C287.333 24.6667 284.2 16 273 16C273.167 12 271.4 4 263 4H37C28.6 4 26.8333 12 27 16C15.8 16 12.6667 24.6667 12.5 29C10 29 9.5 31.5 8 34Z">
+                        </path>
+                        <path
+                            d="M263 2C267.981 2 271.145 4.44 272.937 7.4854C274.202 9.6369 274.772 12.0548 274.947 14.085C280.075 14.5379 283.629 16.7741 285.938 19.6123C287.975 22.1148 288.979 24.9996 289.342 27.3438C289.618 27.4542 289.883 27.588 290.135 27.751C290.87 28.2274 291.393 28.8593 291.789 29.4531C292.178 30.0368 292.511 30.6895 292.8 31.2598C293.105 31.8629 293.384 32.4193 293.715 32.9707C294.122 33.6496 294.46 34.2913 294.745 34.8311C295.042 35.3931 295.268 35.8159 295.495 36.1689C295.917 36.8249 296.177 36.9825 296.485 37.0596C297.376 37.2822 298 38.0823 298 39C298 39.9177 297.376 40.7178 296.485 40.9404C296.177 41.0175 295.917 41.1751 295.495 41.8311C295.268 42.1841 295.042 42.6069 294.745 43.1689C294.46 43.7087 294.122 44.3504 293.715 45.0293C293.384 45.5807 293.105 46.1371 292.8 46.7402C292.511 47.3105 292.178 47.9632 291.789 48.5469C291.393 49.1407 290.87 49.7726 290.135 50.249C289.883 50.4119 289.618 50.5449 289.342 50.6553C288.979 52.9996 287.975 55.8849 285.938 58.3877C283.629 61.2258 280.075 63.4611 274.947 63.9141C274.772 65.9444 274.203 68.3627 272.937 70.5146C271.145 73.56 267.981 76 263 76H37C32.0188 76 28.8553 73.56 27.0635 70.5146C25.7974 68.3627 25.2269 65.9445 25.0518 63.9141C19.925 63.4609 16.3713 61.2257 14.0615 58.3877C12.0246 55.8848 11.0201 52.9997 10.6572 50.6553C10.3815 50.5449 10.1163 50.4118 9.8652 50.249C9.1302 49.7726 8.6068 49.1407 8.2109 48.5469C7.8218 47.9632 7.4891 47.3105 7.2002 46.7402C6.8946 46.1371 6.616 45.5807 6.2852 45.0293C5.8778 44.3504 5.5402 43.7087 5.2549 43.1689C4.9578 42.6069 4.7319 42.1841 4.5049 41.8311C4.0831 41.1751 3.8229 41.0175 3.5146 40.9404C2.6244 40.7178 2 39.9177 2 39C2 38.0823 2.6244 37.2822 3.5146 37.0596C3.8229 36.9825 4.0831 36.8249 4.5049 36.1689C4.7319 35.8159 4.9578 35.3931 5.2549 34.8311C5.5402 34.2913 5.8778 33.6496 6.2852 32.9707C6.616 32.4193 6.8946 31.8629 7.2002 31.2598C7.4891 30.6895 7.8218 30.0368 8.2109 29.4531C8.6068 28.8593 9.1302 28.2274 9.8652 27.751C10.1164 27.5882 10.3814 27.4541 10.6572 27.3438C11.0202 24.9995 12.0248 22.1148 14.0615 19.6123C16.3713 16.7743 19.9249 14.5381 25.0518 14.085C25.227 12.0548 25.7976 9.6369 27.0635 7.4854C28.8553 4.44 32.0188 2 37 2H263Z"
+                            stroke="url(#ryCueEdge)" stroke-width="4" stroke-linejoin="round"></path>
+                    </g>
+                    <defs>
+                        <filter id="ryCueInset" x="0" y="0" width="300" height="86" filterUnits="userSpaceOnUse"
+                            color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+                            <feColorMatrix in="SourceAlpha" type="matrix"
+                                values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"></feColorMatrix>
+                            <feOffset dy="8"></feOffset>
+                            <feGaussianBlur stdDeviation="6"></feGaussianBlur>
+                            <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"></feComposite>
+                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0">
+                            </feColorMatrix>
+                            <feBlend mode="normal" in2="shape" result="effect1_innerShadow"></feBlend>
+                        </filter>
+                        <linearGradient id="ryCueEdge" x1="315" y1="39" x2="-9" y2="38.9999"
+                            gradientUnits="userSpaceOnUse">
+                            <stop class="ry-plaque__edge"></stop>
+                            <stop class="ry-plaque__shine" offset="0.183134"></stop>
+                            <stop class="ry-plaque__edge" offset="0.525864"></stop>
+                            <stop class="ry-plaque__shine" offset="0.790922"></stop>
+                            <stop class="ry-plaque__edge" offset="1"></stop>
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <span class="ry-plaque__label">Tap to open</span>
+            </span>
+        </div>
+    </div>
+    <!-- The beach scene. In normal flow, so it is what the page scrolls through
+         once the gate is gone. -->
+    <section class="royale-hero" aria-label="The couple">
+        <div class="royale-hero__frame">
+            <!-- On a phone: the palace garden at dusk, moving. Muted and playsinline
+                 so browsers allow it to play without a tap; no autoplay, because
+                 app.js starts it from its first frame as the gate opens rather than
+                 letting it loop unseen behind the cover. The source and poster sit
+                 in data attributes and app.js only sets them below 700px, so a
+                 wider screen never fetches the video. The poster is its first
+                 frame, so nothing jumps when playback begins - and it is what stays
+                 up with reduced motion, or wherever a browser declines to play. -->
+            <video class="royale-hero__image royale-hero__video" id="ryHeroVideo" muted="" loop="" playsinline=""
+                preload="auto" data-src="media/garden_palace.mp4" data-poster="media/garden_palace_poster.webp"
+                data-from="(max-width: 699px)" disablepictureinpicture="" aria-hidden="true" tabindex="-1"
+                poster="media/garden_palace_poster.webp" src="media/garden_palace.mp4"></video>
+
+            <!-- From 700px up: the mandap in the palace garden at dusk, a still.
+                 The source for a phone is the video's (already preloaded) poster,
+                 so the phone never fetches the wide picture it does not show. -->
+            <picture class="royale-hero__still">
+                <source media="(max-width: 699px)" srcset="media/garden_palace_poster.webp">
+                <img class="royale-hero__image" src="media/mandap_dusk.png" width="2322" height="1224" alt=""
+                    aria-hidden="true" draggable="false">
+            </picture>
+
+            <!-- tabindex=-1 so app.js can hand focus here after the gate opens,
+                 rather than leaving a keyboard user on a removed element. -->
+            <h1 class="royale-couple" id="ryCouple" tabindex="-1">
+                <span class="royale-couple__name" id="ryBrideName">Ananya</span>
+                <span class="royale-couple__amp">&amp;</span>
+                <span class="royale-couple__name" id="ryGroomName">Aarav</span>
+            </h1>
+        </div>
+
+        <!-- The torn band on the hero's bottom edge, where the picture gives
+             way to the page. -->
+        <img class="ry-tear ry-tear--bottom" src="media/section_divider.svg" alt="" aria-hidden="true">
+        <!-- "Scroll down" at the hero's foot, once the cover has gone - see
+             _platform/scroll-cue.js. -->
+        <div class="scroll-cue is-gone" aria-hidden="true" data-after-cover="" data-delay="0">
+            <span class="scroll-cue__text">Scroll down</span>
+            <svg class="scroll-cue__arrow" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M5 9l7 7 7-7"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- The families, each on a scroll that unrolls as it comes into view
+         (app.js / styles.css "scroll cards"). -->
+    <section class="royale-scrolls royale-families" aria-label="The families">
+        <article class="royale-scroll is-armed is-unrolled" id="ryGroomCard" data-card="groomFamily">
+            <!-- Behind the sheet and centred on the card: what shows while the
+                 scroll is still closed, and covered as it unrolls over it. -->
+            <img class="royale-scroll__bloom" src="media/floral2.webp" alt="" aria-hidden="true" loading="eager"
+                decoding="async">
+            <!-- The window the sheet is revealed through as it unrolls (see
+                 "scroll cards" in styles.css). -->
+            <div class="royale-scroll__window">
+                <div class="royale-scroll__sheet">
+                    <h2 class="royale-scroll__name" id="ryGroomCardName">Chi. Aarav Rathore</h2>
+
+                    <p class="royale-scroll__block">
+                        <span class="royale-scroll__rel" id="ryGroomRelLabel">Son of</span>
+                        <span class="royale-scroll__elder" id="ryGroomParentA">Shri Vikram Singh Rathore</span>
+                        <span class="royale-scroll__amp" id="ryGroomParentJoin">&amp;</span>
+                        <span class="royale-scroll__elder" id="ryGroomParentB">Smt. Sunita Rathore</span>
+                    </p>
+
+                    <p class="royale-scroll__block">
+                        <span class="royale-scroll__rel" id="ryGroomGrandLabel">Grandson of</span>
+                        <span class="royale-scroll__elder" id="ryGroomGrandA">Late Shri Mahendra Singh Rathore</span>
+                        <span class="royale-scroll__amp" id="ryGroomGrandJoin">&amp;</span>
+                        <span class="royale-scroll__elder" id="ryGroomGrandB">Late Smt. Kamla Devi Rathore</span>
+                    </p>
+
+                    <img class="royale-scroll__divider" src="media/divider.webp" alt="" aria-hidden="true"
+                        loading="eager" decoding="async">
+                </div>
+            </div>
+
+            <div class="royale-scroll__rod royale-scroll__rod--top" aria-hidden="true">
+                <img class="royale-scroll__knob royale-scroll__knob--left" src="media/knob-left%201.svg" alt=""
+                    draggable="false">
+                <img class="royale-scroll__roll" src="media/roll-top1.svg" alt="" draggable="false">
+                <img class="royale-scroll__knob royale-scroll__knob--right" src="media/knob%203.svg" alt=""
+                    draggable="false">
+            </div>
+            <div class="royale-scroll__roller" aria-hidden="true">
+                <div class="royale-scroll__rod royale-scroll__rod--bottom">
+                    <img class="royale-scroll__knob royale-scroll__knob--left" src="media/knob-left%201.svg" alt=""
+                        draggable="false">
+                    <img class="royale-scroll__roll" src="media/roll-top1.svg" alt="" draggable="false">
+                    <img class="royale-scroll__knob royale-scroll__knob--right" src="media/knob%203.svg" alt=""
+                        draggable="false">
+                </div>
+            </div>
+        </article>
+
+        <article class="royale-scroll is-armed is-unrolled" id="ryBrideCard" data-card="brideFamily">
+            <!-- Behind the sheet and centred on the card: what shows while the
+                 scroll is still closed, and covered as it unrolls over it. -->
+            <img class="royale-scroll__bloom" src="media/floral2.webp" alt="" aria-hidden="true" loading="eager"
+                decoding="async">
+            <!-- The window the sheet is revealed through as it unrolls (see
+                 "scroll cards" in styles.css). -->
+            <div class="royale-scroll__window">
+                <div class="royale-scroll__sheet">
+                    <h2 class="royale-scroll__name" id="ryBrideCardName">Kum. Ananya Singhania</h2>
+
+                    <p class="royale-scroll__block">
+                        <span class="royale-scroll__rel" id="ryBrideRelLabel">Daughter of</span>
+                        <span class="royale-scroll__elder" id="ryBrideParentA">Shri Rajesh Kumar Singhania</span>
+                        <span class="royale-scroll__amp" id="ryBrideParentJoin">&amp;</span>
+                        <span class="royale-scroll__elder" id="ryBrideParentB">Smt. Meera Singhania</span>
+                    </p>
+
+                    <p class="royale-scroll__block">
+                        <span class="royale-scroll__rel" id="ryBrideGrandLabel">Granddaughter of</span>
+                        <span class="royale-scroll__elder" id="ryBrideGrandA">Late Shri Hari Prasad Singhania</span>
+                        <span class="royale-scroll__amp" id="ryBrideGrandJoin">&amp;</span>
+                        <span class="royale-scroll__elder" id="ryBrideGrandB">Late Smt. Shanti Devi Singhania</span>
+                    </p>
+
+                    <img class="royale-scroll__divider" src="media/divider.webp" alt="" aria-hidden="true"
+                        loading="eager" decoding="async">
+                </div>
+            </div>
+
+            <div class="royale-scroll__rod royale-scroll__rod--top" aria-hidden="true">
+                <img class="royale-scroll__knob royale-scroll__knob--left" src="media/knob-left%201.svg" alt=""
+                    draggable="false">
+                <img class="royale-scroll__roll" src="media/roll-top1.svg" alt="" draggable="false">
+                <img class="royale-scroll__knob royale-scroll__knob--right" src="media/knob%203.svg" alt=""
+                    draggable="false">
+            </div>
+            <div class="royale-scroll__roller" aria-hidden="true">
+                <div class="royale-scroll__rod royale-scroll__rod--bottom">
+                    <img class="royale-scroll__knob royale-scroll__knob--left" src="media/knob-left%201.svg" alt=""
+                        draggable="false">
+                    <img class="royale-scroll__roll" src="media/roll-top1.svg" alt="" draggable="false">
+                    <img class="royale-scroll__knob royale-scroll__knob--right" src="media/knob%203.svg" alt=""
+                        draggable="false">
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <!-- The date reveal: three plaques that stay EMPTY until the guest presses
+         "Reveal the Date", then roll like dials and settle on the day, month
+         and year (date-reveal.js). The
+         strips are written at press time, not hidden here, so the date is not
+         in the page to be read early.
+
+         data-date is the wedding date as YYYY-MM-DD. -->
+    <section class="royale-date" id="ryDateReveal" data-date="2026-12-20" aria-label="The date">
+        <div class="royale-date__stage"
+            style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
+            <img class="royale-date__crown" src="media/lotus_bunch.png" alt="" aria-hidden="true" loading="lazy"
+                decoding="async" style="translate: none; rotate: none; scale: none; transform: translate(0%, -6%);">
+
+            <div class="royale-date__plaques" role="group" aria-label="Wedding date">
+                <div class="royale-date__plaque" data-dial="day">
+                    <span class="royale-date__cap">Date</span>
+                    <div class="royale-date__window">
+                        <div class="royale-date__strip" data-strip=""></div>
+                    </div>
+                </div>
+                <div class="royale-date__plaque" data-dial="month">
+                    <span class="royale-date__cap">Month</span>
+                    <div class="royale-date__window">
+                        <div class="royale-date__strip" data-strip=""></div>
+                    </div>
+                </div>
+                <div class="royale-date__plaque" data-dial="year">
+                    <span class="royale-date__cap">Year</span>
+                    <div class="royale-date__window">
+                        <div class="royale-date__strip" data-strip=""></div>
+                    </div>
+                </div>
+            </div>
+
+            <img class="royale-date__elephant royale-date__elephant--left" src="media/elephant.png" alt=""
+                aria-hidden="true" loading="lazy" decoding="async">
+            <img class="royale-date__elephant royale-date__elephant--right" src="media/elephant.png" alt=""
+                aria-hidden="true" loading="lazy" decoding="async">
+
+            <!-- The line that takes the button's place once the date is out
+                 sits in the same spot, so the section does not jump. -->
+            <div class="royale-date__action">
+                <!-- On the same plaque as the cover's tap cue (tap_to_open.svg, inline
+                     with its own ids). render.js writes the label into the
+                     span, leaving the drawing alone. -->
+                <button class="royale-date__btn ry-plaque" id="ryRevealBtn" type="button">
+                    <svg class="ry-plaque__frame" viewBox="0 0 300 78" fill="none" focusable="false">
+                        <g filter="url(#ryRevealInset)">
+                            <path class="ry-plaque__fill"
+                                d="M8 34C6.5 36.5 6 38.5 4 39C6 39.5 6.5 41.5 8 44C9.5 46.5 10 49 12.5 49C12.6667 53.3333 15.8 62 27 62C26.8333 66 28.6 74 37 74H263C271.4 74 273.167 66 273 62C284.2 62 287.333 53.3333 287.5 49C290 49 290.5 46.5 292 44C293.5 41.5 294 39.5 296 39C294 38.5 293.5 36.5 292 34C290.5 31.5 290 29 287.5 29C287.333 24.6667 284.2 16 273 16C273.167 12 271.4 4 263 4H37C28.6 4 26.8333 12 27 16C15.8 16 12.6667 24.6667 12.5 29C10 29 9.5 31.5 8 34Z">
+                            </path>
+                            <path
+                                d="M263 2C267.981 2 271.145 4.44 272.937 7.4854C274.202 9.6369 274.772 12.0548 274.947 14.085C280.075 14.5379 283.629 16.7741 285.938 19.6123C287.975 22.1148 288.979 24.9996 289.342 27.3438C289.618 27.4542 289.883 27.588 290.135 27.751C290.87 28.2274 291.393 28.8593 291.789 29.4531C292.178 30.0368 292.511 30.6895 292.8 31.2598C293.105 31.8629 293.384 32.4193 293.715 32.9707C294.122 33.6496 294.46 34.2913 294.745 34.8311C295.042 35.3931 295.268 35.8159 295.495 36.1689C295.917 36.8249 296.177 36.9825 296.485 37.0596C297.376 37.2822 298 38.0823 298 39C298 39.9177 297.376 40.7178 296.485 40.9404C296.177 41.0175 295.917 41.1751 295.495 41.8311C295.268 42.1841 295.042 42.6069 294.745 43.1689C294.46 43.7087 294.122 44.3504 293.715 45.0293C293.384 45.5807 293.105 46.1371 292.8 46.7402C292.511 47.3105 292.178 47.9632 291.789 48.5469C291.393 49.1407 290.87 49.7726 290.135 50.249C289.883 50.4119 289.618 50.5449 289.342 50.6553C288.979 52.9996 287.975 55.8849 285.938 58.3877C283.629 61.2258 280.075 63.4611 274.947 63.9141C274.772 65.9444 274.203 68.3627 272.937 70.5146C271.145 73.56 267.981 76 263 76H37C32.0188 76 28.8553 73.56 27.0635 70.5146C25.7974 68.3627 25.2269 65.9445 25.0518 63.9141C19.925 63.4609 16.3713 61.2257 14.0615 58.3877C12.0246 55.8848 11.0201 52.9997 10.6572 50.6553C10.3815 50.5449 10.1163 50.4118 9.8652 50.249C9.1302 49.7726 8.6068 49.1407 8.2109 48.5469C7.8218 47.9632 7.4891 47.3105 7.2002 46.7402C6.8946 46.1371 6.616 45.5807 6.2852 45.0293C5.8778 44.3504 5.5402 43.7087 5.2549 43.1689C4.9578 42.6069 4.7319 42.1841 4.5049 41.8311C4.0831 41.1751 3.8229 41.0175 3.5146 40.9404C2.6244 40.7178 2 39.9177 2 39C2 38.0823 2.6244 37.2822 3.5146 37.0596C3.8229 36.9825 4.0831 36.8249 4.5049 36.1689C4.7319 35.8159 4.9578 35.3931 5.2549 34.8311C5.5402 34.2913 5.8778 33.6496 6.2852 32.9707C6.616 32.4193 6.8946 31.8629 7.2002 31.2598C7.4891 30.6895 7.8218 30.0368 8.2109 29.4531C8.6068 28.8593 9.1302 28.2274 9.8652 27.751C10.1164 27.5882 10.3814 27.4541 10.6572 27.3438C11.0202 24.9995 12.0248 22.1148 14.0615 19.6123C16.3713 16.7743 19.9249 14.5381 25.0518 14.085C25.227 12.0548 25.7976 9.6369 27.0635 7.4854C28.8553 4.44 32.0188 2 37 2H263Z"
+                                stroke="url(#ryRevealEdge)" stroke-width="4" stroke-linejoin="round"></path>
+                        </g>
+                        <defs>
+                            <filter id="ryRevealInset" x="0" y="0" width="300" height="86" filterUnits="userSpaceOnUse"
+                                color-interpolation-filters="sRGB">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
+                                <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape">
+                                </feBlend>
+                                <feColorMatrix in="SourceAlpha" type="matrix"
+                                    values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha">
+                                </feColorMatrix>
+                                <feOffset dy="8"></feOffset>
+                                <feGaussianBlur stdDeviation="6"></feGaussianBlur>
+                                <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"></feComposite>
+                                <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0">
+                                </feColorMatrix>
+                                <feBlend mode="normal" in2="shape" result="effect1_innerShadow"></feBlend>
+                            </filter>
+                            <linearGradient id="ryRevealEdge" x1="315" y1="39" x2="-9" y2="38.9999"
+                                gradientUnits="userSpaceOnUse">
+                                <stop class="ry-plaque__edge"></stop>
+                                <stop class="ry-plaque__shine" offset="0.183134"></stop>
+                                <stop class="ry-plaque__edge" offset="0.525864"></stop>
+                                <stop class="ry-plaque__shine" offset="0.790922"></stop>
+                                <stop class="ry-plaque__edge" offset="1"></stop>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span class="ry-plaque__label">Reveal the Date</span>
+                </button>
+                <p class="royale-date__after" id="ryRevealAfter" hidden="">Save the Date</p>
+            </div>
+
+            <!-- The settled date in words, for a guest who cannot see the dials. -->
+            <p class="royale-date__said" id="ryRevealSaid" aria-live="polite"></p>
+        </div>
+    </section>
+
+    <!-- The marble pavilion in its garden, standing on the page between the
+         date and the gallery. Its edges fade away to nothing, so it sits on
+         the cream with no frame. It says nothing, so it is hidden from a
+         screen reader rather than labelled. -->
+    <div class="royale-pavilion" aria-hidden="true">
+        <img class="royale-pavilion__image" src="media/pavilion.webp" alt="" width="1500" height="927" loading="lazy"
+            decoding="async" draggable="false"
+            style="translate: none; rotate: none; scale: none; transform: translate(0%, -3%);">
+    </div>
+
+    <!-- Photo gallery: hanging gallery, with 3D picture frames.
+         Each frame hangs on two cords from a ring on the rail; drag or scroll sideways
+         and they swing on their cords and twist a little, showing the frame's depth (gallery.js).
+         length is --hang on each frame, which gallery.js also reads. -->
+    <section class="royale-gallery" aria-label="Our story in pictures" style="background-position-y: 58%;">
+        <!-- The lotus ornament laid across the join with the date section
+             above, the full width of the screen, in place of a torn band. -->
+        <img class="royale-gallery__divider" src="media/divider2.png" alt="" aria-hidden="true" loading="lazy"
+            decoding="async" style="opacity: 1;">
+
+        <div class="royale-gallery__scroll" id="ryGalleryScroll">
+            <div class="royale-gallery__track">
+                <div class="royale-gallery__rail" aria-hidden="true"></div>
+                <div class="gframe gframe--portrait" style="--hang: 118px; transform: rotate(-0.38deg);"><span
+                        class="gframe__hook" aria-hidden="true"></span><svg class="gframe__cord" viewBox="0 0 100 100"
+                        preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                        <path d="M50 0L0 100M50 0L100 100"></path>
+                        <path class="gframe__twist" d="M50 0L0 100M50 0L100 100"></path>
+                    </svg>
+                    <div class="gframe__body" style="transform: rotateY(-6.02deg);"><span
+                            class="gframe__crest" aria-hidden="true"></span><span class="gframe__side gframe__side--top"></span><span
+                            class="gframe__side gframe__side--right"></span><span
+                            class="gframe__side gframe__side--bottom"></span><span
+                            class="gframe__side gframe__side--left"></span>
+                        <div class="gframe__face">
+                            <span class="gframe__corner gframe__corner--tl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--tr" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--bl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--br" aria-hidden="true"></span>
+                            <div class="gframe__lip">
+                                <figure class="gframe__mat">
+                                    <div class="gframe__photo"><span class="gframe__placeholder">Your photo here</span>
+                                    </div>
+                                    <figcaption class="gframe__caption">#WhereItAllBegan</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gframe gframe--landscape" style="--hang: 150px; transform: rotate(0.433deg);"><span
+                        class="gframe__hook" aria-hidden="true"></span><svg class="gframe__cord" viewBox="0 0 100 100"
+                        preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                        <path d="M50 0L0 100M50 0L100 100"></path>
+                        <path class="gframe__twist" d="M50 0L0 100M50 0L100 100"></path>
+                    </svg>
+                    <div class="gframe__body" style="transform: rotateY(4.2deg);"><span
+                            class="gframe__crest" aria-hidden="true"></span><span class="gframe__side gframe__side--top"></span><span
+                            class="gframe__side gframe__side--right"></span><span
+                            class="gframe__side gframe__side--bottom"></span><span
+                            class="gframe__side gframe__side--left"></span>
+                        <div class="gframe__face">
+                            <span class="gframe__corner gframe__corner--tl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--tr" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--bl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--br" aria-hidden="true"></span>
+                            <div class="gframe__lip">
+                                <figure class="gframe__mat">
+                                    <div class="gframe__photo"><span class="gframe__placeholder">Your photo here</span>
+                                    </div>
+                                    <figcaption class="gframe__caption">#CherishedMoments</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gframe gframe--story" style="--hang: 86px; transform: rotate(-0.03deg);"><span
+                        class="gframe__hook" aria-hidden="true"></span><svg class="gframe__cord" viewBox="0 0 100 100"
+                        preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                        <path d="M50 0L0 100M50 0L100 100"></path>
+                        <path class="gframe__twist" d="M50 0L0 100M50 0L100 100"></path>
+                    </svg>
+                    <div class="gframe__body" style="transform: rotateY(-2.39deg);"><span
+                            class="gframe__crest" aria-hidden="true"></span><span class="gframe__side gframe__side--top"></span><span
+                            class="gframe__side gframe__side--right"></span><span
+                            class="gframe__side gframe__side--bottom"></span><span
+                            class="gframe__side gframe__side--left"></span>
+                        <div class="gframe__face">
+                            <span class="gframe__corner gframe__corner--tl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--tr" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--bl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--br" aria-hidden="true"></span>
+                            <div class="gframe__lip">
+                                <div class="gframe__mat gframe__story">
+                                    <p>Two souls, brought together by destiny. What started with a simple conversation has blossomed into an eternal promise of love.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gframe gframe--portrait" style="--hang: 132px; transform: rotate(-0.599deg);"><span
+                        class="gframe__hook" aria-hidden="true"></span><svg class="gframe__cord" viewBox="0 0 100 100"
+                        preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                        <path d="M50 0L0 100M50 0L100 100"></path>
+                        <path class="gframe__twist" d="M50 0L0 100M50 0L100 100"></path>
+                    </svg>
+                    <div class="gframe__body" style="transform: rotateY(-5.49deg);"><span
+                            class="gframe__crest" aria-hidden="true"></span><span class="gframe__side gframe__side--top"></span><span
+                            class="gframe__side gframe__side--right"></span><span
+                            class="gframe__side gframe__side--bottom"></span><span
+                            class="gframe__side gframe__side--left"></span>
+                        <div class="gframe__face">
+                            <span class="gframe__corner gframe__corner--tl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--tr" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--bl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--br" aria-hidden="true"></span>
+                            <div class="gframe__lip">
+                                <figure class="gframe__mat">
+                                    <div class="gframe__photo"><span class="gframe__placeholder">Your photo here</span>
+                                    </div>
+                                    <figcaption class="gframe__caption">#LittleThings</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gframe gframe--landscape" style="--hang: 100px; transform: rotate(-0.433deg);"><span
+                        class="gframe__hook" aria-hidden="true"></span><svg class="gframe__cord" viewBox="0 0 100 100"
+                        preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                        <path d="M50 0L0 100M50 0L100 100"></path>
+                        <path class="gframe__twist" d="M50 0L0 100M50 0L100 100"></path>
+                    </svg>
+                    <div class="gframe__body" style="transform: rotateY(-6.88deg);"><span
+                            class="gframe__crest" aria-hidden="true"></span><span class="gframe__side gframe__side--top"></span><span
+                            class="gframe__side gframe__side--right"></span><span
+                            class="gframe__side gframe__side--bottom"></span><span
+                            class="gframe__side gframe__side--left"></span>
+                        <div class="gframe__face">
+                            <span class="gframe__corner gframe__corner--tl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--tr" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--bl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--br" aria-hidden="true"></span>
+                            <div class="gframe__lip">
+                                <figure class="gframe__mat">
+                                    <div class="gframe__photo"><span class="gframe__placeholder">Your photo here</span>
+                                    </div>
+                                    <figcaption class="gframe__caption">#JoyAndLaughter</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gframe gframe--story" style="--hang: 120px; transform: rotate(-0.005deg);"><span
+                        class="gframe__hook" aria-hidden="true"></span><svg class="gframe__cord" viewBox="0 0 100 100"
+                        preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                        <path d="M50 0L0 100M50 0L100 100"></path>
+                        <path class="gframe__twist" d="M50 0L0 100M50 0L100 100"></path>
+                    </svg>
+                    <div class="gframe__body" style="transform: rotateY(0.75deg);"><span
+                            class="gframe__crest" aria-hidden="true"></span><span class="gframe__side gframe__side--top"></span><span
+                            class="gframe__side gframe__side--right"></span><span
+                            class="gframe__side gframe__side--bottom"></span><span
+                            class="gframe__side gframe__side--left"></span>
+                        <div class="gframe__face">
+                            <span class="gframe__corner gframe__corner--tl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--tr" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--bl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--br" aria-hidden="true"></span>
+                            <div class="gframe__lip">
+                                <div class="gframe__mat gframe__story">
+                                    <p>Together, we found a friendship that turned into our forever home. Hand in hand, we step into a lifetime of endless tomorrows.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gframe gframe--portrait" style="--hang: 150px; transform: rotate(-0.274deg);"><span
+                        class="gframe__hook" aria-hidden="true"></span><svg class="gframe__cord" viewBox="0 0 100 100"
+                        preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                        <path d="M50 0L0 100M50 0L100 100"></path>
+                        <path class="gframe__twist" d="M50 0L0 100M50 0L100 100"></path>
+                    </svg>
+                    <div class="gframe__body" style="transform: rotateY(-4.29deg);"><span
+                            class="gframe__crest" aria-hidden="true"></span><span class="gframe__side gframe__side--top"></span><span
+                            class="gframe__side gframe__side--right"></span><span
+                            class="gframe__side gframe__side--bottom"></span><span
+                            class="gframe__side gframe__side--left"></span>
+                        <div class="gframe__face">
+                            <span class="gframe__corner gframe__corner--tl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--tr" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--bl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--br" aria-hidden="true"></span>
+                            <div class="gframe__lip">
+                                <figure class="gframe__mat">
+                                    <div class="gframe__photo"><span class="gframe__placeholder">Your photo here</span>
+                                    </div>
+                                    <figcaption class="gframe__caption">#ForeverBegins</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="gframe gframe--landscape" style="--hang: 92px; transform: rotate(-0.765deg);"><span
+                        class="gframe__hook" aria-hidden="true"></span><svg class="gframe__cord" viewBox="0 0 100 100"
+                        preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                        <path d="M50 0L0 100M50 0L100 100"></path>
+                        <path class="gframe__twist" d="M50 0L0 100M50 0L100 100"></path>
+                    </svg>
+                    <div class="gframe__body" style="transform: rotateY(-7.53deg);"><span
+                            class="gframe__crest" aria-hidden="true"></span><span class="gframe__side gframe__side--top"></span><span
+                            class="gframe__side gframe__side--right"></span><span
+                            class="gframe__side gframe__side--bottom"></span><span
+                            class="gframe__side gframe__side--left"></span>
+                        <div class="gframe__face">
+                            <span class="gframe__corner gframe__corner--tl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--tr" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--bl" aria-hidden="true"></span>
+                            <span class="gframe__corner gframe__corner--br" aria-hidden="true"></span>
+                            <div class="gframe__lip">
+                                <figure class="gframe__mat">
+                                    <div class="gframe__photo"><span class="gframe__placeholder">Your photo here</span>
+                                    </div>
+                                    <figcaption class="gframe__caption">#AnanyaWedsAarav</figcaption>
+                                </figure>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hint that this section scrolls sideways; hidden once it does. -->
+        <div class="ry-hint royale-gallery__hint" id="ryGalleryHint" aria-hidden="true">
+            <span class="ry-hint__arrows"><i></i><i></i><i></i></span>
+            <span class="ry-hint__text">Swipe</span>
+            <span class="ry-hint__arrows"><i></i><i></i><i></i></span>
+        </div>
+    </section>
+
+    <!-- The ceremonies, on the arched cards of media/ceremony_card.svg: one
+         under the other on a phone, three across on a desktop. ceremonies.js
+         fills each date and time from the same wedding date the reveal above
+         uses, moved by the offsets below. -->
+    <!-- The shape of a ceremony card's cream panel, in 0-1 units so it scales
+         with the card: what keeps each illustration inside the arch (see
+         .ryc-card__artwell in styles.css). -->
+    <svg class="ryc-defs" aria-hidden="true" focusable="false" width="0" height="0">
+        <defs>
+            <clipPath id="ryCeremonyPanel" clipPathUnits="objectBoundingBox">
+                <path
+                    d="M0.50047 0.0716 C0.5067 0.07833 0.52707 0.09459 0.55866 0.10578 C0.58899 0.11652 0.59364 0.14244 0.59213 0.15549 H0.59352 C0.65435 0.15549 0.70366 0.19235 0.70366 0.23782 C0.70366 0.24823 0.70107 0.25819 0.69635 0.26736 C0.78331 0.26859 0.85329 0.32166 0.85329 0.38695 C0.85329 0.40617 0.84722 0.42434 0.83644 0.44043 C0.87135 0.45545 0.89485 0.48361 0.89485 0.51588 V0.91356 H0.10515 V0.51588 C0.10515 0.48361 0.12865 0.45545 0.16356 0.44043 C0.15278 0.42434 0.14671 0.40617 0.14671 0.38695 C0.14671 0.32166 0.21669 0.26859 0.30364 0.26736 C0.29893 0.25819 0.29634 0.24823 0.29634 0.23782 C0.29634 0.19235 0.34565 0.15549 0.40648 0.15549 H0.40882 C0.4073 0.14244 0.41195 0.11652 0.44228 0.10578 C0.47387 0.09459 0.49423 0.07833 0.50047 0.0716 Z">
+                </path>
+            </clipPath>
+        </defs>
+    </svg>
+
+    <section class="royale-ceremonies" aria-label="Ceremonies">
+        <h2 class="ryc-title"
+            style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">Ceremonies
+        </h2>
+
+        <div class="ryc-grid">
+            <article class="ryc-card is-armed is-shown" style="--i: 0;">
+                <div class="ryc-card__inner">
+                    <div class="ryc-card__artwell"><img class="ryc-card__art" src="media/ring_ceremony.webp" alt=""
+                            aria-hidden="true" loading="lazy" decoding="async"></div>
+                    <h3 class="ryc-card__name">Ring Ceremony</h3>
+                    <div class="ryc-card__foot">
+                        <div class="ryc-card__where">
+                            <p class="ryc-card__venue">The Grand Ballroom, Rambagh Palace, Jaipur</p><a
+                                class="ryc-card__map"
+                                href="https://www.google.com/maps/search/?api=1&amp;query=Rambagh%20Palace%2C%20Jaipur"
+                                target="_blank" rel="noopener" aria-label="Ring Ceremony venue on the map"><img
+                                    src="media/location.svg" alt="" aria-hidden="true" loading="lazy"
+                                    decoding="async"></a>
+                        </div>
+                        <p class="ryc-card__when"><span class="ryc-card__date">Fri, 18 Dec 2026</span><span
+                                class="ryc-card__time">6:30 PM</span></p>
+                    </div>
+                </div>
+            </article><img class="ryc-divider" src="media/divider2.png" alt="" aria-hidden="true" loading="lazy"
+                decoding="async">
+            <article class="ryc-card is-armed is-shown" style="--i: 1;">
+                <div class="ryc-card__inner">
+                    <div class="ryc-card__artwell"><img class="ryc-card__art" src="media/mehendi.webp" alt=""
+                            aria-hidden="true" loading="lazy" decoding="async"></div>
+                    <h3 class="ryc-card__name">Mehendi</h3>
+                    <div class="ryc-card__foot">
+                        <div class="ryc-card__where">
+                            <p class="ryc-card__venue">Mughal Garden, Rambagh Palace, Jaipur</p><a class="ryc-card__map"
+                                href="https://www.google.com/maps/search/?api=1&amp;query=Rambagh%20Palace%2C%20Jaipur"
+                                target="_blank" rel="noopener" aria-label="Mehendi venue on the map"><img
+                                    src="media/location.svg" alt="" aria-hidden="true" loading="lazy"
+                                    decoding="async"></a>
+                        </div>
+                        <p class="ryc-card__when"><span class="ryc-card__date">Sat, 19 Dec 2026</span><span
+                                class="ryc-card__time">11:00 AM</span></p>
+                    </div>
+                </div>
+            </article><img class="ryc-divider" src="media/divider2.png" alt="" aria-hidden="true" loading="lazy"
+                decoding="async">
+            <article class="ryc-card is-armed is-shown" style="--i: 2;">
+                <div class="ryc-card__inner">
+                    <div class="ryc-card__artwell"><img class="ryc-card__art" src="media/haldi.webp" alt=""
+                            aria-hidden="true" loading="lazy" decoding="async"></div>
+                    <h3 class="ryc-card__name">Haldi</h3>
+                    <div class="ryc-card__foot">
+                        <div class="ryc-card__where">
+                            <p class="ryc-card__venue">Poolside Lawns, Rambagh Palace, Jaipur</p><a
+                                class="ryc-card__map"
+                                href="https://www.google.com/maps/search/?api=1&amp;query=Rambagh%20Palace%2C%20Jaipur"
+                                target="_blank" rel="noopener" aria-label="Haldi venue on the map"><img
+                                    src="media/location.svg" alt="" aria-hidden="true" loading="lazy"
+                                    decoding="async"></a>
+                        </div>
+                        <p class="ryc-card__when"><span class="ryc-card__date">Sat, 19 Dec 2026</span><span
+                                class="ryc-card__time">3:30 PM</span></p>
+                    </div>
+                </div>
+            </article><img class="ryc-divider ryc-divider--row" src="media/divider2.png" alt="" aria-hidden="true"
+                loading="lazy" decoding="async">
+            <article class="ryc-card is-armed is-shown" style="--i: 0;">
+                <div class="ryc-card__inner">
+                    <div class="ryc-card__artwell"><img class="ryc-card__art" src="media/sangeet.webp" alt=""
+                            aria-hidden="true" loading="lazy" decoding="async"></div>
+                    <h3 class="ryc-card__name">Sangeet</h3>
+                    <div class="ryc-card__foot">
+                        <div class="ryc-card__where">
+                            <p class="ryc-card__venue">Kesar Bagh, Rambagh Palace, Jaipur</p><a class="ryc-card__map"
+                                href="https://www.google.com/maps/search/?api=1&amp;query=Rambagh%20Palace%2C%20Jaipur"
+                                target="_blank" rel="noopener" aria-label="Sangeet venue on the map"><img
+                                    src="media/location.svg" alt="" aria-hidden="true" loading="lazy"
+                                    decoding="async"></a>
+                        </div>
+                        <p class="ryc-card__when"><span class="ryc-card__date">Sat, 19 Dec 2026</span><span
+                                class="ryc-card__time">7:30 PM</span></p>
+                    </div>
+                </div>
+            </article><img class="ryc-divider" src="media/divider2.png" alt="" aria-hidden="true" loading="lazy"
+                decoding="async">
+            <article class="ryc-card is-armed is-shown" style="--i: 1;">
+                <div class="ryc-card__inner">
+                    <div class="ryc-card__artwell"><img class="ryc-card__art" src="media/vivaah.webp" alt=""
+                            aria-hidden="true" loading="lazy" decoding="async"></div>
+                    <h3 class="ryc-card__name">Vivaah</h3>
+                    <div class="ryc-card__foot">
+                        <div class="ryc-card__where">
+                            <p class="ryc-card__venue">Naksha Courtyard, Rambagh Palace, Jaipur</p><a
+                                class="ryc-card__map"
+                                href="https://www.google.com/maps/search/?api=1&amp;query=Rambagh%20Palace%2C%20Jaipur"
+                                target="_blank" rel="noopener" aria-label="Vivaah venue on the map"><img
+                                    src="media/location.svg" alt="" aria-hidden="true" loading="lazy"
+                                    decoding="async"></a>
+                        </div>
+                        <p class="ryc-card__when"><span class="ryc-card__date">Sun, 20 Dec 2026</span><span
+                                class="ryc-card__time">7:00 PM</span></p>
+                    </div>
+                </div>
+            </article><img class="ryc-divider" src="media/divider2.png" alt="" aria-hidden="true" loading="lazy"
+                decoding="async">
+            <article class="ryc-card is-armed is-shown" style="--i: 2;">
+                <div class="ryc-card__inner">
+                    <div class="ryc-card__artwell"><img class="ryc-card__art" src="media/reception.webp" alt=""
+                            aria-hidden="true" loading="lazy" decoding="async"></div>
+                    <h3 class="ryc-card__name">Reception</h3>
+                    <div class="ryc-card__foot">
+                        <div class="ryc-card__where">
+                            <p class="ryc-card__venue">The Palace Gardens, Rambagh Palace, Jaipur</p><a
+                                class="ryc-card__map"
+                                href="https://www.google.com/maps/search/?api=1&amp;query=Rambagh%20Palace%2C%20Jaipur"
+                                target="_blank" rel="noopener" aria-label="Reception venue on the map"><img
+                                    src="media/location.svg" alt="" aria-hidden="true" loading="lazy"
+                                    decoding="async"></a>
+                        </div>
+                        <p class="ryc-card__when"><span class="ryc-card__date">Mon, 21 Dec 2026</span><span
+                                class="ryc-card__time">8:00 PM</span></p>
+                    </div>
+                </div>
+            </article>
+        </div>
+
+
+
+        <!-- The torn band across the foot of the section: its solid middle
+             sits on the section's own bottom edge, so the tear bites into
+             the maroon above and into the cream below. -->
+        <img class="ry-tear ry-tear--bottom" src="media/section_divider.svg" alt="" aria-hidden="true" loading="lazy"
+            decoding="async">
+    </section>
+
+    <!-- The compliments and the note, on the same scrolls as the family cards
+         and unrolling the same way. -->
+    <section class="royale-scrolls royale-closing" aria-label="Compliments and a note">
+        <article class="royale-scroll is-armed is-unrolled" id="ryComplimentCard" data-card="compliments">
+            <!-- Behind the sheet and centred on the card: what shows while the
+                 scroll is still closed, and covered as it unrolls over it. -->
+            <img class="royale-scroll__bloom" src="media/floral2.webp" alt="" aria-hidden="true" loading="eager"
+                decoding="async">
+            <!-- The window the sheet is revealed through as it unrolls (see
+                 "scroll cards" in styles.css). -->
+            <div class="royale-scroll__window">
+                <div class="royale-scroll__sheet">
+                    <h2 class="royale-scroll__name" id="ryComplimentLead">With Best Compliments From:</h2>
+
+                    <div class="royale-scroll__lines" id="ryComplimentLines">
+                        <p class="royale-scroll__line"><span>Shri Suresh Rathore &amp; Family (Chacha-Chachi)</span></p>
+                        <p class="royale-scroll__line"><span>Shri Manoj Rathore &amp; Family (Tau-Tai)</span></p>
+                        <p class="royale-scroll__line"><span>Smt. Asha Shekhawat &amp; Family (Bua)</span></p>
+                        <p class="royale-scroll__line"><span>Shri Rajendra Rawal &amp; Family (Mama-Mami)</span></p>
+                    </div>
+
+                    <img class="royale-scroll__divider" src="media/divider.webp" alt="" aria-hidden="true"
+                        loading="eager" decoding="async">
+                </div>
+            </div>
+
+            <div class="royale-scroll__rod royale-scroll__rod--top" aria-hidden="true">
+                <img class="royale-scroll__knob royale-scroll__knob--left" src="media/knob-left%201.svg" alt=""
+                    draggable="false">
+                <img class="royale-scroll__roll" src="media/roll-top1.svg" alt="" draggable="false">
+                <img class="royale-scroll__knob royale-scroll__knob--right" src="media/knob%203.svg" alt=""
+                    draggable="false">
+            </div>
+            <div class="royale-scroll__roller" aria-hidden="true">
+                <div class="royale-scroll__rod royale-scroll__rod--bottom">
+                    <img class="royale-scroll__knob royale-scroll__knob--left" src="media/knob-left%201.svg" alt=""
+                        draggable="false">
+                    <img class="royale-scroll__roll" src="media/roll-top1.svg" alt="" draggable="false">
+                    <img class="royale-scroll__knob royale-scroll__knob--right" src="media/knob%203.svg" alt=""
+                        draggable="false">
+                </div>
+            </div>
+        </article>
+
+        <article class="royale-scroll is-armed is-unrolled" id="ryNoteCard" data-card="note">
+            <!-- Behind the sheet and centred on the card: what shows while the
+                 scroll is still closed, and covered as it unrolls over it. -->
+            <img class="royale-scroll__bloom" src="media/floral2.webp" alt="" aria-hidden="true" loading="eager"
+                decoding="async">
+            <!-- The window the sheet is revealed through as it unrolls (see
+                 "scroll cards" in styles.css). -->
+            <div class="royale-scroll__window">
+                <div class="royale-scroll__sheet">
+                    <h2 class="royale-scroll__name" id="ryNoteLead">A Note From Us</h2>
+
+                    <p class="royale-scroll__note" id="ryNoteText">We can’t wait to celebrate this special day with you.
+                        Thank you for being part of our journey.</p>
+
+                    <img class="royale-scroll__divider" src="media/divider.webp" alt="" aria-hidden="true"
+                        loading="eager" decoding="async">
+                </div>
+            </div>
+
+            <div class="royale-scroll__rod royale-scroll__rod--top" aria-hidden="true">
+                <img class="royale-scroll__knob royale-scroll__knob--left" src="media/knob-left%201.svg" alt=""
+                    draggable="false">
+                <img class="royale-scroll__roll" src="media/roll-top1.svg" alt="" draggable="false">
+                <img class="royale-scroll__knob royale-scroll__knob--right" src="media/knob%203.svg" alt=""
+                    draggable="false">
+            </div>
+            <div class="royale-scroll__roller" aria-hidden="true">
+                <div class="royale-scroll__rod royale-scroll__rod--bottom">
+                    <img class="royale-scroll__knob royale-scroll__knob--left" src="media/knob-left%201.svg" alt=""
+                        draggable="false">
+                    <img class="royale-scroll__roll" src="media/roll-top1.svg" alt="" draggable="false">
+                    <img class="royale-scroll__knob royale-scroll__knob--right" src="media/knob%203.svg" alt=""
+                        draggable="false">
+                </div>
+            </div>
+        </article>
+    </section>
+
+    <!-- The media row: follow the couple, find the venues, save the dates.
+         The same three icons the lotus templates use, sharing their artwork.
+         Sits directly under the note card, so the three things a guest might
+         go and DO come together at the end of the writing - and before the
+         closing picture, which is the send-off and wants the last word.
+         Only Instagram is removable - the other two are derived from the
+         ceremonies, so they have nothing of their own to take away.
+         Each icon is a span painted maroon through its artwork as a mask (see
+         .social__icon), since the artwork itself is drawn in white. -->
+    <section class="royale-social" aria-label="Follow the couple, the venues, and the dates">
+        <div class="socials">
+            <button class="social" id="ryIgBtn" type="button" aria-label="Instagram">
+                <span class="social__icon social__icon--instagram" aria-hidden="true"></span>
+            </button>
+            <button class="social" id="ryLocBtn" type="button" aria-label="Ceremony locations">
+                <span class="social__icon social__icon--location" aria-hidden="true"></span>
+            </button>
+            <button class="social" id="ryCalBtn" type="button" aria-label="Add ceremonies to calendar">
+                <span class="social__icon social__icon--calendar" aria-hidden="true"></span>
+            </button>
+        </div>
+    </section>
+
+    <!-- The closing picture, under its own torn band, with the send-off
+         written on the easel's board: the guest's name, then the thank-you line.
+         The artwork is all decorative (empty alts, and the easel is a background),
+         so a screen reader hears just the two lines. -->
+    <section class="royale-outro">
+        <img class="ry-tear ry-tear--top" src="media/section_divider.svg" alt="" loading="lazy" decoding="async">
+        <!-- The tall cut of the garden on a phone and the wide one from 700px
+             up. Only the cut
+             that matches is ever fetched. -->
+        <picture>
+            <source media="(min-width: 700px)" srcset="media/garden_close.webp" width="1672" height="941">
+            <img class="royale-outro__image" src="media/garden_close_tall.webp" alt="" width="941" height="1672"
+                loading="lazy" decoding="async" draggable="false"
+                style="transform: scale(1.06) translate3d(0px, 0px, 0px);">
+        </picture>
+        <!-- The board on its easel, standing in the garden: a tall one on a
+             phone and a wide one above that, to match the cut of the picture
+             behind it. Backgrounds rather than <img>s, so that only the one
+             being shown is ever fetched. -->
+        <div class="royale-outro__easel"
+            style="translate: none; rotate: none; scale: none; transform: translate(0px, 0px); opacity: 1;">
+            <div class="royale-outro__board">
+                <p class="royale-outro__names" hidden=""></p>
+                <p class="royale-outro__line">Your Presence Means the World to Us</p>
+            </div>
+        </div>
+        <!-- The same torn band at the foot as at the head, so the closing
+             picture is bitten off at both ends. -->
+        <img class="ry-tear ry-tear--bottom" src="media/section_divider.svg" alt="" loading="lazy" decoding="async">
+    </section>
+
+    <!-- One popup, refilled per button by social.js. -->
+    <div class="ry-modal" id="ryModal" hidden="">
+        <div class="ry-modal__overlay" data-ry-close=""></div>
+        <div class="ry-modal__box" role="dialog" aria-modal="true" aria-labelledby="ryModalTitle">
+            <button class="ry-modal__close" type="button" data-ry-close="" aria-label="Close">×</button>
+            <div class="ry-modal__content" id="ryModalContent"></div>
+        </div>
+    </div>
+
+
+    <!-- The invitation's own content, and what draws it. render.js runs
+         before the animation scripts below so they start against the final
+         DOM: date-reveal.js reads the date it sets, gallery.js measures the
+         frames it builds. -->
+    <script src="config.js"></script>
+    <script src="_platform/fit-text.js"></script>
+    <script src="render.js"></script>
+
+    <script src="app.js"></script>
+    <script src="date-reveal.js"></script>
+    <script src="gallery.js"></script>
+    <script src="social.js"></script>
+
+    <!-- The scroll: GSAP and ScrollTrigger for the drifts and the reveals,
+         Lenis for the page's own glide, all three shared from _platform. -->
+    <script src="_platform/vendor/gsap.min.js"></script>
+    <script src="_platform/vendor/ScrollTrigger.min.js"></script>
+    <script src="_platform/vendor/lenis.min.js"></script>
+    <script src="scroll.js"></script>
+    <script src="outro.js"></script>
+
+    <!-- Platform components: background music and scroll cue. -->
+    <script src="_platform/music.js"></script>
+    <script src="_platform/scroll-cue.js"></script>
+    <script>if (window.RoyaleMusic) window.RoyaleMusic.mount(window.Royale);</script>
+</body>
+
+</html>
